@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+
+# Secrets — the Keystatic GitHub App credentials live here
+.env
+.env.production
+.env*.local
+
+# Host build caches
+.vercel/
+.netlify/
+.wrangler/
+
+# OS and editor
+.DS_Store
+Thumbs.db
+*.swp

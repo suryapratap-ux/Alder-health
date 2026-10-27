@@ -1,0 +1,83 @@
+---
+import Button from '../Button.astro';
+
+import { home } from '../../data/pages';
+
+/* Doctor discovery — Figma 5:21788 / 5:21982 / 5:22173. */
+const { search } = home;
+---
+
+<section class="discovery">
+	<h2 class="card-title">{search.heading}</h2>
+
+	<form class="search" action="/find-a-doctor" method="get">
+		<div class="field">
+			<label class="field-label" for="search-query">{search.queryLabel}</label>
+			<div class="control-with-icon">
+				<img class="icon" src="/icons/search.svg" width="18" height="18" alt="" />
+				<input
+					class="control"
+					id="search-query"
+					name="q"
+					type="search"
+					placeholder={search.queryPlaceholder}
+				/>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="field-label" for="search-clinic">{search.clinicLabel}</label>
+			<select class="control" id="search-clinic" name="clinic">
+				{search.clinics.map((clinic) => <option value={clinic}>{clinic}</option>)}
+			</select>
+		</div>
+
+		<div class="field">
+			<label class="field-label" for="search-visit">{search.visitLabel}</label>
+			<select class="control" id="search-visit" name="visit">
+				{search.visitTypes.map((visit) => <option value={visit}>{visit}</option>)}
+			</select>
+		</div>
+
+		<Button type="submit" class="submit">{search.submitLabel}</Button>
+	</form>
+
+	<p class="note">{search.note}</p>
+</section>
+
+<style>
+	.discovery {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		padding: var(--space-40) var(--layout-gutter);
+		background: var(--brand-secondary);
+	}
+
+	.search {
+		display: flex;
+		align-items: flex-end;
+		gap: var(--space-16);
+	}
+
+	.note {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	/* Tablet and mobile — fields stack and the action spans the width */
+	@media (max-width: 1023px) {
+		.discovery {
+			padding-block: var(--space-32);
+		}
+
+		.search {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.search :global(.submit) {
+			width: 100%;
+		}
+	}
+</style>

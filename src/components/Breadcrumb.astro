@@ -1,0 +1,44 @@
+---
+/* Breadcrumb trail — Figma 5:22352 and the equivalent node on each inner page. */
+export interface Crumb {
+	label: string;
+	href: string;
+}
+
+interface Props {
+	trail: Crumb[];
+	current: string;
+}
+
+const { trail, current } = Astro.props;
+---
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+	{
+		trail.map((crumb) => (
+			<>
+				<a class="link-underline" href={crumb.href}>{crumb.label}</a>
+				<span aria-hidden="true">/</span>
+			</>
+		))
+	}
+	<span class="current" aria-current="page">{current}</span>
+</nav>
+
+<style>
+	.breadcrumb {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		font-size: var(--type-caption);
+		line-height: 1.6;
+		color: var(--text-secondary);
+	}
+
+	.breadcrumb a {
+	}
+
+	.current {
+		color: var(--brand-primary);
+	}
+</style>

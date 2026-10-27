@@ -1,0 +1,197 @@
+---
+import type { Question } from '../data/faq';
+
+/*
+ * FAQ accordion — Figma 5:21907.
+ *
+ * One answer is open at a time and the first item starts open.
+ *
+ * The markup is a plain <details> group sharing a `name`, so without
+ * JavaScript the browser still enforces one-at-a-time. The script takes over
+ * the toggling to animate the panel height; the browser closes a `name`
+ * sibling instantly, so the attribute is dropped once the script is in charge.
+ */
+interface Props {
+	items: Question[];
+	name: string;
+}
+
+const { items, name } = Astro.props;
+---
+
+<div class="accordion" data-accordion>
+	{
+		items.map((item) => (
+			<details name={name} open={item.open}>
+				<summary>
+					<span class="marker" aria-hidden="true" />
+					<span class="question">{item.question}</span>
+				</summary>
+				<div class="answer">
+					<p>{item.answer}</p>
+				</div>
+			</details>
+		))
+	}
+</div>
+
+<script>
+	const DURATION = 340;
+	const EASING = 'cubic-bezier(0.33, 0.78, 0.18, 1)';
+
+	/* The animation currently driving a panel, so a reversal can pick up from it. */
+	const running = new WeakMap<HTMLElement, Animation>();
+
+	function prefersInstant() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
+	function slide(details: HTMLDetailsElement, open: boolean) {
+		const answer = details.querySelector<HTMLElement>('.answer');
+
+		if (!answer || prefersInstant() || typeof answer.animate !== 'function') {
+			if (answer) answer.style.height = '';
+			details.open = open;
+			return;
+		}
+
+		/*
+		 * A closed panel is hidden with content-visibility, so it still reports
+		 * its full height — an opening panel therefore starts from a flat 0
+		 * rather than from a measurement. Closing, or reversing mid-flight,
+		 * starts from whatever is on screen right now.
+		 */
+		const previous = running.get(answer);
+		const fromHeight = previous || !open ? answer.getBoundingClientRect().height : 0;
+		const fromOpacity = previous ? Number(getComputedStyle(answer).opacity) : open ? 0 : 1;
+
+		/* Cancelling restores the natural height, so the target measures true. */
+		previous?.cancel();
+		running.delete(answer);
+
+		details.open = true;
+		details.dataset.state = open ? 'opening' : 'closing';
+
+		const animation = answer.animate(
+			[
+				{ height: `${fromHeight}px`, opacity: fromOpacity },
+				{ height: open ? `${answer.getBoundingClientRect().height}px` : '0px', opacity: open ? 1 : 0 },
+			],
+			{ duration: DURATION, easing: EASING }
+		);
+
+		running.set(answer, animation);
+
+		animation.finished
+			.then(() => {
+				running.delete(answer);
+				delete details.dataset.state;
+				details.open = open;
+				answer.style.height = '';
+			})
+			.catch(() => {
+				/* Cancelled by a newer toggle, which owns the clean-up from here. */
+			});
+	}
+
+	for (const group of document.querySelectorAll<HTMLElement>('[data-accordion]')) {
+		const panels = [...group.querySelectorAll('details')];
+
+		for (const details of panels) {
+			/* The script owns exclusivity from here, so closing a sibling animates too. */
+			details.removeAttribute('name');
+
+			const summary = details.querySelector('summary');
+
+			summary?.addEventListener('click', (event) => {
+				event.preventDefault();
+
+				if (details.open && details.dataset.state !== 'closing') {
+					slide(details, false);
+					return;
+				}
+
+				for (const other of panels) {
+					if (other !== details && other.open && other.dataset.state !== 'closing') {
+						slide(other, false);
+					}
+				}
+
+				slide(details, true);
+			});
+		}
+	}
+</script>
+
+<style>
+	details {
+		padding-block: 22px;
+		border-top: 1px solid var(--border-default);
+	}
+
+	summary {
+		display: flex;
+		gap: var(--space-12);
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: var(--ui-leading);
+		color: var(--text-primary);
+		list-style: none;
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
+
+	summary:hover,
+	summary:focus-visible {
+		color: var(--brand-primary);
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	/* Two strokes: the upright one rotates flat, turning the + into a − */
+	.marker {
+		position: relative;
+		flex: 0 0 12px;
+		height: calc(1em * var(--ui-leading));
+	}
+
+	.marker::before,
+	.marker::after {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: 12px;
+		height: 1.5px;
+		border-radius: 1px;
+		background: currentColor;
+		transform: translateY(-50%);
+		transition: transform 0.34s cubic-bezier(0.33, 0.78, 0.18, 1);
+	}
+
+	.marker::after {
+		transform: translateY(-50%) rotate(90deg);
+	}
+
+	details[open] .marker::after {
+		transform: translateY(-50%) rotate(0deg);
+	}
+
+	details[data-state='closing'] .marker::after {
+		transform: translateY(-50%) rotate(90deg);
+	}
+
+	/* Clipped so the height animation reveals the answer rather than reflowing it */
+	.answer {
+		overflow: hidden;
+	}
+
+	.answer p {
+		margin-top: var(--space-16);
+		font-size: var(--type-body);
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+</style>

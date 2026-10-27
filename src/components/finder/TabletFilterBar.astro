@@ -1,0 +1,78 @@
+---
+import Button from '../Button.astro';
+
+/* Tablet filter bar — Figma 5:22501. Shown between 768px and 1023px. */
+const specialties = ['All specialties', 'Primary care', 'Dermatology', 'Family medicine'];
+const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clinic'];
+---
+
+<div class="filter-bar">
+	<div class="choices">
+		<div class="field">
+			<label class="field-label" for="bar-specialty">Specialty</label>
+			<select class="control" id="bar-specialty" name="specialty">
+				{specialties.map((item) => <option>{item}</option>)}
+			</select>
+		</div>
+
+		<div class="field">
+			<label class="field-label" for="bar-location">Location</label>
+			<select class="control" id="bar-location" name="location">
+				{clinics.map((item) => <option>{item}</option>)}
+			</select>
+		</div>
+	</div>
+
+	<div class="visit-types">
+		<label class="check-option">
+			<input type="checkbox" name="visit" value="in-person" checked />
+			In-person
+		</label>
+		<label class="check-option">
+			<input type="checkbox" name="visit" value="video" checked />
+			Video consultation
+		</label>
+		<Button href="/find-a-doctor" variant="secondary">More filters</Button>
+	</div>
+</div>
+
+<style>
+	.filter-bar {
+		display: none;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.choices {
+		display: flex;
+		gap: var(--space-16);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.visit-types {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.visit-types .check-option {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	@media (max-width: 1023px) {
+		.filter-bar {
+			display: flex;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.filter-bar {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,73 @@
+---
+/*
+ * Responsive account navigation — Figma 5:23905 (tablet) / 5:24004 (mobile).
+ * Replaces the desktop account rail below 1024px: a caption line above a row
+ * of three tabs on a hairline rule.
+ */
+const tabs = [
+	{ label: 'Overview', current: true },
+	{ label: 'Appointments' },
+	{ label: 'Settings' },
+];
+---
+
+<nav class="account-tabs-nav" aria-label="Patient account">
+	<p class="caption">Patient account &middot; Fictional patient data</p>
+
+	<div class="tabs">
+		{
+			tabs.map((tab) => (
+				<a
+					href="/dashboard"
+					class:list={['tab', 'link-underline', tab.current && 'tab--current']}
+					aria-current={tab.current ? 'page' : undefined}
+				>
+					{tab.label}
+				</a>
+			))
+		}
+	</div>
+</nav>
+
+<style>
+	.account-tabs-nav {
+		display: none;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.caption {
+		font-size: var(--type-caption);
+		line-height: var(--ui-leading);
+		text-transform: uppercase;
+		color: var(--text-secondary);
+	}
+
+	.tabs {
+		display: flex;
+		gap: var(--space-16);
+		align-items: flex-start;
+		width: 100%;
+		padding-bottom: var(--space-12);
+		border-bottom: 1px solid var(--border-default);
+	}
+
+	.tab {
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--brand-primary);
+		white-space: nowrap;
+	}
+
+	.tab--current {
+		font-weight: 600;
+	}
+
+	@media (max-width: 1023px) {
+		.account-tabs-nav {
+			display: flex;
+		}
+	}
+</style>

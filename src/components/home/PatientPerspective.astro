@@ -1,0 +1,53 @@
+---
+import { home } from '../../data/pages';
+
+/* Fictional patient perspective — Figma 5:21883 / 5:22077 / 5:22268. */
+const { perspective } = home;
+---
+
+<section class="perspective">
+	<p class="eyebrow">{perspective.eyebrow}</p>
+	<blockquote>{perspective.quote}</blockquote>
+	<p class="attribution">{perspective.attribution}</p>
+</section>
+
+<style>
+	.perspective {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-80);
+		background: var(--bg-accent-subtle);
+	}
+
+	blockquote {
+		margin: 0;
+		font-family: var(--font-editorial);
+		font-size: 46px;
+		line-height: var(--editorial-leading);
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.attribution {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	@media (max-width: 1023px) {
+		.perspective {
+			padding: var(--space-80) var(--layout-gutter);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.perspective {
+			padding-block: var(--space-56);
+		}
+
+		blockquote {
+			font-size: 32px;
+		}
+	}
+</style>

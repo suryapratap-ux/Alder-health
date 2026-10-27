@@ -1,0 +1,6 @@
+{
+  "question": "Can I book for someone I care for?",
+  "answer": "Yes. Choose the clinician and time as you would for yourself, then enter their details at the patient step. A real service would also ask you to confirm you have their permission to book on their behalf.",
+  "order": 2,
+  "open": false
+}

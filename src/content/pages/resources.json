@@ -1,0 +1,47 @@
+{
+  "seo": {
+    "title": "Resources — Alder Health",
+    "description": "Practical reading for before, during and after a visit: what to bring, how video consultations work and how to help someone else book their care."
+  },
+  "intro": {
+    "eyebrow": "A little preparation helps",
+    "title": "Good to know before you go.",
+    "lead": "Practical reading for before, during and after an example visit. None of this is medical advice."
+  },
+  "cardLinkLabel": "Read the guide",
+  "guidance": {
+    "eyebrow": "Before your visit",
+    "heading": "The practical details.",
+    "items": [
+      {
+        "title": "In person at the clinic",
+        "copy": "Our example clinics have step-free entrances. Contact the team to discuss your access needs before your visit."
+      },
+      {
+        "title": "Video consultations",
+        "copy": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk."
+      },
+      {
+        "title": "What to bring",
+        "copy": "Have a list of questions and relevant appointment documents ready. Ask the clinic about payment or coverage before your visit."
+      }
+    ]
+  },
+  "next": {
+    "eyebrow": "Your next step, at your pace",
+    "heading": "Ready when you are.",
+    "copy": "Choose a clinician, pick a time, and review the details before you confirm.",
+    "primaryCta": {
+      "label": "Find a doctor",
+      "href": "/find-a-doctor"
+    },
+    "secondaryCta": {
+      "label": "Get help",
+      "href": "/help"
+    }
+  },
+  "notice": {
+    "title": "Example reading only",
+    "copy": "These guides are illustrative examples written for a design demonstration. They are not medical advice and no real care is provided through this site."
+  }
+}

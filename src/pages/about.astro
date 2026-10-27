@@ -1,0 +1,296 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import CareBenefits from '../components/home/CareBenefits.astro';
+import { clinicians } from '../data/clinicians';
+import { about as page } from '../data/pages';
+
+/*
+ * About — the Figma file has no About frame, so this page is assembled from
+ * patterns and copy that are drawn elsewhere in it: the page introduction from
+ * the inner screens, the "Meet Alder Health" band and care benefits from the
+ * home page, and the clinic details carried on the clinician records.
+ */
+const { seo, intro, network, clinics, video, notice } = page;
+---
+
+<Layout title={seo.title} description={seo.description}>
+	<PageIntro
+		trail={[{ label: 'Home', href: '/' }]}
+		current="About"
+		eyebrow={intro.eyebrow}
+		title={intro.title}
+		lead={intro.lead}
+	/>
+
+	<section class="network">
+		<div class="photograph">
+			<img
+				src={network.image.src}
+				width="1376"
+				height="768"
+				alt={network.image.alt}
+			/>
+		</div>
+
+		<div class="introduction">
+			<div class="editorial">
+				<h2>{network.heading}</h2>
+				{network.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+			</div>
+
+			<Button href="/find-a-doctor">
+				<img src="/icons/arrow-right.svg" width="18" height="18" alt="" />
+				{network.ctaLabel}
+			</Button>
+		</div>
+	</section>
+
+	<CareBenefits />
+
+	<section class="clinics" id="clinics">
+		<p class="eyebrow">{clinics.eyebrow}</p>
+		<h2 class="section-title">{clinics.heading}</h2>
+
+		<ul class="clinic-list">
+			{
+				clinics.items.map((clinic) => (
+					<li class="clinic" id={clinic.id}>
+						<p class="clinic-name">{clinic.name}</p>
+						<p class="clinic-address">{clinic.address}</p>
+						<p class="clinic-copy">{clinic.copy}</p>
+						<a class="clinic-link link-underline" href={`/find-a-doctor?clinic=${encodeURIComponent(clinic.name)}`}>
+							{clinics.linkLabel} <span class="link-arrow" aria-hidden="true">&#8599;</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="video" id="video">
+		<div class="video-copy">
+			<p class="eyebrow">{video.eyebrow}</p>
+			<h2 class="section-title">{video.heading}</h2>
+			<p>{video.copy}</p>
+			<Button href="/find-a-doctor?visit=Video" variant="secondary">{video.ctaLabel}</Button>
+		</div>
+
+		<div class="team">
+			<p class="team-label">{video.teamLabel}</p>
+			<ul>
+				{
+					clinicians.map((clinician) => (
+						<li>
+							<a class="link-underline" href={`/doctors/${clinician.slug}`}>
+								{clinician.name} &middot; {clinician.specialty}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<section class="disclosure">
+		<Notice title={notice.title}>{notice.copy}</Notice>
+	</section>
+</Layout>
+
+<style>
+	.network {
+		display: flex;
+		gap: var(--space-64);
+		align-items: center;
+		padding: var(--space-64) var(--layout-gutter);
+		background: var(--bg-subtle);
+	}
+
+	.photograph {
+		flex: 1 0 0;
+		min-width: 0;
+		height: 430px;
+	}
+
+	.photograph img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.introduction {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.editorial h2 {
+		font-size: 44px;
+		line-height: 1.18;
+	}
+
+	.editorial p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.clinics {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-80) var(--layout-gutter);
+	}
+
+	.clinic-list {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+		margin-top: var(--space-8);
+	}
+
+	.clinic {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-8);
+		min-width: 0;
+		padding: var(--space-24);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.clinic-name {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+	}
+
+	.clinic-address,
+	.clinic-copy {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.clinic-link {
+		margin-top: var(--space-8);
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.video {
+		display: flex;
+		gap: var(--space-64);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter);
+		background: var(--brand-secondary);
+	}
+
+	.video-copy {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.video-copy p:not(.eyebrow) {
+		font-size: var(--type-body);
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+
+	/*
+	 * A bordered button on the sage band would hover to the band colour and
+	 * dissolve into it, so it wipes to the subtle surface instead.
+	 */
+	.video-copy :global(.button--secondary)::before {
+		background: var(--bg-subtle);
+	}
+
+	.team {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+		width: 360px;
+		flex-shrink: 0;
+	}
+
+	.team-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.team a {
+		display: flex;
+		align-items: center;
+		min-height: 44px;
+		font-size: var(--type-body);
+		color: var(--brand-primary);
+	}
+
+	.disclosure {
+		padding: var(--space-56) var(--layout-gutter);
+	}
+
+	/* Tablet and mobile — the paired bands stack */
+	@media (max-width: 1023px) {
+		.network,
+		.video {
+			flex-direction: column;
+			align-items: stretch;
+			gap: var(--space-32);
+			padding-block: var(--space-56);
+		}
+
+		.photograph {
+			flex: none;
+			height: 320px;
+		}
+
+		.introduction,
+		.video-copy {
+			flex: none;
+		}
+
+		.team {
+			width: 100%;
+		}
+
+		.clinics {
+			padding-block: var(--space-56);
+		}
+
+		.clinic-list {
+			flex-direction: column;
+		}
+
+		.clinic {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.editorial h2 {
+			font-size: var(--type-page-title);
+		}
+
+		.photograph {
+			height: 260px;
+		}
+	}
+</style>

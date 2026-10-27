@@ -1,0 +1,34 @@
+---
+import Button from '../Button.astro';
+
+/* Compact filters — Figma 5:22615. Mobile only. */
+---
+
+<div class="compact-filters">
+	<Button href="/find-a-doctor" variant="secondary" fullWidth>
+		<img src="/icons/sliders-horizontal.svg" width="18" height="18" alt="" />
+		Filters &middot; 0 selected
+	</Button>
+	<p class="summary">All specialties &middot; All clinics &middot; In-person and video</p>
+</div>
+
+<style>
+	.compact-filters {
+		display: none;
+		flex-direction: column;
+		gap: 14px;
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.summary {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	@media (max-width: 767px) {
+		.compact-filters {
+			display: flex;
+		}
+	}
+</style>

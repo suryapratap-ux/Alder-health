@@ -1,0 +1,119 @@
+---
+/* Filtering rail — Figma 5:22370. Desktop only; tablet and mobile use their own controls. */
+const specialties = ['All specialties', 'Primary care', 'Dermatology', 'Family medicine'];
+const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clinic'];
+const visitTypes = [
+	{ id: 'in-person', label: 'In-person', checked: true },
+	{ id: 'video', label: 'Video consultation', checked: true },
+];
+const languages = [
+	{ id: 'english', label: 'English' },
+	{ id: 'spanish', label: 'Spanish' },
+	{ id: 'mandarin', label: 'Mandarin' },
+];
+---
+
+<aside class="rail" aria-label="Refine your search">
+	<div class="heading">
+		<p class="title">Refine your search</p>
+		<a class="reset" href="/find-a-doctor">Reset</a>
+	</div>
+
+	<div class="rule"></div>
+
+	<div class="field">
+		<label class="field-label" for="rail-specialty">Specialty</label>
+		<select class="control" id="rail-specialty" name="specialty">
+			{specialties.map((item) => <option>{item}</option>)}
+		</select>
+	</div>
+
+	<div class="field">
+		<label class="field-label" for="rail-location">Location</label>
+		<select class="control" id="rail-location" name="location">
+			{clinics.map((item) => <option>{item}</option>)}
+		</select>
+	</div>
+
+	<div class="rule"></div>
+
+	<p class="group-label">Visit type</p>
+	{
+		visitTypes.map((option) => (
+			<label class="check-option">
+				<input type="checkbox" name="visit" value={option.id} checked={option.checked} />
+				{option.label}
+			</label>
+		))
+	}
+
+	<div class="rule"></div>
+
+	<p class="group-label">Languages</p>
+	{
+		languages.map((option) => (
+			<label class="check-option">
+				<input type="checkbox" name="language" value={option.id} />
+				{option.label}
+			</label>
+		))
+	}
+
+	<p class="note">Times are shown in Eastern Time. Availability is illustrative.</p>
+</aside>
+
+<style>
+	.rail {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 248px;
+		flex-shrink: 0;
+		padding-right: var(--space-24);
+	}
+
+	.heading {
+		display: flex;
+		gap: var(--space-12);
+		align-items: flex-start;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.title {
+		flex: 1 0 0;
+		min-width: 0;
+		font-size: var(--type-body);
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.reset {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+		white-space: nowrap;
+	}
+
+	.group-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.note {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	.field {
+		width: 100%;
+		flex: none;
+	}
+
+	@media (max-width: 1023px) {
+		.rail {
+			display: none;
+		}
+	}
+</style>

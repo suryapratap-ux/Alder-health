@@ -1,0 +1,234 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import Accordion from '../components/Accordion.astro';
+import { questions } from '../data/faq';
+import { help as page } from '../data/pages';
+
+/*
+ * Help — no Figma frame exists for this page. It reuses the FAQ accordion from
+ * the home page (5:21907) and the support, privacy and accessibility wording
+ * drawn on the Figma review screen and design-system page.
+ */
+const { seo, intro, faq, contact, policies } = page;
+---
+
+<Layout title={seo.title} description={seo.description}>
+	<PageIntro
+		trail={[{ label: 'Home', href: '/' }]}
+		current="Help"
+		eyebrow={intro.eyebrow}
+		title={intro.title}
+		lead={intro.lead}
+	/>
+
+	<section class="faq">
+		<div class="intro">
+			<p class="eyebrow">{faq.eyebrow}</p>
+			<h2>{faq.heading}</h2>
+			<p class="supporting">{faq.supporting}</p>
+			<Button href="#contact" variant="secondary">{faq.ctaLabel}</Button>
+		</div>
+
+		<Accordion items={questions} name="help-faq" />
+	</section>
+
+	<section class="contact" id="contact">
+		<p class="eyebrow">{contact.eyebrow}</p>
+		<h2 class="section-title">{contact.heading}</h2>
+
+		<ul class="routes">
+			{
+				contact.routes.map((route) => (
+					<li class="route">
+						<p class="route-label">{route.label}</p>
+						<p class="route-value">{route.value}</p>
+						<p class="route-copy">{route.copy}</p>
+					</li>
+				))
+			}
+		</ul>
+
+		<Notice title={contact.notice.title}>{contact.notice.copy}</Notice>
+	</section>
+
+	{
+		policies.map((policy, index) => (
+			<section class:list={['policy', index % 2 === 1 && 'policy--alt']} id={policy.id}>
+				<div class="policy-intro">
+					<p class="eyebrow">{policy.eyebrow}</p>
+					<h2 class="section-title">{policy.heading}</h2>
+				</div>
+
+				<div class="policy-body">
+					{policy.paragraphs.map((paragraph) => (
+						<p>{paragraph}</p>
+					))}
+				</div>
+			</section>
+		))
+	}
+</Layout>
+
+<style>
+	.faq :global(.accordion) {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.faq {
+		display: flex;
+		gap: var(--space-80);
+		align-items: flex-start;
+		padding: 0 var(--layout-gutter) var(--space-72);
+	}
+
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		width: 390px;
+		flex-shrink: 0;
+	}
+
+	.intro h2 {
+		font-size: 44px;
+	}
+
+	.supporting {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.contact {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter);
+		background: var(--brand-secondary);
+	}
+
+	.routes {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.route {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-8);
+		min-width: 0;
+		padding: var(--space-24);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.route-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.route-value {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--brand-primary);
+	}
+
+	.route-copy {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.contact :global(.notice) {
+		width: 100%;
+	}
+
+	.policy {
+		display: flex;
+		gap: var(--space-80);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter);
+	}
+
+	.policy--alt {
+		background: var(--bg-subtle);
+	}
+
+	.policy-intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+		width: 390px;
+		flex-shrink: 0;
+	}
+
+	.policy-body {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.policy-body p {
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.policy-body p + p {
+		margin-top: 26px;
+	}
+
+	/* Tablet and mobile — the two-column bands stack */
+	@media (max-width: 1023px) {
+		.faq {
+			flex-direction: column;
+			gap: var(--space-24);
+			padding-bottom: var(--space-56);
+		}
+
+		.intro,
+		.policy-intro {
+			width: 100%;
+		}
+
+		.faq :global(.accordion),
+		.policy-body {
+			width: 100%;
+			flex: none;
+		}
+
+		.contact,
+		.policy {
+			padding-block: var(--space-56);
+		}
+
+		.policy {
+			flex-direction: column;
+			gap: var(--space-24);
+		}
+
+		.routes {
+			flex-direction: column;
+		}
+
+		.route {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.intro h2 {
+			font-size: var(--type-page-title);
+		}
+	}
+</style>

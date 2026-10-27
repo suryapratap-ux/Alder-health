@@ -1,0 +1,28 @@
+{
+  "seo": {
+    "title": "Find a doctor — Alder Health",
+    "description": "Browse our example clinicians by specialty, clinic and visit type, and find an in-person appointment or video consultation that fits your day."
+  },
+  "intro": {
+    "eyebrow": "Find your care team",
+    "title": "The right person to start with.",
+    "lead": "Meet our example clinicians and find an in-person or video visit that fits your day."
+  },
+  "search": {
+    "queryLabel": "Doctor or specialty",
+    "queryPlaceholder": "All specialties",
+    "clinicLabel": "Clinic or neighborhood",
+    "submitLabel": "Search doctors",
+    "specialties": [
+      "All specialties",
+      "Primary care",
+      "Dermatology",
+      "Family medicine"
+    ],
+    "clinics": [
+      "All Alder clinics",
+      "Alder Riverside Clinic",
+      "Alder Northside Clinic"
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "brandName": "Alder Health",
+  "wordmark": "alder health",
+  "findCare": {
+    "label": "Find care",
+    "items": [
+      {
+        "label": "Doctors",
+        "href": "/find-a-doctor"
+      },
+      {
+        "label": "Services",
+        "href": "/#services"
+      },
+      {
+        "label": "Locations",
+        "href": "/about#clinics"
+      },
+      {
+        "label": "Video consultations",
+        "href": "/about#video"
+      }
+    ]
+  },
+  "primaryNav": [
+    {
+      "label": "About",
+      "href": "/about"
+    },
+    {
+      "label": "Resources",
+      "href": "/resources"
+    },
+    {
+      "label": "Help",
+      "href": "/help"
+    }
+  ],
+  "headerActions": {
+    "account": {
+      "label": "Patient account",
+      "href": "/dashboard"
+    },
+    "book": {
+      "label": "Book appointment",
+      "href": "/booking"
+    },
+    "menu": "Menu"
+  },
+  "footer": {
+    "tagline": "A little more care. A little closer to home.",
+    "support": "Questions about finding care? Our example support team can help.",
+    "email": "hello@alderhealth.example",
+    "columns": [
+      {
+        "title": "Find care",
+        "links": [
+          {
+            "label": "Doctors",
+            "href": "/find-a-doctor"
+          },
+          {
+            "label": "Services",
+            "href": "/#services"
+          },
+          {
+            "label": "Locations",
+            "href": "/about#clinics"
+          },
+          {
+            "label": "Video consultations",
+            "href": "/about#video"
+          }
+        ]
+      },
+      {
+        "title": "Alder Health",
+        "links": [
+          {
+            "label": "About",
+            "href": "/about"
+          },
+          {
+            "label": "Resources",
+            "href": "/resources"
+          },
+          {
+            "label": "Help",
+            "href": "/help"
+          },
+          {
+            "label": "Contact",
+            "href": "/help#contact"
+          }
+        ]
+      },
+      {
+        "title": "Your visit",
+        "links": [
+          {
+            "label": "Patient account",
+            "href": "/dashboard"
+          },
+          {
+            "label": "Book appointment",
+            "href": "/booking"
+          },
+          {
+            "label": "Preparing for a visit",
+            "href": "/resources"
+          }
+        ]
+      }
+    ],
+    "legal": "Alder Health. Fictional healthcare network. Demonstration only.",
+    "policyLinks": [
+      {
+        "label": "Privacy",
+        "href": "/help#privacy"
+      },
+      {
+        "label": "Accessibility",
+        "href": "/help#accessibility"
+      },
+      {
+        "label": "Contact",
+        "href": "/help#contact"
+      }
+    ]
+  }
+}

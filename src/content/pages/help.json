@@ -1,0 +1,57 @@
+{
+  "seo": {
+    "title": "Help — Alder Health",
+    "description": "Answers about choosing a visit type, booking for someone else and changing an appointment, plus how this demonstration handles privacy and access."
+  },
+  "intro": {
+    "eyebrow": "Here to make it clearer",
+    "title": "A few things you might be wondering.",
+    "lead": "Answers about booking, visit types and what this demonstration does with the details you enter."
+  },
+  "faq": {
+    "eyebrow": "Common questions",
+    "heading": "Start here.",
+    "supporting": "Need something else? Our example support team is a good place to start.",
+    "ctaLabel": "Contact support"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "heading": "Talk to the example team.",
+    "routes": [
+      {
+        "label": "Email the example team",
+        "value": "hello@alderhealth.example",
+        "copy": "For access needs or help with the booking process."
+      },
+      {
+        "label": "Call the example line",
+        "value": "(555) 010-0199",
+        "copy": "Weekdays, 8am–5pm Eastern Time."
+      }
+    ],
+    "notice": {
+      "title": "Do not send medical details",
+      "copy": "This is a design demonstration. Do not send sensitive medical information to the example addresses above. For an emergency, contact your local emergency services."
+    }
+  },
+  "policies": [
+    {
+      "id": "privacy",
+      "eyebrow": "Privacy & your choices",
+      "heading": "What happens to your details.",
+      "paragraphs": [
+        "Nothing you type on this site is stored, transmitted or used to create an appointment. The patient details shown in the booking flow are fictional examples that ship with the demonstration.",
+        "In a real service, a privacy notice would explain how booking information is collected, how long it is kept and who can see it. This demonstration has no such processing to describe."
+      ]
+    },
+    {
+      "id": "accessibility",
+      "eyebrow": "Accessibility",
+      "heading": "How this site is built.",
+      "paragraphs": [
+        "The design targets WCAG 2.2 AA: visible focus on every control, body text at 16px and up, and touch targets of at least 44px. Controls are built as semantic buttons, links and form fields so they work with a keyboard and a screen reader.",
+        "These visual specimens do not certify implementation accessibility. If something here is hard to use, the example support team is the place to say so."
+      ]
+    }
+  ]
+}

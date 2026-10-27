@@ -1,0 +1,84 @@
+---
+import { home } from '../../data/pages';
+
+/* Care benefits — Figma 5:21862 / 5:22056 / 5:22247. */
+const { benefits } = home;
+---
+
+<section class="benefits">
+	<p class="eyebrow">{benefits.eyebrow}</p>
+
+	<ul class="practical">
+		{
+			benefits.items.map((benefit) => (
+				<li class="benefit">
+					<img src={benefit.icon} width="28" height="28" alt="" />
+					<div class="editorial">
+						<p class="title">{benefit.title}</p>
+						<p class="copy">{benefit.copy}</p>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.benefits {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-32);
+		align-items: flex-start;
+		padding: var(--space-56) var(--layout-gutter);
+		background: var(--brand-secondary);
+	}
+
+	.practical {
+		display: flex;
+		gap: var(--space-40);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.benefit {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.title {
+		font-family: var(--font-editorial);
+		font-size: 26px;
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.copy {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	@media (max-width: 1023px) {
+		.practical {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.benefit {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.benefits {
+			padding-block: var(--space-48);
+		}
+	}
+</style>

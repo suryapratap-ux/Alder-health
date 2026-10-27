@@ -1,0 +1,149 @@
+---
+import Button from '../Button.astro';
+import { home } from '../../data/pages';
+
+/* Service overview — Figma 5:21810 / 5:22004 / 5:22195. */
+const { services } = home;
+---
+
+<section class="services" id="services">
+	<div class="intro">
+		<p class="eyebrow">{services.eyebrow}</p>
+		<div class="editorial">
+			<h2>{services.heading}</h2>
+			<p>{services.intro}</p>
+		</div>
+		<Button href="#services" variant="secondary">{services.ctaLabel}</Button>
+	</div>
+
+	<ul class="directory">
+		{
+			services.items.map((service) => (
+				<li>
+					<a class="listing" href="#services">
+						<span class="index">{service.index}</span>
+						<span class="editorial">
+							<span class="title">{service.title}</span>
+							<span class="copy">{service.copy}</span>
+						</span>
+						<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" />
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.services {
+		display: flex;
+		gap: var(--space-80);
+		align-items: flex-start;
+		padding: var(--space-80);
+	}
+
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 390px;
+		flex-shrink: 0;
+	}
+
+	.editorial h2,
+	.title {
+		display: block;
+		font-family: var(--font-editorial);
+		font-size: 44px;
+		font-weight: 400;
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.editorial p,
+	.copy {
+		display: block;
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.directory {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.listing {
+		display: flex;
+		gap: var(--space-20);
+		align-items: flex-start;
+		padding-block: var(--space-24);
+		border-top: 1px solid var(--border-default);
+		text-decoration: none;
+	}
+
+	.listing:hover .title {
+		color: var(--brand-primary);
+	}
+
+	.index {
+		width: 24px;
+		flex-shrink: 0;
+		font-size: var(--type-caption);
+		line-height: var(--ui-leading);
+		color: var(--brand-accent);
+	}
+
+	.listing .editorial {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.title {
+		font-size: var(--type-card-heading);
+	}
+
+	.listing img {
+		flex-shrink: 0;
+		margin-top: 6px;
+	}
+
+	/*
+	 * Tablet — the introduction sits above the directory. The heading keeps the
+	 * designed two-line rag; the full 704px measure would set it on one line
+	 * because Chrome renders Lora slightly narrower than Figma does.
+	 */
+	@media (max-width: 1023px) {
+		.editorial h2 {
+			max-width: 24rem;
+		}
+
+		.services {
+			flex-direction: column;
+			gap: var(--space-32);
+			padding: var(--space-80) var(--layout-gutter);
+		}
+
+		.intro {
+			width: 100%;
+		}
+
+		.directory {
+			width: 100%;
+			flex: none;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.services {
+			padding-block: var(--space-56);
+		}
+
+		.editorial h2 {
+			font-size: var(--type-page-title);
+		}
+	}
+</style>

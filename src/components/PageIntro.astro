@@ -1,0 +1,50 @@
+---
+import Breadcrumb from './Breadcrumb.astro';
+import type { Crumb } from './Breadcrumb.astro';
+
+/*
+ * Page introduction — the pattern drawn on the Figma inner screens
+ * (5:22351 Find a doctor): breadcrumb, eyebrow, page title, lead.
+ */
+interface Props {
+	trail: Crumb[];
+	current: string;
+	eyebrow: string;
+	title: string;
+	lead: string;
+}
+
+const { trail, current, eyebrow, title, lead } = Astro.props;
+---
+
+<section class="page-intro">
+	<Breadcrumb trail={trail} current={current} />
+	<p class="eyebrow">{eyebrow}</p>
+	<h1>{title}</h1>
+	<p class="lead">{lead}</p>
+</section>
+
+<style>
+	.page-intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-32) var(--layout-gutter) var(--space-40);
+	}
+
+	h1 {
+		font-size: 56px;
+	}
+
+	/* Mobile — the page title steps down and the lead drops to body size */
+	@media (max-width: 767px) {
+		h1 {
+			font-size: var(--type-page-title);
+		}
+
+		.lead {
+			font-size: var(--type-body);
+		}
+	}
+</style>

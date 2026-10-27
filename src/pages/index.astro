@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/home/Hero.astro';
+import DoctorSearch from '../components/home/DoctorSearch.astro';
+import ServiceOverview from '../components/home/ServiceOverview.astro';
+import LocalNetwork from '../components/home/LocalNetwork.astro';
+import FeaturedClinicians from '../components/home/FeaturedClinicians.astro';
+import CareBenefits from '../components/home/CareBenefits.astro';
+import BookingInvitation from '../components/home/BookingInvitation.astro';
+import PatientPerspective from '../components/home/PatientPerspective.astro';
+import EducationalResources from '../components/home/EducationalResources.astro';
+import FrequentlyAsked from '../components/home/FrequentlyAsked.astro';
+import { home } from '../data/pages';
+---
+
+<Layout title={home.seo.title} description={home.seo.description}>
+	<Hero />
+	<DoctorSearch />
+	<ServiceOverview />
+	<LocalNetwork />
+	<FeaturedClinicians />
+	<CareBenefits />
+	<BookingInvitation />
+	<PatientPerspective />
+	<EducationalResources />
+	<FrequentlyAsked />
+</Layout>

@@ -1,0 +1,595 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import ResponsiveAccountNav from '../components/account/ResponsiveAccountNav.astro';
+import { getClinician, clinicians } from '../data/clinicians';
+import { exampleAppointment, examplePatient } from '../data/appointment';
+
+/* Patient dashboard — Figma 5:23777 (desktop), 5:23892 (tablet), 5:23994 (mobile). */
+const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
+const firstName = examplePatient.name.split(' ')[0];
+
+const accountNav = [
+	{ label: 'Overview', current: true },
+	{ label: 'Appointments' },
+	{ label: 'Notification preferences' },
+	{ label: 'Account details' },
+	{ label: 'Help & support' },
+	{ label: 'Sign out' },
+];
+
+const pastAppointments = [
+	{
+		date: 'September 16, 2026',
+		status: '✓ Completed',
+		clinician: 'Daniel Ortiz · Family medicine',
+		place: 'Alder Riverside Clinic · In-person',
+	},
+	{
+		date: 'July 8, 2026',
+		status: '— Canceled',
+		clinician: 'Emma Reed · Primary care',
+		place: 'Alder Riverside Clinic · In-person',
+	},
+];
+
+const preferences = [
+	{ id: 'email-reminders', label: 'Email appointment reminders', on: true },
+	{ id: 'text-reminders', label: 'Text appointment reminders', on: false },
+	{ id: 'resource-updates', label: 'Resource updates', on: false },
+];
+
+const readingList = [
+	{ title: 'Your first visit, made simpler' },
+	{ title: 'Helping someone book their care' },
+	{ title: 'Understanding your visit options' },
+];
+---
+
+<Layout
+	title="Patient account — Alder Health"
+	description="An example patient overview: your upcoming appointment, past visits, notification preferences and reading to help you prepare for a visit."
+>
+	<section class="workspace">
+		<aside class="account-rail" aria-label="Patient account">
+			<p class="eyebrow">Patient account</p>
+			<p class="patient-name">{examplePatient.name}</p>
+			<p class="patient-note">Fictional patient data</p>
+
+			<nav class="account-nav">
+				{
+					accountNav.map((item) => (
+						<a href="/dashboard" class:list={['nav-item', item.current && 'nav-item--current']}>
+							{item.label}
+						</a>
+					))
+				}
+			</nav>
+		</aside>
+
+		<ResponsiveAccountNav />
+
+		<div class="account-main">
+			<div class="greeting">
+				<p class="eyebrow">Your care, in one place</p>
+				<h1>Hello, {firstName}.</h1>
+				<p class="lead">Here&rsquo;s what&rsquo;s coming up and the details to help you get ready.</p>
+				<p class="demo-note">Fictional patient data &middot; demonstration only</p>
+			</div>
+
+			<section class="upcoming">
+				<div class="upcoming-head">
+					<p class="upcoming-title">Your upcoming appointment</p>
+					<p class="upcoming-status">&#10003; Upcoming</p>
+				</div>
+
+				<div class="clinician">
+					<img
+						src={clinician.photo}
+						width={clinician.photoWidth}
+						height={clinician.photoHeight}
+						style={`object-position: ${clinician.photoFocus}`}
+						alt={clinician.alt}
+					/>
+					<div>
+						<p class="clinician-name">{clinician.name}</p>
+						<p class="clinician-specialty">{clinician.specialty}</p>
+						<p class="clinician-note">Fictional clinician &middot; illustrative portrait</p>
+					</div>
+				</div>
+
+				<div class="rule"></div>
+
+				<h2 class="appointment-date">{exampleAppointment.dayLong}</h2>
+
+				<div class="appointment-facts">
+					<p>{exampleAppointment.timeRange}</p>
+					<p>In-person &middot; 30-minute visit</p>
+					<p>{clinician.clinic} &middot; {clinician.clinicAddress}</p>
+					<p>{examplePatient.name} &middot; Reference {exampleAppointment.reference}</p>
+				</div>
+
+				<div class="appointment-actions">
+					<Button href="/confirmation">View details</Button>
+					<Button href="/booking" variant="secondary">Reschedule</Button>
+					<a class="cancel link-underline" href="/dashboard">Cancel appointment</a>
+				</div>
+
+				<Notice title="Example appointment only">
+					No real appointment has been booked. Use these static actions as a design example.
+				</Notice>
+			</section>
+
+			<section class="past">
+				<h2 class="section-title">Past appointments</h2>
+				<p class="past-note">Illustrative history. No diagnostic information is shown.</p>
+
+				<ul class="past-list">
+					{
+						pastAppointments.map((entry) => (
+							<li>
+								<p class="past-date">
+									{entry.date} &middot; {entry.status}
+								</p>
+								<p>{entry.clinician}</p>
+								<p>{entry.place}</p>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<div class="bottom">
+				<section class="preferences">
+					<h2 class="card-title">Keep in touch, your way.</h2>
+					<p class="preferences-note">Static example preferences. No reminders will be sent.</p>
+
+					<div class="toggles">
+						{
+							preferences.map((preference) => (
+								<div class="toggle-row">
+									<label for={preference.id}>{preference.label}</label>
+									<span class="toggle">
+										<input type="checkbox" id={preference.id} checked={preference.on} />
+										<span class="track" aria-hidden="true" />
+										<span class="state">{preference.on ? 'On' : 'Off'}</span>
+									</span>
+								</div>
+							))
+						}
+					</div>
+
+					<Button variant="secondary" type="submit">Save preferences</Button>
+				</section>
+
+				<section class="reading">
+					<h2 class="section-title">Before your next visit</h2>
+
+					<ul class="reading-list">
+						{
+							readingList.map((item) => (
+								<li>
+									<a href="/resources">
+										<span class="reading-title">{item.title}</span>
+										<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" />
+									</a>
+									<p>Practical preparation, without medical advice.</p>
+								</li>
+							))
+						}
+					</ul>
+
+					<p class="reading-help">Need help? hello@alderhealth.example</p>
+				</section>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.workspace {
+		display: flex;
+		gap: var(--space-48);
+		align-items: flex-start;
+		padding: var(--space-48) var(--layout-gutter) var(--space-64);
+	}
+
+	.account-rail {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+		width: 208px;
+		flex-shrink: 0;
+	}
+
+	.patient-name {
+		margin-top: var(--space-8);
+		font-size: var(--type-body);
+		font-weight: 600;
+	}
+
+	.patient-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.account-nav {
+		display: flex;
+		flex-direction: column;
+		margin-top: var(--space-16);
+	}
+
+	.nav-item {
+		display: flex;
+		align-items: center;
+		min-height: 44px;
+		padding: 0 var(--space-12);
+		border-radius: var(--radius-control);
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+		text-decoration: none;
+	}
+
+	.nav-item--current {
+		background: var(--brand-secondary);
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.nav-item:hover {
+		color: var(--brand-primary);
+	}
+
+	.account-main {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-32);
+		min-width: 0;
+	}
+
+	.greeting {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+	}
+
+	h1 {
+		font-size: 52px;
+	}
+
+	.lead {
+		font-size: 18px;
+	}
+
+	.demo-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.upcoming {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-32);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.upcoming-head {
+		display: flex;
+		gap: var(--space-16);
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.upcoming-title {
+		font-size: var(--type-body);
+		font-weight: 600;
+	}
+
+	.upcoming-status {
+		font-size: var(--type-small);
+		color: var(--status-success);
+	}
+
+	.clinician {
+		display: flex;
+		gap: var(--space-16);
+		align-items: center;
+	}
+
+	.clinician img {
+		width: 72px;
+		height: 86px;
+		flex-shrink: 0;
+		border-radius: var(--radius-control);
+		object-fit: cover;
+	}
+
+	.clinician-name {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.2;
+		letter-spacing: var(--editorial-tracking);
+	}
+
+	.clinician-specialty {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.clinician-note {
+		font-size: var(--type-small);
+		color: var(--text-muted);
+	}
+
+	.appointment-date {
+		font-size: var(--type-section);
+	}
+
+	.appointment-facts p {
+		font-size: var(--type-body);
+		line-height: 1.75;
+		color: var(--text-secondary);
+	}
+
+	.appointment-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-12);
+		align-items: center;
+	}
+
+	.cancel {
+		padding-inline: var(--space-8);
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.upcoming :global(.notice) {
+		width: 100%;
+	}
+
+	.past {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+	}
+
+	.past-note {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.past-list {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		margin-top: var(--space-8);
+	}
+
+	.past-list li {
+		padding-block: var(--space-24);
+		border-top: 1px solid var(--border-default);
+	}
+
+	.past-list p {
+		font-size: var(--type-body);
+		line-height: 1.75;
+		color: var(--text-secondary);
+	}
+
+	.past-date {
+		color: var(--text-primary);
+	}
+
+	.bottom {
+		display: flex;
+		gap: var(--space-32);
+		align-items: flex-start;
+	}
+
+	.preferences {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		width: 520px;
+		flex-shrink: 0;
+		padding: var(--space-24);
+		border-radius: var(--radius-module);
+		background: var(--brand-secondary);
+	}
+
+	/*
+	 * A bordered button on the sage band would hover to the band colour and
+	 * dissolve into it, so it wipes to the subtle surface instead.
+	 */
+	.preferences :global(.button--secondary)::before {
+		background: var(--bg-subtle);
+	}
+
+	.preferences-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.toggles {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+		width: 100%;
+	}
+
+	.toggle-row {
+		display: flex;
+		gap: var(--space-16);
+		align-items: center;
+		justify-content: space-between;
+		min-height: 52px;
+	}
+
+	.toggle-row label {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.toggle {
+		display: flex;
+		gap: var(--space-12);
+		align-items: center;
+	}
+
+	.toggle input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.track {
+		position: relative;
+		display: block;
+		width: 48px;
+		height: 28px;
+		border-radius: 999px;
+		background: var(--border-strong);
+		cursor: pointer;
+		transition: background 0.15s ease;
+	}
+
+	.track::after {
+		content: '';
+		position: absolute;
+		top: 4px;
+		left: 4px;
+		width: 20px;
+		height: 20px;
+		border-radius: 50%;
+		background: var(--bg-surface);
+		transition: transform 0.15s ease;
+	}
+
+	.toggle input:checked + .track {
+		background: var(--brand-primary);
+	}
+
+	.toggle input:checked + .track::after {
+		transform: translateX(20px);
+	}
+
+	.toggle input:focus-visible + .track {
+		outline: 2px solid var(--interactive-focus);
+		outline-offset: 2px;
+	}
+
+	.state {
+		width: 24px;
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.reading {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.reading-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		width: 100%;
+	}
+
+	.reading-list li {
+		border-top: 1px solid var(--border-default);
+	}
+
+	.reading-list a {
+		display: flex;
+		gap: var(--space-16);
+		align-items: flex-start;
+		justify-content: space-between;
+		text-decoration: none;
+	}
+
+	.reading-title {
+		font-size: var(--type-body);
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.reading-list a:hover .reading-title {
+		color: var(--brand-primary);
+	}
+
+	.reading-list p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.reading-help {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	/* Tablet and mobile — the rail gives way to the responsive tab strip */
+	@media (max-width: 1023px) {
+		.workspace {
+			flex-direction: column;
+			gap: var(--space-28);
+			padding-block: var(--space-40) var(--space-64);
+		}
+
+		.account-rail {
+			display: none;
+		}
+
+		.account-main {
+			flex: none;
+			width: 100%;
+		}
+
+		.bottom {
+			flex-direction: column;
+		}
+
+		.preferences,
+		.reading {
+			width: 100%;
+			flex: none;
+		}
+	}
+
+	@media (max-width: 767px) {
+		h1 {
+			font-size: 40px;
+		}
+
+		.lead {
+			font-size: var(--type-body);
+		}
+
+		.upcoming {
+			padding: var(--space-24);
+		}
+
+		.cancel {
+			display: flex;
+			align-items: center;
+			min-height: 48px;
+		}
+	}
+</style>

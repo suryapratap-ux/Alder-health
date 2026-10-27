@@ -1,0 +1,147 @@
+{
+  "seo": {
+    "title": "Alder Health — Care that fits your life",
+    "description": "Find a doctor, choose a time and see your appointment details in one place. In-person visits and video consultations across our example clinics."
+  },
+  "hero": {
+    "eyebrow": "Your neighborhood. Your kind of care.",
+    "heading": "Care that fits your life.",
+    "lead": "For the busy days, the ongoing care, and the people you look after. Find a familiar face and a time that works for you.",
+    "primaryCta": {
+      "label": "Find a doctor",
+      "href": "/find-a-doctor"
+    },
+    "secondaryCta": {
+      "label": "Explore services",
+      "href": "#services"
+    },
+    "formats": "Local clinics. In-person visits. Video consultations.",
+    "image": {
+      "src": "public/images/hero-consultation.png",
+      "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room."
+    },
+    "caption": "A moment of connection. Illustrative photography, not a patient story."
+  },
+  "services": {
+    "eyebrow": "Start with what you need",
+    "heading": "Different needs. One place to turn.",
+    "intro": "From a first conversation to your next routine visit, explore care without the guesswork.",
+    "ctaLabel": "Explore all services",
+    "items": [
+      {
+        "index": "01",
+        "title": "Primary care",
+        "copy": "Everyday health visits, preventive conversations and support for ongoing care."
+      },
+      {
+        "index": "02",
+        "title": "Dermatology",
+        "copy": "Appointments to talk through skin, hair and nail concerns."
+      },
+      {
+        "index": "03",
+        "title": "Family medicine",
+        "copy": "Care conversations for adults and families, across different stages of life."
+      },
+      {
+        "index": "04",
+        "title": "Mental wellbeing",
+        "copy": "A space to discuss emotional wellbeing and explore available support."
+      }
+    ]
+  },
+  "benefits": {
+    "eyebrow": "Less friction, more clarity",
+    "items": [
+      {
+        "icon": "public/icons/calendar-days.svg",
+        "title": "A time that works",
+        "copy": "Browse example availability before starting your booking."
+      },
+      {
+        "icon": "public/icons/video.svg",
+        "title": "Care in more places",
+        "copy": "Choose an in-person appointment or a video consultation."
+      },
+      {
+        "icon": "public/icons/messages-square.svg",
+        "title": "A person to ask",
+        "copy": "Find a contact route when you need a little help with the details."
+      }
+    ]
+  },
+  "search": {
+    "heading": "A good place to start.",
+    "queryLabel": "Doctor, specialty or service",
+    "queryPlaceholder": "Try primary care",
+    "clinicLabel": "Clinic or neighborhood",
+    "visitLabel": "Visit type",
+    "submitLabel": "Find a doctor",
+    "note": "Not sure where to begin? Our team can help you find a service. For an emergency, contact your local emergency services.",
+    "clinics": [
+      "All Alder clinics",
+      "Alderwood",
+      "Riverside",
+      "Hillcrest",
+      "Eastgate"
+    ],
+    "visitTypes": [
+      "In-person or video",
+      "In-person",
+      "Video"
+    ]
+  },
+  "featured": {
+    "eyebrow": "People you can get to know",
+    "heading": "Find a familiar face.",
+    "intro": "All clinicians, profiles and credentials shown are fictional examples. Portraits are illustrative.",
+    "ctaLabel": "Meet all doctors",
+    "cardLinkLabel": "Meet the clinician"
+  },
+  "network": {
+    "eyebrow": "Meet Alder Health",
+    "heading": "A local network. A human connection.",
+    "paragraphs": [
+      "Alder brings outpatient appointments and video consultations together, so you can choose the right setting for your day.",
+      "Meet our fictional care teams at Riverside and Northside. Read about each clinician, see practical visit details, and choose your next step."
+    ],
+    "clinicLinks": [
+      {
+        "label": "Riverside",
+        "href": "/find-a-doctor?clinic=Riverside"
+      },
+      {
+        "label": "Northside",
+        "href": "/find-a-doctor?clinic=Northside"
+      }
+    ],
+    "credit": "Illustrative image of a fictional clinic.",
+    "image": {
+      "src": "public/images/clinic-exterior.png",
+      "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic."
+    }
+  },
+  "perspective": {
+    "eyebrow": "An imagined everyday experience",
+    "quote": "“I wanted to see the person, the place, and the time before I decided. Having it all in one place made the next step feel simpler.”",
+    "attribution": "Fictional patient quote · written to illustrate the experience, not a real testimonial."
+  },
+  "resources": {
+    "eyebrow": "A little preparation helps",
+    "heading": "Good to know before you go.",
+    "ctaLabel": "All resources",
+    "cardLinkLabel": "Read the guide"
+  },
+  "faq": {
+    "eyebrow": "Here to make it clearer",
+    "heading": "A few things you might be wondering.",
+    "supporting": "Need something else? Our support team is a good place to start.",
+    "ctaLabel": "Get help"
+  },
+  "invitation": {
+    "eyebrow": "Your next step, at your pace",
+    "heading": "Make room for your care.",
+    "supporting": "Choose a clinician, pick a time, and review the details before you confirm.",
+    "ctaLabel": "Book an appointment"
+  }
+}

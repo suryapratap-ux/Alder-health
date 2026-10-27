@@ -1,0 +1,38 @@
+{
+  "name": "Maya Chen",
+  "order": 2,
+  "specialty": "Dermatology",
+  "clinic": "Alder Northside Clinic",
+  "clinicAddress": "42 Birch Street, Northside",
+  "note": "Fictional profile · illustrative portrait",
+  "languages": "English, Mandarin",
+  "languagesSentence": "Languages: English and Mandarin",
+  "credentials": "MD · Dermatology residency",
+  "formats": "In-person · Video consultations",
+  "nextVisit": "Thu, Nov 5 · 9:30 AM ET",
+  "visitLength": "30-minute in-person visit",
+  "photo": "public/images/clinician-maya-chen.png",
+  "photoWidth": 1584,
+  "photoHeight": 672,
+  "photoFocus": "54% 25%",
+  "alt": "Illustrative portrait of Maya Chen, a dermatology clinician, in a clinic setting.",
+  "profile": {
+    "headline": "A conversation, not a checklist.",
+    "quote": "“I want people to feel they have room to ask questions and talk about what matters in their day-to-day lives.”",
+    "paragraphs": [
+      "In this fictional profile, Maya takes a thoughtful, practical approach to dermatology. She welcomes adults seeking appointments to talk through skin, hair and nail concerns.",
+      "She values clear explanations and shared conversations about next steps. Outside the clinic, her imagined routine includes neighborhood walks, a good book and time with family."
+    ],
+    "areasIntro": "Examples of topics that may be discussed during a dermatology visit. This is not medical advice.",
+    "areas": [
+      "Everyday skin concerns",
+      "Preventive care conversations",
+      "Ongoing-care check-ins",
+      "Care coordination"
+    ],
+    "inPersonHeading": "In person at Northside",
+    "inPerson": "42 Birch Street, Northside. The example clinic has a step-free entrance. Contact the team to discuss your access needs.",
+    "video": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk.",
+    "whatToBring": "Have a list of questions and relevant appointment documents ready. Ask the clinic about payment or coverage before your visit."
+  }
+}

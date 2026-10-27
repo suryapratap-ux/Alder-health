@@ -1,0 +1,65 @@
+---
+/* Appointment progress — Figma 5:22905. */
+interface Step {
+	label: string;
+	state: 'done' | 'current' | 'upcoming';
+}
+
+interface Props {
+	steps: Step[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="progress">
+	{
+		steps.map((step, index) => (
+			<li class:list={['step', `step--${step.state}`]}>
+				<span class="indicator" />
+				<span class="label">
+					{step.state === 'done' ? '✓' : index + 1} {step.label}
+				</span>
+			</li>
+		))
+	}
+</ol>
+
+<style>
+	.progress {
+		display: flex;
+		gap: var(--space-12);
+		align-items: flex-start;
+		width: 100%;
+		padding-block: var(--space-24);
+	}
+
+	.step {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: 10px;
+		min-width: 0;
+	}
+
+	.indicator {
+		height: 3px;
+		background: var(--border-default);
+	}
+
+	.step--done .indicator,
+	.step--current .indicator {
+		background: var(--brand-primary);
+	}
+
+	.label {
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--text-muted);
+	}
+
+	.step--current .label {
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+</style>

@@ -1,0 +1,166 @@
+---
+import type { Clinician } from '../../data/clinicians';
+import { exampleAppointment, examplePatient } from '../../data/appointment';
+
+/* Booking context sidebar — Figma 5:23016. */
+interface Props {
+	clinician: Clinician;
+	showPatient?: boolean;
+	help?: 'booking' | 'review';
+}
+
+const { clinician, showPatient = false, help = 'booking' } = Astro.props;
+---
+
+<aside class="booking-context">
+	<section class="summary">
+		<p class="summary-label">Your appointment</p>
+
+		<div class="clinician">
+			<img
+				src={clinician.photo}
+				width={clinician.photoWidth}
+				height={clinician.photoHeight}
+				style={`object-position: ${clinician.photoFocus}`}
+				alt={clinician.alt}
+			/>
+			<div class="clinician-name">
+				<p class="name">{clinician.name}</p>
+				<p>{clinician.specialty}</p>
+			</div>
+		</div>
+
+		<div class="rule"></div>
+
+		<div class="details">
+			<p class="date">{exampleAppointment.dateShort}</p>
+			<p>{exampleAppointment.timeRange}</p>
+			<p>{exampleAppointment.format}</p>
+			<p>{clinician.clinic}</p>
+			<p>{clinician.clinicAddress}</p>
+			{showPatient && <p>Patient: {examplePatient.name}</p>}
+		</div>
+
+		<p class="disclaimer">Fictional clinician and clinic. Example availability only.</p>
+	</section>
+
+	{
+		help === 'review' ? (
+			<section class="help help--plain">
+				<p>
+					No price or coverage is promised. Ask the clinic about practical payment questions before
+					a real visit.
+				</p>
+				<p>Need help? hello@alderhealth.example</p>
+			</section>
+		) : (
+			<section class="help">
+				<h2>A question about your visit?</h2>
+				<p>
+					For access needs or help with the booking process, contact the example support team.
+				</p>
+				<p class="email">hello@alderhealth.example</p>
+			</section>
+		)
+	}
+</aside>
+
+<style>
+	.booking-context {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.summary {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		width: 100%;
+		padding: var(--space-24);
+		border-radius: var(--radius-module);
+		background: var(--brand-secondary);
+	}
+
+	.summary-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		text-transform: uppercase;
+		color: var(--brand-primary);
+	}
+
+	.clinician {
+		display: flex;
+		gap: 14px;
+		align-items: center;
+		width: 100%;
+	}
+
+	.clinician img {
+		width: 64px;
+		height: 72px;
+		flex-shrink: 0;
+		border-radius: var(--radius-control);
+		object-fit: cover;
+	}
+
+	.clinician-name {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.clinician-name p {
+		font-size: var(--type-body);
+		line-height: 1.7;
+		color: var(--text-primary);
+	}
+
+	.name {
+		font-weight: 600;
+	}
+
+	.details p {
+		font-size: var(--type-body);
+		line-height: 2;
+		color: var(--text-secondary);
+	}
+
+	.date {
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.disclaimer {
+		font-size: var(--type-eyebrow);
+		color: var(--text-secondary);
+	}
+
+	.help {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.help--plain {
+		gap: var(--space-16);
+	}
+
+	.help h2 {
+		font-size: 24px;
+	}
+
+	.help p {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.email {
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+</style>

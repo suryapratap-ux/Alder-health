@@ -1,0 +1,252 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import { resources } from '../data/resources';
+import { resourcesPage as page } from '../data/pages';
+
+/*
+ * Resources — no Figma frame exists for this page, so it reuses the resource
+ * cards from the home page (5:21887) and the "Before your visit" guidance from
+ * the doctor profile (5:22712).
+ */
+const { seo, intro, cardLinkLabel, guidance, next, notice } = page;
+---
+
+<Layout title={seo.title} description={seo.description}>
+	<PageIntro
+		trail={[{ label: 'Home', href: '/' }]}
+		current="Resources"
+		eyebrow={intro.eyebrow}
+		title={intro.title}
+		lead={intro.lead}
+	/>
+
+	<section class="guides">
+		<ul class="collection">
+			{
+				resources.map((resource) => (
+					<li class="resource">
+						<img class="cover" src={resource.photo} width="1376" height="768" alt={resource.alt} />
+						<p class="kicker">{resource.kicker}</p>
+						<div class="editorial">
+							<p class="title">{resource.title}</p>
+							<p class="copy">{resource.copy}</p>
+							<a class="read link-underline" href="#guides">
+								{cardLinkLabel} <span class="link-arrow" aria-hidden="true">&#8599;</span>
+							</a>
+						</div>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="guidance" id="guides">
+		<div class="guidance-intro">
+			<p class="eyebrow">{guidance.eyebrow}</p>
+			<h2 class="section-title">{guidance.heading}</h2>
+		</div>
+
+		<div class="guidance-list">
+			{
+				guidance.items.map((item) => (
+					<div class="guidance-item">
+						<h3>{item.title}</h3>
+						<p>{item.copy}</p>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	<section class="next">
+		<div class="next-copy">
+			<p class="eyebrow">{next.eyebrow}</p>
+			<h2 class="section-title">{next.heading}</h2>
+			<p>{next.copy}</p>
+		</div>
+		<div class="next-actions">
+			<Button href={next.primaryCta.href}>
+				<img src="/icons/arrow-right.svg" width="18" height="18" alt="" />
+				{next.primaryCta.label}
+			</Button>
+			<Button href={next.secondaryCta.href} variant="secondary">{next.secondaryCta.label}</Button>
+		</div>
+	</section>
+
+	<section class="disclosure">
+		<Notice title={notice.title}>{notice.copy}</Notice>
+	</section>
+</Layout>
+
+<style>
+	.guides {
+		padding: 0 var(--layout-gutter) var(--space-80);
+	}
+
+	.collection {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.resource {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		min-width: 0;
+	}
+
+	.cover {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+	}
+
+	.kicker {
+		font-size: 11px;
+		font-weight: 600;
+		line-height: var(--ui-leading);
+		text-transform: uppercase;
+		color: var(--brand-accent);
+	}
+
+	.title {
+		font-family: var(--font-editorial);
+		font-size: 24px;
+		line-height: 1.7;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.copy {
+		margin-top: 27px;
+		font-size: var(--type-body);
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.read {
+		display: inline-block;
+		margin-top: 27px;
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: 1.7;
+		color: var(--brand-primary);
+	}
+
+	.guidance {
+		display: flex;
+		gap: var(--space-80);
+		align-items: flex-start;
+		padding: var(--space-72) var(--layout-gutter);
+		background: var(--bg-subtle);
+	}
+
+	.guidance-intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+		width: 390px;
+		flex-shrink: 0;
+	}
+
+	.guidance-list {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	.guidance-item {
+		padding-block: var(--space-24);
+		border-top: 1px solid var(--border-default);
+	}
+
+	.guidance-item h3 {
+		font-size: 24px;
+		line-height: 1.18;
+	}
+
+	.guidance-item p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.next {
+		display: flex;
+		gap: var(--space-40);
+		align-items: center;
+		padding: var(--space-64) var(--layout-gutter);
+	}
+
+	.next-copy {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.next-copy p:not(.eyebrow) {
+		font-size: 18px;
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+
+	.next-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-12);
+	}
+
+	.disclosure {
+		padding: 0 var(--layout-gutter) var(--space-64);
+	}
+
+	/* Tablet and mobile — cards and bands stack */
+	@media (max-width: 1023px) {
+		.guides {
+			padding-bottom: var(--space-56);
+		}
+
+		.collection {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.resource {
+			flex: none;
+			width: 100%;
+		}
+
+		.guidance {
+			flex-direction: column;
+			gap: var(--space-24);
+			padding-block: var(--space-56);
+		}
+
+		.guidance-intro {
+			width: 100%;
+		}
+
+		.guidance-list {
+			flex: none;
+			width: 100%;
+		}
+
+		.next {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-24);
+			padding-block: var(--space-56);
+		}
+	}
+</style>

@@ -1,0 +1,269 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import ProgressSteps from '../components/booking/ProgressSteps.astro';
+import BookingContext from '../components/booking/BookingContext.astro';
+import { getClinician, clinicians } from '../data/clinicians';
+import { exampleAppointment, examplePatient } from '../data/appointment';
+
+/* Review appointment — Figma 5:23329 (desktop), 5:23425 (tablet), 5:23519 (mobile). */
+const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
+
+const reviewSteps = [
+	{ label: 'Care', state: 'done' as const },
+	{ label: 'Time', state: 'done' as const },
+	{ label: 'Details', state: 'done' as const },
+	{ label: 'Review', state: 'current' as const },
+];
+
+const summaryBlocks = [
+	{
+		title: 'Your care',
+		editHref: `/doctors/${clinician.slug}`,
+		lines: [
+			`${clinician.name} · ${clinician.specialty}`,
+			'In-person visit · 30 minutes',
+			'Fictional clinician and illustrative credentials.',
+		],
+	},
+	{
+		title: 'Time and place',
+		editHref: '/booking',
+		lines: [
+			exampleAppointment.dayLong,
+			`10:00–10:30 AM ${exampleAppointment.timezone}`,
+			clinician.clinic,
+			clinician.clinicAddress,
+		],
+	},
+	{
+		title: 'Patient details',
+		editHref: '/booking',
+		lines: [
+			examplePatient.name,
+			examplePatient.email,
+			`Phone: ${examplePatient.phone}`,
+			`Access needs: ${examplePatient.accessNeeds}`,
+			'Fictional patient data. No medical history is collected.',
+		],
+	},
+];
+---
+
+<Layout
+	title="Review your appointment — Alder Health"
+	description="Step 4 of 4. Check the clinician, time, place and patient details of your example appointment before confirming. No real booking is made."
+>
+	<section class="intro">
+		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Book appointment', href: '/booking' }]} current="Review" />
+		<p class="eyebrow">Step 4 of 4</p>
+		<h1>A moment to check the details.</h1>
+		<p class="lead">
+			Make sure everything looks right before you confirm this example appointment.
+		</p>
+		<ProgressSteps steps={reviewSteps} />
+		<Notice title="Demo only — no real appointment will be made" />
+	</section>
+
+	<section class="workspace">
+		<div class="review">
+			{
+				summaryBlocks.map((block) => (
+					<div class="block block--ruled">
+						<div class="block-head">
+							<h2 class="card-title">{block.title}</h2>
+							<Button href={block.editHref} variant="secondary" class="edit">
+								Edit
+							</Button>
+						</div>
+						<div class="block-lines">
+							{block.lines.map((line) => (
+								<p>{line}</p>
+							))}
+						</div>
+					</div>
+				))
+			}
+
+			<div class="rule"></div>
+
+			<div class="block block--padded">
+				<h2 class="card-title">If your plans change</h2>
+				<p class="prose">
+					For a real visit, check the clinic&rsquo;s cancellation and rescheduling information
+					before booking. Contact the clinic if you need help changing a time. This demo does not
+					define a cancellation policy or any fees.
+				</p>
+			</div>
+
+			<div class="block">
+				<h2 class="card-title">Privacy &amp; your choices</h2>
+				<p class="small-prose">
+					These details are shown only as fictional examples. In a real service, review the privacy
+					notice to understand how your booking information is used.
+				</p>
+				<a class="privacy-link link-underline" href="/help#privacy">Privacy notice <span class="link-arrow" aria-hidden="true">&#8599;</span></a>
+
+				<div class="acknowledgements">
+					<label class="check-option">
+						<input type="checkbox" checked />
+						I have reviewed the appointment and patient details.
+					</label>
+					<label class="check-option">
+						<input type="checkbox" checked />
+						I understand this is a demo, not a real booking.
+					</label>
+				</div>
+
+				<p class="small-prose">This acknowledgment is not consent to medical treatment.</p>
+			</div>
+
+			<div class="actions">
+				<Button href="/booking" variant="secondary">Back to details</Button>
+				<Button href="/confirmation">
+					<span aria-hidden="true">&#10003;</span>
+					Confirm appointment
+				</Button>
+			</div>
+		</div>
+
+		<BookingContext clinician={clinician} showPatient help="review" />
+	</section>
+</Layout>
+
+<style>
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		padding: var(--space-32) var(--layout-gutter) var(--space-24);
+	}
+
+	h1 {
+		font-size: 52px;
+	}
+
+	.lead {
+		font-size: 18px;
+	}
+
+	.intro :global(.notice) {
+		width: 100%;
+	}
+
+	.workspace {
+		display: flex;
+		gap: var(--space-48);
+		align-items: flex-start;
+		padding: 0 var(--layout-gutter) var(--space-64);
+	}
+
+	.review {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-8);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.block {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.block--ruled {
+		gap: var(--space-16);
+		padding-block: var(--space-24);
+		border-top: 1px solid var(--border-default);
+	}
+
+	.block--padded {
+		padding-block: var(--space-24);
+	}
+
+	.block-head {
+		display: flex;
+		gap: var(--space-16);
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.block-lines p,
+	.prose {
+		font-size: var(--type-body);
+		line-height: 1.55;
+		color: var(--text-secondary);
+	}
+
+	.block-lines p {
+		line-height: var(--ui-leading);
+	}
+
+	.small-prose {
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+
+	.privacy-link {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.acknowledgements {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+	}
+
+	.actions {
+		display: flex;
+		gap: var(--space-12);
+		flex-wrap: wrap;
+		padding-block: var(--space-12);
+	}
+
+	/* Desktop — the summary sidebar keeps its 360px column */
+	@media (min-width: 1024px) {
+		.workspace :global(.booking-context) {
+			width: 360px;
+			flex-shrink: 0;
+		}
+	}
+
+	@media (max-width: 1023px) {
+		.workspace {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.review {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		h1 {
+			font-size: var(--type-page-title);
+		}
+
+		.lead {
+			font-size: var(--type-body);
+		}
+
+		.actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+	}
+</style>

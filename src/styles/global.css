@@ -1,0 +1,450 @@
+/*
+ * Alder Health design tokens.
+ * Values are bound to the Figma file "03 — Design System" (semantic colour,
+ * type and dimension variables). Do not hand-tune these; change them in Figma.
+ */
+:root {
+	/* Brand */
+	--brand-primary: #164b3d;
+	--brand-primary-hover: #103b30;
+	--brand-secondary: #e6eee7;
+	--brand-accent: #a9513c;
+
+	/* Backgrounds */
+	--bg-default: #faf8f3;
+	--bg-surface: #ffffff;
+	--bg-subtle: #f0eee7;
+	--bg-soft-sage: #e0eadf;
+	--bg-image-backdrop: #e2eadf;
+	--bg-sage-decorative: #dce8de;
+	--bg-accent-subtle: #f4e8e0;
+
+	/* Text */
+	--text-primary: #183c32;
+	--text-secondary: #465b53;
+	--text-muted: #637068;
+	--text-inverse: #ffffff;
+
+	/* Borders */
+	--border-default: #ced5cd;
+	--border-strong: #87988c;
+
+	/* Status */
+	--status-success: #236344;
+	--status-success-surface: #eaf3eb;
+	--status-warning: #805b12;
+	--status-error: #ad382e;
+	--status-information: #285c77;
+	--status-information-surface: #eaf1f5;
+
+	/* Interaction */
+	--interactive-focus: #296fcc;
+	--interactive-disabled: #e1e5df;
+
+	/* Type families */
+	--font-editorial: 'Lora', Georgia, 'Times New Roman', serif;
+	--font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+	/* Editorial type scale — desktop values, stepped down at each breakpoint */
+	--type-display: 72px;
+	--type-page-title: 48px;
+	--type-section: 40px;
+	--type-card-heading: 28px;
+	--editorial-leading: 1.16;
+	--editorial-tracking: -0.8px;
+
+	/* Interface type scale (Inter, 1.55 leading) */
+	--type-lead: 20px;
+	--type-body: 16px;
+	--type-small: 14px;
+	--type-caption: 13px;
+	--type-eyebrow: 12px;
+	--ui-leading: 1.55;
+
+	/* Spacing rhythm — 4px base */
+	--space-4: 4px;
+	--space-8: 8px;
+	--space-12: 12px;
+	--space-16: 16px;
+	--space-20: 20px;
+	--space-24: 24px;
+	--space-28: 28px;
+	--space-32: 32px;
+	--space-40: 40px;
+	--space-48: 48px;
+	--space-56: 56px;
+	--space-64: 64px;
+	--space-72: 72px;
+	--space-80: 80px;
+
+	/* Radii — 6px controls, 10px contained modules */
+	--radius-control: 6px;
+	--radius-module: 10px;
+
+	/* Elevation — evergreen at 7% */
+	--shadow-raised: 0 8px 24px rgba(22, 75, 61, 0.07);
+
+	/* Layout — 1440/12col/80, 768/8col/32, 390/4col/24 */
+	--layout-max: 1440px;
+	--layout-gutter: 80px;
+	--layout-column-gap: 24px;
+}
+
+@media (max-width: 1023px) {
+	:root {
+		--type-display: 56px;
+		--type-page-title: 40px;
+		--type-section: 32px;
+		--layout-gutter: 32px;
+	}
+}
+
+@media (max-width: 767px) {
+	:root {
+		--type-display: 44px;
+		--type-page-title: 36px;
+		--type-section: 32px;
+		--layout-gutter: 24px;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg-default);
+	color: var(--text-primary);
+	font-family: var(--font-ui);
+	font-size: var(--type-body);
+	line-height: var(--ui-leading);
+	-webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	margin: 0;
+	font-family: var(--font-editorial);
+	font-weight: 400;
+	line-height: var(--editorial-leading);
+	letter-spacing: var(--editorial-tracking);
+	color: var(--text-primary);
+}
+
+p {
+	margin: 0;
+}
+
+ul,
+ol {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+a {
+	color: inherit;
+}
+
+button {
+	font: inherit;
+	color: inherit;
+}
+
+/* Layout ------------------------------------------------------------------ */
+
+.shell {
+	width: 100%;
+	max-width: var(--layout-max);
+	margin-inline: auto;
+	padding-inline: var(--layout-gutter);
+}
+
+/* Type utilities ---------------------------------------------------------- */
+
+.display {
+	font-family: var(--font-editorial);
+	font-size: var(--type-display);
+	font-weight: 400;
+	line-height: var(--editorial-leading);
+	letter-spacing: var(--editorial-tracking);
+}
+
+.page-title {
+	font-family: var(--font-editorial);
+	font-size: var(--type-page-title);
+	font-weight: 400;
+	line-height: var(--editorial-leading);
+	letter-spacing: var(--editorial-tracking);
+}
+
+.section-title {
+	font-family: var(--font-editorial);
+	font-size: var(--type-section);
+	font-weight: 400;
+	line-height: var(--editorial-leading);
+	letter-spacing: var(--editorial-tracking);
+}
+
+.card-title {
+	font-family: var(--font-editorial);
+	font-size: var(--type-card-heading);
+	font-weight: 400;
+	line-height: var(--editorial-leading);
+	letter-spacing: var(--editorial-tracking);
+}
+
+.eyebrow {
+	margin: 0;
+	color: var(--brand-accent);
+	font-family: var(--font-ui);
+	font-size: var(--type-eyebrow);
+	font-weight: 600;
+	line-height: 1.5;
+	letter-spacing: 1.7px;
+	text-transform: uppercase;
+}
+
+.lead {
+	font-size: var(--type-lead);
+	line-height: var(--ui-leading);
+	color: var(--text-secondary);
+}
+
+.caption {
+	font-size: var(--type-caption);
+	line-height: var(--ui-leading);
+	color: var(--text-muted);
+}
+
+/* Accessibility ----------------------------------------------------------- */
+
+.skip-link {
+	position: absolute;
+	left: -9999px;
+}
+
+.skip-link:focus {
+	left: var(--layout-gutter);
+	top: var(--space-8);
+	z-index: 20;
+	padding: var(--space-12) var(--space-20);
+	border-radius: var(--radius-control);
+	background: var(--bg-surface);
+	box-shadow: var(--shadow-raised);
+}
+
+:focus-visible {
+	outline: 2px solid var(--interactive-focus);
+	outline-offset: 2px;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/*
+ * Hero display sizes. The home hero runs one step above the design-system
+ * display scale (Figma 5:21774 / 5:21968 / 5:22159).
+ */
+:root {
+	--type-hero: 76px;
+}
+
+@media (max-width: 1023px) {
+	:root {
+		--type-hero: 60px;
+	}
+}
+
+@media (max-width: 767px) {
+	:root {
+		--type-hero: 44px;
+	}
+}
+
+/* Form controls ----------------------------------------------------------- */
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-8);
+	flex: 1 0 0;
+	min-width: 0;
+}
+
+.field-label {
+	font-size: var(--type-small);
+	font-weight: 600;
+	color: var(--text-primary);
+}
+
+.control {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	min-height: 50px;
+	/* 13px + 1px border keeps the control on the Figma 53px box */
+	padding: 13px 14px;
+	border: 1px solid var(--border-strong);
+	border-radius: var(--radius-control);
+	background: var(--bg-surface);
+	font-family: var(--font-ui);
+	font-size: var(--type-body);
+	line-height: var(--ui-leading);
+	color: var(--text-primary);
+}
+
+.control::placeholder {
+	color: var(--text-muted);
+}
+
+select.control {
+	appearance: none;
+	padding-right: 42px;
+	background-image: url('/icons/chevron-down.svg');
+	background-repeat: no-repeat;
+	background-position: right 14px center;
+	background-size: 18px 18px;
+}
+
+.control-with-icon {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.control-with-icon .icon {
+	position: absolute;
+	left: 14px;
+	pointer-events: none;
+}
+
+.control-with-icon .control {
+	padding-left: 42px;
+}
+
+/* Checkbox options — Figma 5:22387 (22px control, 44px touch target) */
+.check-option {
+	display: flex;
+	align-items: center;
+	gap: var(--space-12);
+	min-height: 44px;
+	font-size: 15px;
+	line-height: var(--ui-leading);
+	color: var(--text-secondary);
+	cursor: pointer;
+}
+
+.check-option input {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	flex-shrink: 0;
+	margin: 0;
+	appearance: none;
+	border: 1.5px solid var(--border-strong);
+	border-radius: 4px;
+	background: var(--bg-surface);
+	cursor: pointer;
+}
+
+.check-option input:checked {
+	border-color: var(--brand-primary);
+	background: var(--brand-primary);
+}
+
+.check-option input:checked::after {
+	content: '\2713';
+	font-size: var(--type-small);
+	line-height: 1;
+	color: var(--text-inverse);
+}
+
+/* Horizontal rule used between filter groups and card sections */
+.rule {
+	width: 100%;
+	height: 1px;
+	background: var(--border-default);
+}
+
+/* Link motion ------------------------------------------------------------- */
+
+/*
+ * Inline text links draw a rule that sweeps in from the left on hover.
+ *
+ * The rule is a pseudo-element anchored to the middle of the link and pushed
+ * down in em, so it tracks the text rather than the bottom of the line box —
+ * these links inherit line heights from 1.55 to 2.8 and a bottom-anchored
+ * underline would float well clear of the words on the looser ones.
+ */
+.link-underline {
+	position: relative;
+	text-decoration: none;
+}
+
+.link-underline::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 100%;
+	height: 1px;
+	background: currentColor;
+	transform: translateY(0.7em) scaleX(0);
+	transform-origin: left center;
+	transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+	transform: translateY(0.7em) scaleX(1);
+}
+
+/* The trailing arrow on a link leans in the direction it points. */
+.link-arrow {
+	display: inline-block;
+	transition: transform 0.24s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+a:hover > .link-arrow {
+	transform: translate(2px, -2px);
+}
+
+a:hover > .link-arrow--down {
+	transform: translateY(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+	}
+}

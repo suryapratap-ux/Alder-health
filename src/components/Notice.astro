@@ -1,0 +1,49 @@
+---
+/* Notice — Figma 5:22411 (information) and 5:23006 (success). */
+interface Props {
+	title: string;
+	tone?: 'info' | 'success';
+}
+
+const { title, tone = 'info' } = Astro.props;
+const icon = tone === 'success' ? '/icons/circle-check.svg' : '/icons/info.svg';
+---
+
+<div class:list={['notice', `notice--${tone}`]}>
+	<img src={icon} width="20" height="20" alt="" />
+	<div>
+		<p class="notice-title">{title}</p>
+		<p class="notice-body"><slot /></p>
+	</div>
+</div>
+
+<style>
+	.notice {
+		display: flex;
+		gap: var(--space-12);
+		align-items: flex-start;
+		padding: 18px;
+		border-radius: var(--radius-control);
+	}
+
+	.notice--info {
+		background: var(--status-information-surface);
+		color: var(--status-information);
+	}
+
+	.notice--success {
+		background: var(--status-success-surface);
+		color: var(--status-success);
+	}
+
+	.notice-title {
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: 1.6;
+	}
+
+	.notice-body {
+		font-size: var(--type-small);
+		line-height: 1.6;
+	}
+</style>

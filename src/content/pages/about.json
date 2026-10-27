@@ -1,0 +1,53 @@
+{
+  "seo": {
+    "title": "About — Alder Health",
+    "description": "Alder Health is a fictional outpatient network built to show how booking care can feel calm and practical. Meet the example clinics and clinicians."
+  },
+  "intro": {
+    "eyebrow": "Meet Alder Health",
+    "title": "A local network. A human connection.",
+    "lead": "Alder brings outpatient appointments and video consultations together, so you can choose the right setting for your day."
+  },
+  "network": {
+    "heading": "Care that stays close to home.",
+    "paragraphs": [
+      "Alder Health is a fictional outpatient network. It exists to show how finding a clinician, choosing a time and preparing for a visit can feel calm and practical rather than administrative.",
+      "Every clinician, clinic, credential and appointment time on this site is an illustrative example. Nothing here books real care."
+    ],
+    "ctaLabel": "Meet the clinicians",
+    "image": {
+      "src": "public/images/clinic-exterior.png",
+      "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic."
+    }
+  },
+  "clinics": {
+    "eyebrow": "Where we are",
+    "heading": "Two example clinics.",
+    "linkLabel": "See clinicians here",
+    "items": [
+      {
+        "id": "riverside",
+        "name": "Alder Riverside Clinic",
+        "address": "18 Willow Lane, Riverside",
+        "copy": "Primary care and family medicine appointments, with a step-free entrance and a quiet waiting area."
+      },
+      {
+        "id": "northside",
+        "name": "Alder Northside Clinic",
+        "address": "42 Birch Street, Northside",
+        "copy": "Dermatology and primary care appointments, a short walk from the Northside transit stop."
+      }
+    ]
+  },
+  "video": {
+    "eyebrow": "Care in more places",
+    "heading": "Video consultations.",
+    "copy": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk. The clinic can help you check whether a video consultation is suitable for your visit.",
+    "ctaLabel": "Find a video visit",
+    "teamLabel": "Clinicians offering video"
+  },
+  "notice": {
+    "title": "Fictional healthcare network",
+    "copy": "Alder Health is a design demonstration. The clinics, clinicians, availability and patient records shown across this site are illustrative examples only."
+  }
+}

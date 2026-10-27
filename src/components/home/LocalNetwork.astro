@@ -1,0 +1,128 @@
+---
+import { home } from '../../data/pages';
+
+/* Local network introduction — Figma 5:21833 / 5:22027 / 5:22218. */
+const { network } = home;
+---
+
+<section class="network">
+	<div class="photograph">
+		<img
+			src={network.image.src}
+			width="1376"
+			height="768"
+			alt={network.image.alt}
+		/>
+	</div>
+
+	<div class="introduction">
+		<p class="eyebrow">{network.eyebrow}</p>
+		<div class="editorial">
+			<h2>{network.heading}</h2>
+			{network.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+			<p class="clinic-links">
+				{
+					network.clinicLinks.map((link) => (
+						<a class="link-underline" href={link.href}>
+							{link.label} <span class="link-arrow" aria-hidden="true">&#8599;</span>
+						</a>
+					))
+				}
+			</p>
+			<p class="credit">{network.credit}</p>
+		</div>
+	</div>
+</section>
+
+<style>
+	.network {
+		display: flex;
+		gap: var(--space-64);
+		align-items: center;
+		padding: var(--space-64) var(--layout-gutter);
+		background: var(--bg-subtle);
+	}
+
+	.photograph {
+		flex: 1 0 0;
+		min-width: 0;
+		height: 430px;
+	}
+
+	.photograph img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.introduction {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	h2 {
+		font-size: 44px;
+		line-height: 1.18;
+	}
+
+	.editorial p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.clinic-links {
+		display: flex;
+		gap: var(--space-24);
+	}
+
+	.clinic-links a {
+		color: var(--text-secondary);
+	}
+
+	.clinic-links a:hover {
+		color: var(--brand-primary);
+	}
+
+	.credit {
+		margin-top: 0;
+	}
+
+	/* Tablet and mobile — photograph above the introduction */
+	@media (max-width: 1023px) {
+		.network {
+			flex-direction: column;
+			align-items: stretch;
+			gap: var(--space-32);
+			padding-block: var(--space-64);
+		}
+
+		.photograph {
+			flex: none;
+			height: 430px;
+		}
+
+		.introduction {
+			flex: none;
+		}
+	}
+
+	@media (max-width: 767px) {
+		h2 {
+			font-size: var(--type-page-title);
+		}
+
+		.network {
+			padding-block: var(--space-48);
+		}
+
+		.photograph {
+			height: 280px;
+		}
+	}
+</style>

@@ -1,0 +1,11 @@
+# Normalise to LF in the repository. Keystatic writes content files through the
+# GitHub API with LF endings, so without this every CMS edit made on Windows
+# would show up as a whole-file change.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

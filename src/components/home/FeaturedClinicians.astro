@@ -1,0 +1,207 @@
+---
+import Button from '../Button.astro';
+import { clinicians } from '../../data/clinicians';
+
+import { home } from '../../data/pages';
+
+/* Featured clinicians — Figma 5:21838 / 5:22032 / 5:22223. */
+const { featured } = home;
+---
+
+<section class="clinicians">
+	<div class="header">
+		<div class="header-copy">
+			<p class="eyebrow">{featured.eyebrow}</p>
+
+			<div class="editorial">
+				<h2>{featured.heading}</h2>
+				<p>{featured.intro}</p>
+			</div>
+		</div>
+
+		<Button href="/find-a-doctor" variant="secondary">{featured.ctaLabel}</Button>
+	</div>
+
+	<ul class="collection">
+		{
+			clinicians.map((clinician) => (
+				<li class="clinician">
+					<img
+						class="portrait"
+						src={clinician.photo}
+						width={clinician.photoWidth}
+						height={clinician.photoHeight}
+						style={`object-position: ${clinician.photoFocus}`}
+						alt={clinician.alt}
+					/>
+					<div class="introduction">
+						<div class="details">
+							<p class="name">{clinician.name}</p>
+							<p class="specialty">{clinician.specialty}</p>
+							<p>{clinician.clinic}</p>
+							<p>{clinician.note}</p>
+						</div>
+						<a class="meet link-underline" href={`/doctors/${clinician.slug}`}>
+							{featured.cardLinkLabel} <span class="link-arrow" aria-hidden="true">&#8599;</span>
+						</a>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.clinicians {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-32);
+		align-items: flex-start;
+		padding: var(--space-80);
+	}
+
+	h2 {
+		font-size: 44px;
+		line-height: 1.18;
+	}
+
+	/* The "Meet all doctors" action sits top-right, opposite the heading. */
+	.header {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.header-copy {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-32);
+		min-width: 0;
+	}
+
+	.editorial {
+		width: 100%;
+	}
+
+	.editorial p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.collection {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.clinician {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-20);
+		min-width: 0;
+	}
+
+	.portrait {
+		width: 100%;
+		height: 260px;
+		object-fit: cover;
+	}
+
+	.introduction {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.details p {
+		font-size: var(--type-body);
+		line-height: 1.8;
+		color: var(--text-secondary);
+	}
+
+	.meet {
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: var(--ui-leading);
+		color: var(--brand-primary);
+	}
+
+	.details .name {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.details .specialty {
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	/* Tablet — each clinician becomes a full-width row */
+	@media (max-width: 1023px) {
+		.clinicians {
+			padding: var(--space-80) var(--layout-gutter);
+		}
+
+		.collection {
+			flex-direction: column;
+		}
+
+		.clinician {
+			flex: none;
+			flex-direction: row;
+			gap: var(--space-20);
+			width: 100%;
+		}
+
+		.portrait {
+			width: 180px;
+			flex-shrink: 0;
+		}
+
+		.introduction {
+			flex: 1 0 0;
+			min-width: 0;
+		}
+	}
+
+	/* Mobile — back to a stacked card with a taller portrait */
+	@media (max-width: 767px) {
+		.clinicians {
+			padding-block: var(--space-56);
+		}
+
+		.header {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.header-copy {
+			flex: none;
+			width: 100%;
+		}
+
+		.clinician {
+			flex-direction: column;
+		}
+
+		.portrait {
+			width: 100%;
+			height: 310px;
+		}
+
+		.editorial h2 {
+			font-size: var(--type-page-title);
+		}
+	}
+</style>

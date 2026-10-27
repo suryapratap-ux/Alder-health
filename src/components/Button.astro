@@ -1,0 +1,138 @@
+---
+/*
+ * Alder/Button — Figma node 5:24842.
+ * Primary is evergreen; secondary is a bordered surface control.
+ * Both sit on a 48px control height with a 6px radius.
+ */
+interface Props {
+	href?: string;
+	variant?: 'primary' | 'secondary' | 'sage';
+	type?: 'button' | 'submit';
+	class?: string;
+	fullWidth?: boolean;
+}
+
+const { href, variant = 'primary', type = 'button', class: className, fullWidth = false } = Astro.props;
+const classes = ['button', `button--${variant}`, fullWidth && 'button--full', className]
+	.filter(Boolean)
+	.join(' ');
+---
+
+{
+	href ? (
+		<a class={classes} href={href}>
+			<span class="button-label">
+				<slot />
+			</span>
+		</a>
+	) : (
+		<button class={classes} type={type}>
+			<span class="button-label">
+				<slot />
+			</span>
+		</button>
+	)
+}
+
+<style>
+	/*
+	 * The hover state sweeps a fill in from the left rather than swapping the
+	 * background colour outright, matching the rule that sweeps under a text
+	 * link. The fill is a pseudo-element behind the label, so the label colour
+	 * stays put while the surface changes underneath it.
+	 */
+	.button {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 48px;
+		padding-inline: var(--space-20);
+		overflow: hidden;
+		border: 1px solid transparent;
+		border-radius: var(--radius-control);
+		font-family: var(--font-ui);
+		font-size: 15px;
+		font-weight: 600;
+		line-height: 1;
+		text-decoration: none;
+		white-space: nowrap;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			transform 0.24s cubic-bezier(0.2, 0.7, 0.2, 1),
+			box-shadow 0.24s ease;
+	}
+
+	/* Evergreen at 7% — the restrained elevation from the design system. */
+	.button:hover,
+	.button:focus-visible {
+		transform: translateY(-1px);
+		box-shadow: var(--shadow-raised);
+	}
+
+	.button::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform 0.34s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	.button:hover::before,
+	.button:focus-visible::before {
+		transform: scaleX(1);
+	}
+
+	/* Keeps the label and any icon above the sweeping fill. */
+	.button-label {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-8);
+	}
+
+	.button--full {
+		width: 100%;
+	}
+
+	.button--primary {
+		background: var(--brand-primary);
+		color: var(--text-inverse);
+	}
+
+	.button--primary::before {
+		background: var(--brand-primary-hover);
+	}
+
+	.button--secondary {
+		border-color: var(--border-strong);
+		background: var(--bg-surface);
+		color: var(--brand-primary);
+	}
+
+	.button--secondary::before {
+		background: var(--brand-secondary);
+	}
+
+	.button--secondary:hover {
+		border-color: var(--brand-primary);
+	}
+
+	.button--sage {
+		background: var(--brand-secondary);
+		color: var(--brand-primary);
+	}
+
+	/*
+	 * Sage sits on the evergreen band, where both the Soft Sage hover tint and
+	 * the evergreen elevation shadow are invisible. It wipes to the surface
+	 * white instead, which reads clearly against the dark background and keeps
+	 * the evergreen label well above contrast.
+	 */
+	.button--sage::before {
+		background: var(--bg-surface);
+	}
+</style>

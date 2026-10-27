@@ -1,0 +1,38 @@
+{
+  "name": "Daniel Ortiz",
+  "order": 3,
+  "specialty": "Family medicine",
+  "clinic": "Alder Riverside Clinic",
+  "clinicAddress": "18 Willow Lane, Riverside",
+  "note": "Fictional profile · illustrative portrait",
+  "languages": "English, Spanish",
+  "languagesSentence": "Languages: English and Spanish",
+  "credentials": "MD · Family Medicine residency",
+  "formats": "In-person · Video consultations",
+  "nextVisit": "Thu, Nov 5 · 11:00 AM ET",
+  "visitLength": "30-minute in-person visit",
+  "photo": "public/images/clinician-daniel-ortiz.png",
+  "photoWidth": 1584,
+  "photoHeight": 672,
+  "photoFocus": "50% 25%",
+  "alt": "Illustrative portrait of Daniel Ortiz, a family medicine clinician, in a clinic setting.",
+  "profile": {
+    "headline": "A conversation, not a checklist.",
+    "quote": "“I want people to feel they have room to ask questions and talk about what matters in their day-to-day lives.”",
+    "paragraphs": [
+      "In this fictional profile, Daniel takes a thoughtful, practical approach to family medicine. He welcomes adults and families seeking care conversations across different stages of life.",
+      "He values clear explanations and shared conversations about next steps. Outside the clinic, his imagined routine includes neighborhood walks, a good book and time with family."
+    ],
+    "areasIntro": "Examples of topics that may be discussed during a family medicine visit. This is not medical advice.",
+    "areas": [
+      "Everyday health concerns",
+      "Preventive care conversations",
+      "Ongoing-care check-ins",
+      "Care coordination"
+    ],
+    "inPersonHeading": "In person at Riverside",
+    "inPerson": "18 Willow Lane, Riverside. The example clinic has a step-free entrance. Contact the team to discuss your access needs.",
+    "video": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk.",
+    "whatToBring": "Have a list of questions and relevant appointment documents ready. Ask the clinic about payment or coverage before your visit."
+  }
+}

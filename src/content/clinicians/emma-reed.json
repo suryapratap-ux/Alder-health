@@ -1,0 +1,38 @@
+{
+  "name": "Emma Reed",
+  "order": 1,
+  "specialty": "Primary care",
+  "clinic": "Alder Riverside Clinic",
+  "clinicAddress": "18 Willow Lane, Riverside",
+  "note": "Fictional profile · illustrative portrait",
+  "languages": "English, Spanish",
+  "languagesSentence": "Languages: English and Spanish",
+  "credentials": "MD · Family Medicine residency",
+  "formats": "In-person · Video consultations",
+  "nextVisit": "Wed, Nov 4 · 10:00 AM ET",
+  "visitLength": "30-minute in-person visit",
+  "photo": "public/images/clinician-emma-reed.png",
+  "photoWidth": 896,
+  "photoHeight": 1200,
+  "photoFocus": "52% 20%",
+  "alt": "Illustrative portrait of Emma Reed, a primary care clinician, in a clinic setting.",
+  "profile": {
+    "headline": "A conversation, not a checklist.",
+    "quote": "“I want people to feel they have room to ask questions and talk about what matters in their day-to-day lives.”",
+    "paragraphs": [
+      "In this fictional profile, Emma takes a thoughtful, practical approach to primary care. She welcomes adults seeking everyday appointments, preventive conversations and support with ongoing care.",
+      "She values clear explanations and shared conversations about next steps. Outside the clinic, her imagined routine includes neighborhood walks, a good book and time with family."
+    ],
+    "areasIntro": "Examples of topics that may be discussed during a primary care visit. This is not medical advice.",
+    "areas": [
+      "Everyday health concerns",
+      "Preventive care conversations",
+      "Ongoing-care check-ins",
+      "Care coordination"
+    ],
+    "inPersonHeading": "In person at Riverside",
+    "inPerson": "18 Willow Lane, Riverside. The example clinic has a step-free entrance. Contact the team to discuss your access needs.",
+    "video": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk.",
+    "whatToBring": "Have a list of questions and relevant appointment documents ready. Ask the clinic about payment or coverage before your visit."
+  }
+}

@@ -1,0 +1,157 @@
+---
+import Button from './Button.astro';
+import type { Clinician } from '../data/clinicians';
+
+/* Choose an appointment — Figma 5:22717. */
+interface Props {
+	clinician: Clinician;
+}
+
+const { clinician } = Astro.props;
+---
+
+<div class="appointment">
+	<section class="card">
+		<div class="intro">
+			<h2 class="card-title">A time for your care.</h2>
+			<p>Book an example visit with {clinician.name}.</p>
+		</div>
+
+		<p class="label">Visit type</p>
+
+		<div class="segmented" role="radiogroup" aria-label="Visit type">
+			<label class="choice">
+				<input type="radio" name="visit-type" value="in-person" checked />
+				<span>In-person</span>
+			</label>
+			<label class="choice">
+				<input type="radio" name="visit-type" value="video" />
+				<span>Video</span>
+			</label>
+		</div>
+
+		<div class="location">
+			<p>{clinician.clinic}</p>
+			<p>{clinician.clinicAddress}</p>
+		</div>
+
+		<div class="rule"></div>
+
+		<div class="availability">
+			<p>Next example: {clinician.nextVisit}</p>
+			<p>{clinician.visitLength}</p>
+		</div>
+
+		<Button href={`/booking?doctor=${clinician.slug}`} fullWidth>Choose an appointment</Button>
+
+		<p class="disclaimer">Fictional profile and availability. No real appointment will be made.</p>
+	</section>
+
+	<p class="sidebar-note">
+		Times are shown in Eastern Time. Availability is illustrative.
+	</p>
+</div>
+
+<style>
+	.appointment {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		width: 100%;
+	}
+
+	.card {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		padding: var(--space-24);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.intro {
+		width: 100%;
+	}
+
+	.intro p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.segmented {
+		display: flex;
+		gap: var(--space-4);
+		width: 100%;
+		padding: var(--space-4);
+		border-radius: var(--radius-control);
+		background: var(--bg-subtle);
+	}
+
+	.choice {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.choice input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.choice span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		padding: var(--space-8);
+		border: 1px solid var(--bg-subtle);
+		border-radius: 4px;
+		background: var(--bg-subtle);
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		text-align: center;
+		color: var(--brand-primary);
+		cursor: pointer;
+	}
+
+	.choice input:checked + span {
+		border-color: var(--brand-primary);
+		background: var(--bg-surface);
+		font-weight: 600;
+	}
+
+	.choice input:focus-visible + span {
+		outline: 2px solid var(--interactive-focus);
+		outline-offset: 2px;
+	}
+
+	.location p {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.availability p {
+		font-size: var(--type-body);
+		color: var(--status-success);
+	}
+
+	.disclaimer {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	.sidebar-note {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+</style>

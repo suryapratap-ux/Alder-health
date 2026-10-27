@@ -1,0 +1,85 @@
+---
+import Button from '../Button.astro';
+import Accordion from '../Accordion.astro';
+import { questions } from '../../data/faq';
+
+/*
+ * Frequently asked questions — Figma 5:21907 / 5:22101 / 5:22292.
+ * The design shows the first and last item expanded; the rest are collapsed.
+ */
+import { home } from '../../data/pages';
+
+const { faq } = home;
+---
+
+<section class="faq">
+	<div class="intro">
+		<p class="eyebrow">{faq.eyebrow}</p>
+		<h2>{faq.heading}</h2>
+		<p class="supporting">{faq.supporting}</p>
+		<Button href="/help" variant="secondary">{faq.ctaLabel}</Button>
+	</div>
+
+	<Accordion items={questions} name="home-faq" />
+</section>
+
+<style>
+	.faq :global(.accordion) {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.faq {
+		display: flex;
+		gap: var(--space-80);
+		align-items: flex-start;
+		padding: var(--space-72) var(--layout-gutter);
+		background: var(--bg-subtle);
+	}
+
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		width: 390px;
+		flex-shrink: 0;
+	}
+
+	h2 {
+		font-size: 44px;
+	}
+
+	.supporting {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	/* Tablet and mobile — the introduction sits above the list */
+	@media (max-width: 1023px) {
+		.faq {
+			flex-direction: column;
+			gap: var(--space-24);
+			padding-block: var(--space-72);
+		}
+
+		.intro {
+			width: 100%;
+		}
+
+		.faq :global(.accordion) {
+			width: 100%;
+			flex: none;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.faq {
+			padding-block: var(--space-48);
+		}
+
+		h2 {
+			font-size: var(--type-page-title);
+		}
+	}
+</style>

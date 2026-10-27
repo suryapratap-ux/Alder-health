@@ -1,0 +1,317 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import { getClinician, clinicians } from '../data/clinicians';
+import { exampleAppointment, examplePatient } from '../data/appointment';
+
+/* Appointment confirmation — Figma 5:23610 (desktop), 5:23668 (tablet), 5:23724 (mobile). */
+const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
+const firstName = examplePatient.name.split(' ')[0];
+
+const preparationSteps = [
+	{
+		index: '01',
+		title: 'Plan your arrival',
+		copy: `Your example in-person visit is at ${clinician.clinic}, ${clinician.clinicAddress}. Allow time to find the entrance and check in.`,
+	},
+	{
+		index: '02',
+		title: 'Bring your questions',
+		copy: 'Have your appointment details and any relevant documents ready. Write down the questions you would like to discuss.',
+	},
+	{
+		index: '03',
+		title: 'Tell us what would help',
+		copy: 'For step-free access or other practical needs, contact the clinic before your visit. Do not send sensitive medical details by general email.',
+	},
+];
+---
+
+<Layout
+	title="Appointment confirmed — Alder Health"
+	description="An example confirmation with your visit details, how to plan your arrival and what to bring. Nothing is booked — this is a design demonstration."
+>
+	<section class="success">
+		<span class="success-mark" aria-hidden="true">
+			<img src="/icons/circle-check.svg" width="20" height="20" alt="" />
+		</span>
+
+		<p class="eyebrow">Example appointment confirmed</p>
+		<h1>Your next step is all set.</h1>
+		<p class="lead">
+			{firstName}, here are the details for your example {clinician.specialty.toLowerCase()} visit.
+		</p>
+
+		<Notice title="Example confirmation — no appointment has been booked" tone="success">
+			This is a fictional booking demonstration. No confirmation email has been sent.
+		</Notice>
+	</section>
+
+	<section class="details">
+		<div class="summary-column">
+			<div class="summary">
+				<p class="summary-label">
+					Your appointment &middot; {exampleAppointment.reference}
+				</p>
+
+				<div class="clinician">
+					<img
+						src={clinician.photo}
+						width={clinician.photoWidth}
+						height={clinician.photoHeight}
+						style={`object-position: ${clinician.photoFocus}`}
+						alt={clinician.alt}
+					/>
+					<div>
+						<p class="name">{clinician.name}</p>
+						<p>{clinician.specialty}</p>
+					</div>
+				</div>
+
+				<div class="rule"></div>
+
+				<div class="facts">
+					<p class="date">{exampleAppointment.dateShort}</p>
+					<p>{exampleAppointment.timeRange}</p>
+					<p>{exampleAppointment.format}</p>
+					<p>{clinician.clinic}</p>
+					<p>{clinician.clinicAddress}</p>
+					<p>Patient: {examplePatient.name}</p>
+				</div>
+
+				<p class="disclaimer">Fictional clinician and clinic. Example availability only.</p>
+			</div>
+
+			<div class="summary-actions">
+				<Button href="/dashboard">
+					<img src="/icons/calendar-days.svg" width="18" height="18" alt="" />
+					Add to calendar
+				</Button>
+				<Button href="/dashboard" variant="secondary">View appointments</Button>
+			</div>
+
+			<p class="static-note">Calendar and account actions are static examples.</p>
+		</div>
+
+		<div class="preparation">
+			<h2 class="section-title">A little preparation, a calmer day.</h2>
+
+			{
+				preparationSteps.map((step) => (
+					<div class="preparation-step">
+						<h3>{step.index} / {step.title}</h3>
+						<p>{step.copy}</p>
+					</div>
+				))
+			}
+
+			<div class="rule"></div>
+
+			<div class="plans">
+				<h2 class="section-title">Plans change. We&rsquo;re here to help.</h2>
+				<p>
+					Use View appointments to find the reschedule and cancel actions. For a real visit, check
+					the clinic&rsquo;s cancellation information or contact the team.
+				</p>
+				<p class="email">hello@alderhealth.example</p>
+				<p class="reference">
+					Example contact route &middot; Reference {exampleAppointment.reference}
+				</p>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.success {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter) var(--space-40);
+	}
+
+	.success-mark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 64px;
+		height: 64px;
+		border-radius: 50%;
+		background: var(--status-success-surface);
+	}
+
+	h1 {
+		font-size: 52px;
+	}
+
+	.lead {
+		font-size: 18px;
+	}
+
+	.success :global(.notice) {
+		width: 100%;
+	}
+
+	.details {
+		display: flex;
+		gap: var(--space-56);
+		align-items: flex-start;
+		padding: 0 var(--layout-gutter) var(--space-64);
+	}
+
+	.summary-column {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		width: 432px;
+		flex-shrink: 0;
+	}
+
+	.summary {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		width: 100%;
+		padding: var(--space-24);
+		border-radius: var(--radius-module);
+		background: var(--brand-secondary);
+	}
+
+	.summary-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		text-transform: uppercase;
+		color: var(--brand-primary);
+	}
+
+	.clinician {
+		display: flex;
+		gap: 14px;
+		align-items: center;
+	}
+
+	.clinician img {
+		width: 64px;
+		height: 72px;
+		flex-shrink: 0;
+		border-radius: var(--radius-control);
+		object-fit: cover;
+	}
+
+	.clinician p {
+		font-size: var(--type-body);
+		line-height: 1.7;
+		color: var(--text-primary);
+	}
+
+	.name {
+		font-weight: 600;
+	}
+
+	.facts p {
+		font-size: var(--type-body);
+		line-height: 2;
+		color: var(--text-secondary);
+	}
+
+	.date {
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.disclaimer {
+		font-size: var(--type-eyebrow);
+		color: var(--text-secondary);
+	}
+
+	.summary-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-12);
+	}
+
+	.static-note {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	.preparation {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-32);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.preparation-step {
+		width: 100%;
+	}
+
+	.preparation-step h3 {
+		font-size: var(--type-card-heading);
+		line-height: 1.18;
+	}
+
+	.preparation-step p,
+	.plans p {
+		margin-top: var(--space-16);
+		font-size: var(--type-body);
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+
+	.plans {
+		width: 100%;
+	}
+
+	.email {
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.reference {
+		font-size: var(--type-small);
+	}
+
+	/* Tablet and mobile — the summary card moves above the preparation steps */
+	@media (max-width: 1023px) {
+		.details {
+			flex-direction: column;
+			gap: var(--space-48);
+		}
+
+		.summary-column {
+			width: 100%;
+		}
+
+		.preparation {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.success {
+			padding-block: var(--space-40);
+		}
+
+		h1 {
+			font-size: 40px;
+		}
+
+		.lead {
+			font-size: var(--type-body);
+		}
+
+		.summary-actions {
+			flex-direction: column;
+			align-items: stretch;
+			width: 100%;
+		}
+	}
+</style>

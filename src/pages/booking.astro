@@ -1,0 +1,449 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import ProgressSteps from '../components/booking/ProgressSteps.astro';
+import BookingContext from '../components/booking/BookingContext.astro';
+import { getClinician, clinicians } from '../data/clinicians';
+import { exampleAppointment, calendar, timeSlots, bookingSteps } from '../data/appointment';
+
+/* Appointment booking — Figma 5:22886 (desktop), 5:23036 (tablet), 5:23184 (mobile). */
+const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
+---
+
+<Layout
+	title="Choose a time — Alder Health"
+	description="Step 2 of 4. Pick an in-person or video visit, choose a date and time from the example availability, then carry your selections through to review."
+>
+	<section class="intro">
+		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Book appointment', href: '/booking' }]} current="Choose a time" />
+		<p class="eyebrow">Step 2 of 4</p>
+		<h1>Choose a time for yourself.</h1>
+		<p class="lead">
+			{clinician.name} is selected for your {clinician.specialty.toLowerCase()} visit. Choose how and
+			when you&rsquo;d like to meet.
+		</p>
+		<ProgressSteps steps={bookingSteps} />
+	</section>
+
+	<section class="workspace">
+		<div class="time-selection">
+			<div class="selected-care">
+				<p class="care-label">{clinician.name} &middot; {clinician.specialty}</p>
+				<p class="care-note">Fictional clinician &middot; illustrative appointment availability</p>
+			</div>
+
+			<div class="visit-type">
+				<p class="question">How would you like to visit?</p>
+				<div class="segmented" role="radiogroup" aria-label="How would you like to visit?">
+					<label class="choice">
+						<input type="radio" name="booking-visit" value="in-person" checked />
+						<span>In-person</span>
+					</label>
+					<label class="choice">
+						<input type="radio" name="booking-visit" value="video" />
+						<span>Video</span>
+					</label>
+				</div>
+				<p class="visit-note">In-person at {clinician.clinic}, {clinician.clinicAddress}.</p>
+			</div>
+
+			<div class="rule"></div>
+
+			<div class="selector">
+				<div class="month">
+					<h2 class="card-title">{calendar.monthLabel}</h2>
+					<div class="month-nav">
+						<button type="button" aria-label="Previous month">&#8249;</button>
+						<button type="button" aria-label="Next month">&#8250;</button>
+					</div>
+				</div>
+
+				<table class="calendar">
+					<thead>
+						<tr>
+							{calendar.weekdays.map((day) => <th scope="col">{day}</th>)}
+						</tr>
+					</thead>
+					<tbody>
+						{
+							Array.from({ length: Math.ceil((calendar.days + calendar.startWeekday) / 7) }).map(
+								(_, week) => (
+									<tr>
+										{Array.from({ length: 7 }).map((__, weekday) => {
+											const dayNumber = week * 7 + weekday - calendar.startWeekday + 1;
+											const inMonth = dayNumber >= 1 && dayNumber <= calendar.days;
+											if (!inMonth) return <td />;
+											const isSelected = dayNumber === calendar.selected;
+											const isAvailable = calendar.available.includes(dayNumber);
+											return (
+												<td>
+													<button
+														type="button"
+														class:list={[
+															'day',
+															isSelected && 'day--selected',
+															isAvailable && 'day--available',
+														]}
+														aria-pressed={isSelected ? 'true' : 'false'}
+													>
+														{dayNumber}
+													</button>
+												</td>
+											);
+										})}
+									</tr>
+								)
+							)
+						}
+					</tbody>
+				</table>
+
+				<p class="calendar-key">
+					Selected date has a filled background. Underlined dates have example availability.
+				</p>
+
+				<div class="rule"></div>
+
+				<div class="slots">
+					<p class="slot-day">{exampleAppointment.dayLabel}</p>
+					<p class="slot-note">
+						{exampleAppointment.visitLabel} &middot; {exampleAppointment.timezone}
+					</p>
+					<div class="slot-list" role="radiogroup" aria-label="Available times">
+						{
+							timeSlots.map((slot) => (
+								<label class:list={['slot', slot.selected && 'slot--selected']}>
+									<input type="radio" name="booking-time" value={slot.label} checked={slot.selected} />
+									<span>{slot.label}</span>
+								</label>
+							))
+						}
+					</div>
+				</div>
+			</div>
+
+			<Notice title={`✓ Your time is selected`} tone="success">
+				{exampleAppointment.dayLong} at {exampleAppointment.time} Eastern Time. Your visit will last
+				{' '}{exampleAppointment.duration}.
+			</Notice>
+
+			<div class="step-navigation">
+				<Button href={`/doctors/${clinician.slug}`} variant="secondary">Back</Button>
+				<Button href="/review">
+					<img src="/icons/arrow-right.svg" width="18" height="18" alt="" />
+					Continue to details
+				</Button>
+			</div>
+
+			<p class="workspace-note">
+				Your selections carry forward to review. This demonstration does not hold or book a real
+				time.
+			</p>
+		</div>
+
+		<BookingContext clinician={clinician} />
+	</section>
+</Layout>
+
+<style>
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		padding: var(--space-32) var(--layout-gutter) var(--space-24);
+	}
+
+	h1 {
+		font-size: 52px;
+	}
+
+	.lead {
+		font-size: 18px;
+	}
+
+	.workspace {
+		display: flex;
+		gap: var(--space-48);
+		align-items: flex-start;
+		padding: 0 var(--layout-gutter) var(--space-64);
+	}
+
+	.time-selection {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-28);
+		align-items: flex-start;
+		min-width: 0;
+		padding: var(--space-32);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.care-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--brand-primary);
+	}
+
+	.care-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.visit-type {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+		width: 100%;
+	}
+
+	.question {
+		font-size: var(--type-body);
+		font-weight: 600;
+	}
+
+	.segmented {
+		display: flex;
+		gap: var(--space-4);
+		width: 100%;
+		padding: var(--space-4);
+		border-radius: var(--radius-control);
+		background: var(--bg-subtle);
+	}
+
+	.choice {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	.choice input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.choice span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		padding: var(--space-8);
+		border: 1px solid transparent;
+		border-radius: 4px;
+		font-size: var(--type-small);
+		color: var(--brand-primary);
+		cursor: pointer;
+	}
+
+	.choice input:checked + span {
+		border-color: var(--brand-primary);
+		background: var(--bg-surface);
+		font-weight: 600;
+	}
+
+	.choice input:focus-visible + span {
+		outline: 2px solid var(--interactive-focus);
+		outline-offset: 2px;
+	}
+
+	.visit-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.selector {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		width: 100%;
+	}
+
+	.month {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.month-nav {
+		display: flex;
+		gap: var(--space-16);
+	}
+
+	.month-nav button {
+		width: 32px;
+		height: 32px;
+		border: 0;
+		background: none;
+		font-size: 20px;
+		color: var(--text-primary);
+		cursor: pointer;
+	}
+
+	.calendar {
+		width: 100%;
+		border-collapse: collapse;
+		text-align: center;
+	}
+
+	.calendar th {
+		padding-bottom: var(--space-12);
+		font-size: var(--type-small);
+		font-weight: 400;
+		color: var(--text-secondary);
+	}
+
+	.calendar td {
+		padding: var(--space-4);
+	}
+
+	.day {
+		width: 100%;
+		min-width: 44px;
+		min-height: 44px;
+		border: 0;
+		border-radius: var(--radius-control);
+		background: none;
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+		cursor: pointer;
+	}
+
+	.day--available {
+		text-decoration: underline;
+		color: var(--text-primary);
+	}
+
+	.day--selected {
+		background: var(--brand-primary);
+		color: var(--text-inverse);
+		text-decoration: none;
+	}
+
+	.calendar-key {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.slots {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+	}
+
+	.slot-day {
+		font-size: var(--type-body);
+		font-weight: 600;
+	}
+
+	.slot-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	.slot-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-12);
+		margin-top: var(--space-4);
+	}
+
+	.slot input {
+		position: absolute;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.slot span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
+		padding-inline: var(--space-20);
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius-control);
+		background: var(--bg-surface);
+		font-size: var(--type-body);
+		font-weight: 600;
+		color: var(--brand-primary);
+		cursor: pointer;
+	}
+
+	.slot input:checked + span {
+		border-color: var(--brand-primary);
+		background: var(--brand-primary);
+		color: var(--text-inverse);
+	}
+
+	.slot input:checked + span::before {
+		content: '\2713';
+		padding-right: var(--space-8);
+	}
+
+	.slot input:focus-visible + span {
+		outline: 2px solid var(--interactive-focus);
+		outline-offset: 2px;
+	}
+
+	.step-navigation {
+		display: flex;
+		gap: var(--space-16);
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.workspace-note {
+		font-size: var(--type-small);
+		color: var(--text-secondary);
+	}
+
+	/* Desktop — the booking context sits in a 360px sidebar */
+	@media (min-width: 1024px) {
+		.workspace :global(.booking-context) {
+			width: 360px;
+			flex-shrink: 0;
+		}
+	}
+
+	/* Tablet and mobile — the context card drops below the selector */
+	@media (max-width: 1023px) {
+		.workspace {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.time-selection {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		h1 {
+			font-size: var(--type-page-title);
+		}
+
+		.lead {
+			font-size: var(--type-body);
+		}
+
+		.time-selection {
+			padding: 0;
+			border: 0;
+			border-radius: 0;
+			background: none;
+		}
+
+		.day {
+			min-width: 36px;
+			font-size: var(--type-small);
+		}
+	}
+</style>

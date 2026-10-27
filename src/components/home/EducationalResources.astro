@@ -1,0 +1,155 @@
+---
+import Button from '../Button.astro';
+import { resources } from '../../data/resources';
+
+import { home } from '../../data/pages';
+
+/* Educational resources — Figma 5:21887 / 5:22081 / 5:22272. */
+const section = home.resources;
+---
+
+<section class="resources">
+	<div class="intro">
+		<div class="heading">
+			<p class="eyebrow">{section.eyebrow}</p>
+			<h2>{section.heading}</h2>
+		</div>
+		<Button href="/resources" variant="secondary">{section.ctaLabel}</Button>
+	</div>
+
+	<ul class="collection">
+		{
+			resources.map((resource) => (
+				<li class="resource">
+					<img class="cover" src={resource.photo} width="1376" height="768" alt={resource.alt} />
+					<p class="kicker">{resource.kicker}</p>
+					<div class="editorial">
+						<p class="title">{resource.title}</p>
+						<p class="copy">{resource.copy}</p>
+						<a class="read link-underline" href="/resources">{section.cardLinkLabel} <span class="link-arrow" aria-hidden="true">&#8599;</span></a>
+					</div>
+				</li>
+			))
+		}
+	</ul>
+</section>
+
+<style>
+	.resources {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-32);
+		align-items: flex-start;
+		padding: var(--space-80);
+	}
+
+	.intro {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-end;
+		width: 100%;
+	}
+
+	.heading {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		min-width: 0;
+	}
+
+	h2 {
+		font-size: 44px;
+	}
+
+	.collection {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.resource {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		min-width: 0;
+	}
+
+	.cover {
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+	}
+
+	.kicker {
+		font-size: 11px;
+		font-weight: 600;
+		line-height: var(--ui-leading);
+		text-transform: uppercase;
+		color: var(--brand-accent);
+	}
+
+	.title {
+		font-family: var(--font-editorial);
+		font-size: 24px;
+		line-height: 1.7;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.copy {
+		margin-top: 27px;
+		font-size: var(--type-body);
+		line-height: 1.7;
+		color: var(--text-secondary);
+	}
+
+	.read {
+		display: inline-block;
+		margin-top: 27px;
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: 1.7;
+		color: var(--brand-primary);
+	}
+
+	/* Tablet and mobile — resources stack */
+	@media (max-width: 1023px) {
+		.resources {
+			padding: var(--space-80) var(--layout-gutter);
+		}
+
+		.intro {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-24);
+		}
+
+		.heading {
+			flex: none;
+			width: 100%;
+		}
+
+		.collection {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.resource {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.resources {
+			padding-block: var(--space-56);
+		}
+
+		h2 {
+			font-size: var(--type-page-title);
+		}
+	}
+</style>

@@ -1,0 +1,375 @@
+---
+import Button from './Button.astro';
+import { site } from '../data/site';
+
+/*
+ * Alder/Navigation/Site header — Figma 5:21757 (desktop), 5:21953 (tablet),
+ * 5:25560 (mobile). Desktop shows the inline Explore nav; tablet and mobile
+ * collapse it behind the Menu control, which discloses the same links.
+ *
+ * "Find care" carries a chevron in the design but no panel is drawn, so the
+ * menu is built from the Find care group in the footer directory. The chevron
+ * reuses the path from the Figma chevron-down icon so it can inherit the link
+ * colour and rotate when the menu opens.
+ */
+const { wordmark, findCare, primaryNav, headerActions } = site;
+---
+
+<header class="site-header">
+	<div class="navigation">
+		<a class="wordmark" href="/">{wordmark}</a>
+
+		<nav class="explore" aria-label="Explore">
+			<div class="find-care" data-find-care>
+				<button
+					class="find-care-toggle"
+					type="button"
+					aria-expanded="false"
+					aria-controls="find-care-menu"
+					data-find-care-toggle
+				>
+					{findCare.label}
+					<svg
+						class="chevron"
+						width="14"
+						height="14"
+						viewBox="0 0 18 18"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M4.5 6.75L9 11.25L13.5 6.75"
+							stroke="currentColor"
+							stroke-width="1.7"
+							stroke-linecap="round"
+							stroke-linejoin="round"></path>
+					</svg>
+				</button>
+
+				<div class="find-care-menu" id="find-care-menu" data-open="false">
+					{findCare.items.map((link) => <a href={link.href}>{link.label}</a>)}
+				</div>
+			</div>
+
+			{primaryNav.map((link) => <a class="link-underline" href={link.href}>{link.label}</a>)}
+		</nav>
+
+		<div class="account">
+			<a class="account-link link-underline" href={headerActions.account.href}>
+				{headerActions.account.label}
+			</a>
+			<Button href={headerActions.book.href} class="book">{headerActions.book.label}</Button>
+			<button
+				class="menu-control"
+				type="button"
+				aria-expanded="false"
+				aria-controls="site-menu"
+				data-menu-toggle
+			>
+				<img src="/icons/menu.svg" width="20" height="20" alt="" />
+				{headerActions.menu}
+			</button>
+		</div>
+	</div>
+
+	<div class="divider"></div>
+
+	<nav class="disclosed-menu" id="site-menu" aria-label="Site" hidden>
+		<p class="disclosed-group">{findCare.label}</p>
+		{
+			findCare.items.map((link) => (
+				<a class="disclosed-sublink link-underline" href={link.href}>
+					{link.label}
+				</a>
+			))
+		}
+
+		{primaryNav.map((link) => <a class="link-underline" href={link.href}>{link.label}</a>)}
+		<a class="link-underline" href={headerActions.account.href}>{headerActions.account.label}</a>
+		<Button href={headerActions.book.href} fullWidth>{headerActions.book.label}</Button>
+	</nav>
+</header>
+
+<script>
+	const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+	const siteMenu = document.getElementById('site-menu');
+
+	menuToggle?.addEventListener('click', () => {
+		const open = menuToggle.getAttribute('aria-expanded') === 'true';
+		menuToggle.setAttribute('aria-expanded', String(!open));
+		siteMenu?.toggleAttribute('hidden', open);
+	});
+
+	const findCare = document.querySelector<HTMLElement>('[data-find-care]');
+	const findCareToggle = document.querySelector<HTMLButtonElement>('[data-find-care-toggle]');
+	const findCareMenu = document.getElementById('find-care-menu');
+
+	if (findCare && findCareToggle && findCareMenu) {
+		let closeTimer: number | undefined;
+
+		const setOpen = (open: boolean) => {
+			window.clearTimeout(closeTimer);
+			findCareToggle.setAttribute('aria-expanded', String(open));
+			findCareMenu.dataset.open = String(open);
+		};
+
+		// A short delay on leaving keeps the menu from flickering shut while the
+		// pointer crosses the gap between the toggle and the panel.
+		const closeSoon = () => {
+			window.clearTimeout(closeTimer);
+			closeTimer = window.setTimeout(() => setOpen(false), 140);
+		};
+
+		findCareToggle.addEventListener('click', () => {
+			setOpen(findCareToggle.getAttribute('aria-expanded') !== 'true');
+		});
+
+		// Hover only where there is a real pointer; touch and keyboard use the button.
+		if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+			findCare.addEventListener('mouseenter', () => setOpen(true));
+			findCare.addEventListener('mouseleave', closeSoon);
+		}
+
+		findCare.addEventListener('focusin', () => setOpen(true));
+		findCare.addEventListener('focusout', (event) => {
+			if (findCare.contains(event.relatedTarget as Node)) return;
+			setOpen(false);
+		});
+
+		document.addEventListener('click', (event) => {
+			if (findCare.contains(event.target as Node)) return;
+			setOpen(false);
+		});
+
+		document.addEventListener('keydown', (event) => {
+			if (event.key !== 'Escape') return;
+			if (findCareToggle.getAttribute('aria-expanded') === 'true') {
+				setOpen(false);
+				findCareToggle.focus();
+			}
+			if (menuToggle?.getAttribute('aria-expanded') === 'true') {
+				menuToggle.setAttribute('aria-expanded', 'false');
+				siteMenu?.setAttribute('hidden', '');
+				menuToggle.focus();
+			}
+		});
+	}
+</script>
+
+<style>
+	.site-header {
+		position: relative;
+		z-index: 10;
+		background: var(--bg-default);
+	}
+
+	.navigation {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 100px;
+		padding-inline: var(--layout-gutter);
+	}
+
+	.wordmark {
+		font-family: var(--font-editorial);
+		font-size: 25px;
+		letter-spacing: -0.8px;
+		color: var(--brand-primary);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+
+	.explore {
+		display: flex;
+		align-items: center;
+		gap: var(--space-28);
+	}
+
+	.explore a {
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--text-primary);
+		white-space: nowrap;
+	}
+
+	.explore a:hover {
+		color: var(--brand-primary);
+	}
+
+	.find-care {
+		position: relative;
+		/* Bridges the gap to the panel so the pointer never leaves the trigger. */
+		padding-bottom: var(--space-16);
+		margin-bottom: calc(var(--space-16) * -1);
+	}
+
+	.find-care-toggle {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 0;
+		border: 0;
+		background: none;
+		font-family: var(--font-ui);
+		font-size: 15px;
+		font-weight: 500;
+		color: var(--text-primary);
+		white-space: nowrap;
+		cursor: pointer;
+		transition: color 0.15s ease;
+	}
+
+	.find-care-toggle:hover,
+	.find-care-toggle[aria-expanded='true'] {
+		color: var(--brand-primary);
+	}
+
+	.chevron {
+		display: block;
+		transform-origin: center;
+		transition: transform 0.24s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+
+	.find-care-toggle[aria-expanded='true'] .chevron {
+		transform: rotate(180deg);
+	}
+
+	.find-care-menu {
+		position: absolute;
+		top: 100%;
+		left: calc(var(--space-12) * -1);
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		min-width: 232px;
+		padding: var(--space-8);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-raised);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-6px);
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s cubic-bezier(0.2, 0.6, 0.2, 1),
+			visibility 0.2s;
+	}
+
+	.find-care-menu[data-open='true'] {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.find-care-menu a {
+		display: flex;
+		align-items: center;
+		min-height: 44px;
+		padding-inline: var(--space-12);
+		border-radius: var(--radius-control);
+		font-size: var(--type-body);
+		font-weight: 400;
+		color: var(--text-secondary);
+		text-decoration: none;
+		transition:
+			background-color 0.16s ease,
+			color 0.16s ease,
+			padding-left 0.16s cubic-bezier(0.2, 0.6, 0.2, 1);
+	}
+
+	.find-care-menu a:hover,
+	.find-care-menu a:focus-visible {
+		padding-left: var(--space-16);
+		background: var(--brand-secondary);
+		color: var(--brand-primary);
+	}
+
+	.account {
+		display: flex;
+		align-items: center;
+		gap: var(--space-24);
+	}
+
+	.account-link {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--brand-primary);
+		white-space: nowrap;
+	}
+
+	.menu-control {
+		display: none;
+		align-items: center;
+		gap: 6px;
+		height: 44px;
+		padding: 0;
+		border: 0;
+		background: none;
+		font-size: var(--type-small);
+		color: var(--text-primary);
+		cursor: pointer;
+	}
+
+	.divider {
+		height: 1px;
+		background: var(--border-default);
+	}
+
+	.disclosed-menu {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		padding: var(--space-24) var(--layout-gutter) var(--space-32);
+		border-bottom: 1px solid var(--border-default);
+		background: var(--bg-default);
+	}
+
+	.disclosed-menu[hidden] {
+		display: none;
+	}
+
+	.disclosed-menu a {
+		align-self: flex-start;
+		font-size: var(--type-body);
+		color: var(--text-primary);
+	}
+
+	.disclosed-group {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.disclosed-sublink {
+		margin-left: var(--space-16);
+	}
+
+	/* Tablet — inline nav collapses, account actions and Menu remain */
+	@media (max-width: 1023px) {
+		.explore {
+			display: none;
+		}
+
+		.account {
+			gap: var(--space-12);
+		}
+
+		.menu-control {
+			display: inline-flex;
+		}
+	}
+
+	/* Mobile — wordmark and Menu only, on an 88px bar */
+	@media (max-width: 767px) {
+		.navigation {
+			height: 88px;
+		}
+
+		.account-link,
+		.account :global(.book) {
+			display: none;
+		}
+	}
+</style>

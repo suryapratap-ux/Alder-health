@@ -1,0 +1,76 @@
+---
+import Button from '../Button.astro';
+
+import { home } from '../../data/pages';
+
+/* Booking invitation — Figma 5:21875 / 5:22069 / 5:22260. */
+const { invitation } = home;
+---
+
+<section class="invitation">
+	<div class="copy">
+		<p class="eyebrow">{invitation.eyebrow}</p>
+		<h2>{invitation.heading}</h2>
+		<p class="supporting">{invitation.supporting}</p>
+	</div>
+
+	<Button href="/booking" variant="sage">
+		<img src="/icons/arrow-right-primary.svg" width="18" height="18" alt="" />
+		{invitation.ctaLabel}
+	</Button>
+</section>
+
+<style>
+	.invitation {
+		display: flex;
+		gap: var(--space-40);
+		align-items: center;
+		padding: var(--space-72) var(--layout-gutter);
+		background: var(--brand-primary);
+	}
+
+	.copy {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.eyebrow {
+		color: var(--bg-soft-sage);
+	}
+
+	h2 {
+		font-size: 52px;
+		line-height: var(--editorial-leading);
+		color: var(--text-inverse);
+	}
+
+	.supporting {
+		font-size: 18px;
+		line-height: var(--ui-leading);
+		color: var(--bg-image-backdrop);
+	}
+
+	/* Tablet and mobile — the action drops below the invitation */
+	@media (max-width: 1023px) {
+		.invitation {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-40);
+			padding-block: var(--space-72);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.invitation {
+			padding-block: var(--space-56);
+		}
+
+		h2 {
+			font-size: 40px;
+		}
+	}
+</style>

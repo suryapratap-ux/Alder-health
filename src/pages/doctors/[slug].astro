@@ -1,0 +1,379 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Button from '../../components/Button.astro';
+import Notice from '../../components/Notice.astro';
+import AppointmentCard from '../../components/AppointmentCard.astro';
+import { clinicians } from '../../data/clinicians';
+
+/* Doctor profile — Figma 5:22683 (desktop), 5:22753 (tablet), 5:22819 (mobile). */
+export function getStaticPaths() {
+	return clinicians.map((clinician) => ({
+		params: { slug: clinician.slug },
+		props: { clinician },
+	}));
+}
+
+const { clinician } = Astro.props;
+const { profile } = clinician;
+const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
+---
+
+<Layout
+	title={`${clinician.name} — Alder Health`}
+	description={`${clinician.name} is a ${clinician.specialty.toLowerCase()} clinician at ${clinician.clinic}. Read the profile, see what a visit covers and choose an example time.`}
+>
+	<section class="profile-navigation">
+		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Find care', href: '/#services' }, { label: 'Doctors', href: '/find-a-doctor' }]} current={clinician.name} />
+		<Notice title="Fictional clinician profile">
+			Credentials, availability and clinic details are illustrative examples. No real appointment
+			will be made.
+		</Notice>
+	</section>
+
+	<section class="profile">
+		<div class="column">
+			<div class="identity-block">
+				<img
+					class="portrait"
+					src={clinician.photo}
+					width={clinician.photoWidth}
+					height={clinician.photoHeight}
+					style={`object-position: ${clinician.photoFocus}`}
+					alt={clinician.alt}
+				/>
+				<div class="identity">
+					<h1>{clinician.name}</h1>
+					<p class="specialty">{clinician.specialty}</p>
+					<div class="credentials">
+						<p>{clinician.credentials}</p>
+						<p>Illustrative credentials &middot; fictional example</p>
+						<p>{clinician.clinic}</p>
+						<p>{clinician.languagesSentence}</p>
+						<p>Illustrative portrait</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="rule"></div>
+
+			<div class="editorial">
+				<h2>{profile.headline}</h2>
+				<p class="quote">{profile.quote}</p>
+				{profile.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+			</div>
+		</div>
+
+		<AppointmentCard clinician={clinician} />
+
+		<div class="column">
+			<div class="rule"></div>
+
+			<div class="editorial">
+				<h2>Areas of care</h2>
+				<p>{profile.areasIntro}</p>
+				<ul class="areas">
+					{profile.areas.map((area) => <li>{area}</li>)}
+				</ul>
+			</div>
+
+			<div class="rule"></div>
+
+			<h2 class="visit-heading">Before your visit</h2>
+
+			<div class="visit-block">
+				<h3>{profile.inPersonHeading}</h3>
+				<p>{profile.inPerson}</p>
+			</div>
+
+			<div class="visit-block">
+				<h3>Video consultations</h3>
+				<p>{profile.video}</p>
+			</div>
+
+			<div class="visit-block">
+				<h3>What to bring</h3>
+				<p>{profile.whatToBring}</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="related">
+		<p class="eyebrow">More people to meet</p>
+		<h2 class="section-title">Explore other clinicians.</h2>
+
+		<ul class="related-collection">
+			{
+				related.map((entry) => (
+					<li class="related-clinician">
+						<img
+							class="related-photo"
+							src={entry.photo}
+							width={entry.photoWidth}
+							height={entry.photoHeight}
+							style={`object-position: ${entry.photoFocus}`}
+							alt={entry.alt}
+						/>
+						<div class="related-copy">
+							<p class="related-name">{entry.name}</p>
+							<p>{entry.specialty}</p>
+							<p>{entry.clinic}</p>
+							<p>{entry.note}</p>
+						</div>
+						<Button href={`/doctors/${entry.slug}`} variant="secondary">View profile</Button>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<div class="sticky-booking">
+		<p>{clinician.name} &middot; Next example: {clinician.nextVisit}</p>
+		<Button href={`/booking?doctor=${clinician.slug}`} fullWidth>Choose an appointment</Button>
+	</div>
+</Layout>
+
+<style>
+	.profile-navigation {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		padding: var(--space-32) var(--layout-gutter);
+	}
+
+	/*
+	 * Desktop places the appointment card in a 360px sidebar; tablet and mobile
+	 * drop it into the flow after the opening editorial block (Figma 5:22777).
+	 */
+	.profile {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-32);
+		align-items: flex-start;
+		padding: 0 var(--layout-gutter) var(--space-64);
+	}
+
+	.identity-block {
+		display: flex;
+		gap: var(--space-32);
+		align-items: center;
+		width: 100%;
+	}
+
+	.portrait {
+		width: 240px;
+		height: 310px;
+		flex-shrink: 0;
+		object-fit: cover;
+	}
+
+	.identity {
+		flex: 1 0 0;
+		min-width: 0;
+	}
+
+	h1 {
+		font-size: 56px;
+	}
+
+	.specialty {
+		font-size: var(--type-body);
+		font-weight: 600;
+		line-height: 1.8;
+		color: var(--brand-primary);
+	}
+
+	.credentials {
+		margin-top: 26px;
+	}
+
+	.credentials p {
+		font-size: var(--type-body);
+		line-height: 1.8;
+		color: var(--text-secondary);
+	}
+
+	.editorial {
+		width: 100%;
+	}
+
+	.editorial h2 {
+		font-size: 32px;
+		line-height: 1.18;
+	}
+
+	.editorial p,
+	.areas li {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.areas {
+		margin-top: 26px;
+	}
+
+	.areas li {
+		margin-top: 0;
+	}
+
+	.areas li::before {
+		content: '\2022';
+		padding-right: var(--space-8);
+	}
+
+	.visit-heading {
+		font-size: 32px;
+		line-height: 1.16;
+	}
+
+	.visit-block {
+		width: 100%;
+	}
+
+	.visit-block h3 {
+		font-size: 24px;
+		line-height: 1.18;
+	}
+
+	.visit-block p {
+		margin-top: 26px;
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.related {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter);
+		background: var(--bg-subtle);
+	}
+
+	.related-collection {
+		display: flex;
+		gap: var(--space-24);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	.related-clinician {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-20);
+		align-items: flex-start;
+		min-width: 0;
+	}
+
+	.related-photo {
+		width: 100%;
+		height: 280px;
+		object-fit: cover;
+	}
+
+	.related-copy p {
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.related-name {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--text-primary);
+	}
+
+	.related-copy .related-name + p {
+		margin-top: 26px;
+	}
+
+	.sticky-booking {
+		display: none;
+		position: sticky;
+		bottom: 0;
+		flex-direction: column;
+		gap: 10px;
+		padding: var(--space-16);
+		border-top: 1px solid var(--border-default);
+		background: var(--bg-surface);
+	}
+
+	.sticky-booking p {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	.column {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-32);
+		align-items: flex-start;
+		width: 100%;
+	}
+
+	/* Desktop — the appointment card moves into a 360px sidebar beside both columns */
+	@media (min-width: 1024px) {
+		.profile {
+			display: grid;
+			grid-template-columns: minmax(0, 880px) 360px;
+			column-gap: var(--space-40);
+			row-gap: var(--space-32);
+			align-items: start;
+		}
+
+		.column {
+			grid-column: 1;
+		}
+
+		.profile > :global(.appointment) {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+			align-self: start;
+		}
+	}
+
+	/* Mobile — related clinicians stack */
+	@media (max-width: 767px) {
+		.related-collection {
+			flex-direction: column;
+		}
+
+		.related-clinician {
+			flex: none;
+			width: 100%;
+		}
+	}
+
+	/* Mobile — a sticky booking action follows the page */
+	@media (max-width: 767px) {
+		h1 {
+			font-size: var(--type-page-title);
+		}
+
+		.identity-block {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.portrait {
+			width: 100%;
+			height: 310px;
+		}
+
+		.identity {
+			flex: none;
+			width: 100%;
+		}
+
+		.sticky-booking {
+			display: flex;
+		}
+	}
+</style>
