@@ -1,20 +1,16 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import keystatic from '@keystatic/astro';
 
 /*
- * The Keystatic admin is a React app served from two server-rendered routes, so
- * it is only mounted while `astro dev` is running. `astro build` stays a plain
- * static export with no adapter, no React and no CMS code in the output — the
- * pages read their content from the JSON files Keystatic writes.
- *
- * Set KEYSTATIC=1 to include the admin in a build, once the site is hosted
- * somewhere that can run a server.
+ * `output: 'static'` with an adapter means every page is prerendered to plain
+ * HTML at build time, except the two routes Keystatic injects for its admin,
+ * which it marks as server-rendered. So the public site is still a static
+ * export carrying no React, and only /keystatic and /api/keystatic run as
+ * functions.
  */
-const withAdmin = process.argv.includes('dev') || process.env.KEYSTATIC === '1';
-
 export default defineConfig({
 	/*
 	 * Set this to the production origin, e.g. 'https://alderhealth.com'.
@@ -24,6 +20,7 @@ export default defineConfig({
 	 */
 	// site: 'https://example.com',
 
-	integrations: withAdmin ? [react(), keystatic()] : [],
-	...(withAdmin ? { adapter: node({ mode: 'standalone' }) } : {}),
+	output: 'static',
+	adapter: vercel(),
+	integrations: [react(), keystatic()],
 });

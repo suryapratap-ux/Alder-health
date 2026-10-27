@@ -53,8 +53,30 @@ const photo = (label = 'Photograph') =>
 		{ label }
 	);
 
+/*
+ * Which repository the CMS reads and writes. Kept in an environment variable
+ * rather than hard-coded so the same code runs against a fork, and so the value
+ * is set in one place alongside the GitHub App credentials. PUBLIC_ because
+ * the admin is a browser app and needs it too.
+ */
+const repo = import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO;
+
+/*
+ * With the repository set, the CMS reads and writes through GitHub, so the
+ * deployed site can be edited by anyone with access. Without it, it falls back
+ * to the working copy on disk, which keeps `npm run dev` usable on a fresh
+ * clone before the GitHub App exists. A production build has no such excuse,
+ * so it fails loudly rather than deploying a CMS that writes nowhere.
+ */
+if (!repo && import.meta.env.PROD) {
+	throw new Error(
+		'PUBLIC_KEYSTATIC_GITHUB_REPO is not set. It should be "owner/repository" — ' +
+			'copy .env.example to .env and fill it in, and set it on the host. See the README.'
+	);
+}
+
 export default config({
-	storage: { kind: 'local' },
+	storage: repo ? { kind: 'github', repo } : { kind: 'local' },
 
 	ui: {
 		brand: { name: 'Alder Health' },
