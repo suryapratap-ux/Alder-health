@@ -4,8 +4,8 @@ import { collection, config, fields, singleton } from '@keystatic/core';
  * Keystatic content schema.
  *
  * Content is stored as JSON under src/content/ and read by the pages as plain
- * JSON imports, so none of this file ends up in the production build — the
- * admin only runs during `astro dev` (see astro.config.mjs).
+ * JSON imports, so none of this file reaches the public pages — only the
+ * /keystatic route loads it (see astro.config.mjs).
  *
  * The demo application screens (booking, review, confirmation, dashboard) are
  * deliberately not modelled here: their text is interface labelling over
@@ -54,29 +54,27 @@ const photo = (label = 'Photograph') =>
 	);
 
 /*
- * Which repository the CMS reads and writes. Kept in an environment variable
- * rather than hard-coded so the same code runs against a fork, and so the value
- * is set in one place alongside the GitHub App credentials. PUBLIC_ because
- * the admin is a browser app and needs it too.
+ * The Keystatic Cloud project this site's content belongs to, as
+ * "team/project". Cloud handles sign-in, so editors do not need GitHub
+ * accounts — which is the point of using it rather than GitHub mode.
+ *
+ * It lives in an environment variable rather than the config so the same code
+ * can point at a staging project, and PUBLIC_ because the admin is a browser
+ * app and needs it too.
  */
-const repo = import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO;
+const cloudProject = import.meta.env.PUBLIC_KEYSTATIC_CLOUD_PROJECT;
 
 /*
- * With the repository set, the CMS reads and writes through GitHub, so the
- * deployed site can be edited by anyone with access. Without it, it falls back
- * to the working copy on disk, which keeps `npm run dev` usable on a fresh
- * clone before the GitHub App exists. A production build has no such excuse,
- * so it fails loudly rather than deploying a CMS that writes nowhere.
+ * With the project set, the CMS reads and writes through Keystatic Cloud, so
+ * the deployed site can be edited by anyone invited to the team. Without it,
+ * it falls back to the working copy on disk, which keeps `npm run dev` usable
+ * on a fresh clone before the Cloud project exists. A production build has no
+ * such excuse — astro.config.mjs fails the build rather than deploying a CMS
+ * that writes nowhere.
  */
-if (!repo && import.meta.env.PROD) {
-	throw new Error(
-		'PUBLIC_KEYSTATIC_GITHUB_REPO is not set. It should be "owner/repository" — ' +
-			'copy .env.example to .env and fill it in, and set it on the host. See the README.'
-	);
-}
-
 export default config({
-	storage: repo ? { kind: 'github', repo } : { kind: 'local' },
+	storage: cloudProject ? { kind: 'cloud' } : { kind: 'local' },
+	...(cloudProject ? { cloud: { project: cloudProject } } : {}),
 
 	ui: {
 		brand: { name: 'Alder Health' },

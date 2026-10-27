@@ -10,15 +10,18 @@ npm run preview  # preview the build
 
 ## Editing content
 
-Once deployed, open `/keystatic` on the live site and sign in with GitHub.
-Saving commits the changed JSON straight to this repository, which triggers a
-deploy, so the edit is live a minute or so later. Nobody needs to run the
-project to change copy.
+Once deployed, editors open `/keystatic` on the live site and sign in through
+Keystatic Cloud. **They do not need a GitHub account** — that is the reason
+this uses Cloud rather than Keystatic's GitHub mode, where every editor needs
+write access to the repository.
+
+Saving commits the changed JSON to this repository, which triggers a deploy, so
+the edit is live a minute or so later.
 
 Locally, `npm run dev` and <http://localhost:4321/keystatic> does the same
-thing. If `PUBLIC_KEYSTATIC_GITHUB_REPO` is set it reads and writes GitHub; if
-it is not, it falls back to editing the files in your working copy, so a fresh
-clone is usable before the GitHub App exists.
+thing. If `PUBLIC_KEYSTATIC_CLOUD_PROJECT` is set it reads and writes through
+Cloud; if it is not, it falls back to editing the files in your working copy,
+so a fresh clone is usable before the Cloud project exists.
 
 | In the CMS | On disk |
 | --- | --- |
@@ -38,7 +41,9 @@ Image fields **pick** from the files already in `public/images` and
 Keystatic takes ownership of the file and renames it after the field it sits in,
 which moves assets out from under the other pages that share them —
 `clinic-exterior.png` appears on both the home and about pages. To add a new
-image, commit the file to `public/images` and it becomes selectable.
+image, commit the file to `public/images` and it becomes selectable. (Keystatic
+Cloud also offers **Cloud Images**, a paid upload-and-optimise service that
+would let editors add images without touching the repository.)
 
 Each clinician portrait also carries a **focal point** — an `object-position`
 value such as `52% 20%` — because the portraits are cropped to several
@@ -57,61 +62,49 @@ is interface labelling rather than editorial copy, so it stays in the templates.
 
 ### 1. Push to GitHub
 
-Create an empty **private** repository, then:
+Create an empty **private** repository, then set the remote and push `main`.
+Keystatic Cloud stores nothing itself — it handles sign-in and commits to this
+repository on the editor's behalf — so the repo has to exist first.
 
-```sh
-git remote add origin https://github.com/OWNER/REPO.git
-git push -u origin main
+### 2. Create the Keystatic Cloud project
+
+Sign up at <https://keystatic.cloud>, create a team, then a project inside it
+pointed at the GitHub repository from step 1. The project's settings page shows
+its `team/project` name.
+
+Copy `.env.example` to `.env` and fill it in:
+
+```
+PUBLIC_KEYSTATIC_CLOUD_PROJECT=team/project
 ```
 
-### 2. Deploy to Vercel
+The free plan covers **3 users per team**, which is enough for you plus two at
+the client. Beyond that, Pro starts at $10/month plus $5/month per extra user.
+
+### 3. Deploy to Vercel
 
 Import the repository at <https://vercel.com/new>; Astro is detected
-automatically. Before the first deploy, add one environment variable under
-**Settings → Environment Variables**:
+automatically. Add the same variable under **Settings → Environment
+Variables**, then deploy. The build fails without it by design, so that a CMS
+which writes nowhere never reaches production.
 
-```
-PUBLIC_KEYSTATIC_GITHUB_REPO=OWNER/REPO
-```
+### 4. Invite the client
 
-The build fails without it by design, so that a CMS which writes nowhere never
-reaches production. Deploy, and note the URL you get.
+Add them to the Cloud team. They sign in at `yourdomain.com/keystatic` — no
+GitHub account, no repository access.
 
-### 3. Create the GitHub App
-
-```sh
-npm run dev
-```
-
-Open <http://localhost:4321/keystatic/setup>. Enter the Vercel URL from the
-previous step as the **Deployed App URL** — that is what lets the wizard
-register the OAuth callback for you, so getting it right here saves fixing it
-by hand later. The wizard creates a GitHub App on your account and prints four
-values.
-
-Copy `.env.example` to `.env` and paste them in, and add the same four to
-Vercel, then redeploy:
-
-```
-PUBLIC_KEYSTATIC_GITHUB_REPO=OWNER/REPO
-PUBLIC_KEYSTATIC_GITHUB_APP_SLUG=…
-KEYSTATIC_GITHUB_CLIENT_ID=…
-KEYSTATIC_GITHUB_CLIENT_SECRET=…
-KEYSTATIC_SECRET=…
-```
-
-`.env` is gitignored. The client secret is a credential — treat it like a
-password and never commit it.
-
-If sign-in fails on the deployed site with a callback mismatch, open the App's
-settings on GitHub and set the callback URL to
-`https://YOUR-DOMAIN/api/keystatic/github/oauth/callback`.
-
-### 4. Set the site URL
+### 5. Set the site URL
 
 `site` in [`astro.config.mjs`](astro.config.mjs) is commented out. Set it to the
 production origin to switch on canonical URLs, `og:url` and the absolute
 `og:image` URL.
+
+## Optional: review edits before they go live
+
+By default an editor's save commits straight to `main` and deploys. Adding
+`branchPrefix` to the `storage` block in `keystatic.config.ts` makes the admin
+work on branches instead, so changes arrive as pull requests for you to approve.
+Worth switching on before handing the CMS to someone else.
 
 ## What gets deployed
 
