@@ -1,0 +1,352 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import page from '../content/pages/contact.json';
+
+/*
+ * Contact — no Figma frame exists for this page. It follows the sign-in
+ * pattern: the form sits in a raised panel beside a quieter column of the
+ * ways to reach the team, so neither competes with the other.
+ *
+ * There is no message service behind this site. The form validates what is
+ * typed and then says plainly that nothing was sent; it never reports that a
+ * message reached anyone.
+ */
+const { seo, intro, form, errors, routes, notice } = page;
+---
+
+<Layout title={seo.title} description={seo.description}>
+	<PageIntro
+		trail={[{ label: 'Home', href: '/' }, { label: 'Help', href: '/help' }]}
+		current="Contact"
+		eyebrow={intro.eyebrow}
+		title={intro.title}
+		lead={intro.lead}
+	/>
+
+	<section class="contact">
+		<form
+			class="form"
+			data-contact
+			data-busy-label={form.submitBusyLabel}
+			data-idle-label={form.submitLabel}
+			novalidate
+		>
+			<div class="form-head">
+				<h2 class="card-title">{form.heading}</h2>
+				<p class="form-note">{form.note}</p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="name">{form.nameLabel}</label>
+				<input
+					class="control"
+					id="name"
+					name="name"
+					type="text"
+					autocomplete="name"
+					placeholder={form.namePlaceholder}
+					data-missing={errors.nameMissing}
+					aria-describedby="name-error"
+				/>
+				<p class="field-error" id="name-error" hidden></p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="email">{form.emailLabel}</label>
+				<input
+					class="control"
+					id="email"
+					name="email"
+					type="email"
+					autocomplete="email"
+					placeholder={form.emailPlaceholder}
+					data-missing={errors.emailMissing}
+					data-invalid={errors.emailInvalid}
+					aria-describedby="email-error"
+				/>
+				<p class="field-error" id="email-error" hidden></p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="subject">{form.subjectLabel}</label>
+				<select
+					class="control"
+					id="subject"
+					name="subject"
+					data-missing={errors.subjectMissing}
+					aria-describedby="subject-error"
+				>
+					<option value="">{form.subjectPlaceholder}</option>
+					{form.subjectOptions.map((option) => <option value={option}>{option}</option>)}
+				</select>
+				<p class="field-error" id="subject-error" hidden></p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="message">{form.messageLabel}</label>
+				<textarea
+					class="control message"
+					id="message"
+					name="message"
+					rows="5"
+					placeholder={form.messagePlaceholder}
+					data-missing={errors.messageMissing}
+					aria-describedby="message-error"></textarea>
+				<p class="field-error" id="message-error" hidden></p>
+			</div>
+
+			<Button type="submit" fullWidth class="submit">{form.submitLabel}</Button>
+
+			<p class="form-status" data-status role="status" hidden>
+				{form.unavailableMessage}
+			</p>
+		</form>
+
+		<aside class="aside">
+			<h2 class="section-title">{routes.heading}</h2>
+
+			<ul class="routes">
+				{
+					routes.items.map((route) => (
+						<li class="route">
+							<p class="route-label">{route.label}</p>
+							<p class="route-value">{route.value}</p>
+							<p class="route-copy">{route.copy}</p>
+						</li>
+					))
+				}
+			</ul>
+
+			<Notice title={notice.title}>{notice.copy}</Notice>
+		</aside>
+	</section>
+</Layout>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('[data-contact]');
+
+	if (form) {
+		const status = form.querySelector<HTMLElement>('[data-status]');
+		const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+		const label = submit?.querySelector<HTMLElement>('.button-label');
+
+		type Field = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
+		const showError = (input: Field, message: string) => {
+			const field = document.getElementById(`${input.id}-error`);
+			if (!field) return;
+			field.textContent = message;
+			field.hidden = false;
+			input.setAttribute('aria-invalid', 'true');
+		};
+
+		const clearError = (input: Field) => {
+			const field = document.getElementById(`${input.id}-error`);
+			if (!field) return;
+			field.hidden = true;
+			input.removeAttribute('aria-invalid');
+		};
+
+		const validate = (input: Field) => {
+			const value = input.value.trim();
+
+			if (!value) {
+				showError(input, input.dataset.missing!);
+				return false;
+			}
+
+			/* A single @ with something either side is as far as it is worth going. */
+			if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+				showError(input, input.dataset.invalid!);
+				return false;
+			}
+
+			clearError(input);
+			return true;
+		};
+
+		const fields = [...form.querySelectorAll<Field>('[data-missing]')];
+
+		for (const input of fields) {
+			/* Re-check as they correct it, but only once it has been flagged. */
+			const recheck = () => {
+				if (input.getAttribute('aria-invalid') === 'true') validate(input);
+			};
+			input.addEventListener('input', recheck);
+			input.addEventListener('change', recheck);
+			input.addEventListener('blur', () => {
+				if (input.value.trim()) validate(input);
+			});
+		}
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			if (status) status.hidden = true;
+
+			const firstInvalid = fields.filter((input) => !validate(input))[0];
+
+			if (firstInvalid) {
+				firstInvalid.focus();
+				return;
+			}
+
+			/*
+			 * Everything the form can check has passed. There is nothing to send
+			 * to, so it pauses briefly to acknowledge the press and then says so
+			 * rather than pretending a message reached anyone.
+			 */
+			if (submit && label) {
+				submit.disabled = true;
+				label.textContent = form.dataset.busyLabel!;
+			}
+
+			window.setTimeout(() => {
+				if (submit && label) {
+					submit.disabled = false;
+					label.textContent = form.dataset.idleLabel!;
+				}
+				if (status) status.hidden = false;
+			}, 600);
+		});
+	}
+</script>
+
+<style>
+	.contact {
+		display: grid;
+		grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+		gap: var(--space-64);
+		align-items: start;
+		padding: var(--space-48) var(--layout-pad) var(--space-72);
+	}
+
+	.form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		padding: var(--space-32);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-raised);
+	}
+
+	.form-head {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.form-note {
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+
+	/* The only control that grows, so it sets its own height rather than the 50px box */
+	.message {
+		min-height: 140px;
+		align-items: flex-start;
+		resize: vertical;
+	}
+
+	.field-error {
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--brand-accent);
+	}
+
+	.control[aria-invalid='true'] {
+		border-color: var(--brand-accent);
+	}
+
+	.form-status {
+		padding: var(--space-12) var(--space-16);
+		border-radius: var(--radius-control);
+		background: var(--status-information-surface);
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--status-information);
+	}
+
+	/*
+	 * The sage panel and white route cards are the contact treatment the help
+	 * page carried, kept here so this reads as part of the site rather than a
+	 * new design. Stacked rather than side by side, since the column is narrow.
+	 */
+	.aside {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		min-width: 0;
+		padding: var(--space-32);
+		border-radius: var(--radius-module);
+		background: var(--brand-secondary);
+	}
+
+	.routes {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-16);
+	}
+
+	.route {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+		padding: var(--space-24);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.route-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.route-value {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--brand-primary);
+		/* An address has no spaces to break at, so allow one anywhere. */
+		overflow-wrap: anywhere;
+	}
+
+	.route-copy {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.aside :global(.notice) {
+		width: 100%;
+	}
+
+	/* Tablet — the ways to reach us drop below the form */
+	@media (max-width: 1023px) {
+		.contact {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--space-32);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.contact {
+			padding-block: var(--space-32) var(--space-48);
+		}
+
+		.form,
+		.aside {
+			padding: var(--space-20);
+		}
+
+		.route {
+			padding: var(--space-20);
+		}
+	}
+</style>

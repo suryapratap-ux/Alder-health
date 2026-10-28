@@ -642,46 +642,6 @@ content:
               - name: ctaLabel
                 label: Button text
                 type: string
-          - name: contact
-            label: Contact section
-            type: object
-            fields:
-              - name: eyebrow
-                label: Eyebrow
-                type: string
-              - name: heading
-                label: Heading
-                type: string
-                required: true
-              - name: routes
-                label: Ways to get in touch
-                type: object
-                list:
-                  collapsible:
-                    collapsed: true
-                    summary: '{label}'
-                fields:
-                  - name: label
-                    label: Title
-                    type: string
-                    required: true
-                  - name: value
-                    label: Email or phone number
-                    type: string
-                    required: true
-                  - name: copy
-                    label: Description
-                    type: text
-              - name: notice
-                label: Warning notice
-                type: object
-                fields:
-                  - name: title
-                    label: Title
-                    type: string
-                  - name: copy
-                    label: Text
-                    type: text
           - name: policies
             label: Policy sections
             type: object
@@ -710,6 +670,135 @@ content:
                 list: true
 
 
+      - name: contact
+        label: Contact page
+        type: file
+        path: src/content/pages/contact.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: form
+            label: Message form
+            type: object
+            description: >-
+              Wording only. There is no message service behind the form, so
+              changing these cannot make it send.
+            fields:
+              - name: heading
+                label: Form heading
+                type: string
+              - name: note
+                label: Note under the heading
+                type: text
+              - name: nameLabel
+                label: Name label
+                type: string
+              - name: namePlaceholder
+                label: Name placeholder
+                type: string
+              - name: emailLabel
+                label: Email label
+                type: string
+              - name: emailPlaceholder
+                label: Email placeholder
+                type: string
+              - name: subjectLabel
+                label: Topic label
+                type: string
+              - name: subjectPlaceholder
+                label: Topic placeholder
+                type: string
+              - name: subjectOptions
+                label: Topic choices
+                type: string
+                list: true
+              - name: messageLabel
+                label: Message label
+                type: string
+              - name: messagePlaceholder
+                label: Message placeholder
+                type: string
+              - name: submitLabel
+                label: Submit button
+                type: string
+              - name: submitBusyLabel
+                label: Submit button while sending
+                type: string
+              - name: unavailableMessage
+                label: Message shown after submitting
+                type: text
+          - name: errors
+            label: Validation messages
+            type: object
+            fields:
+              - name: nameMissing
+                label: Name missing
+                type: string
+              - name: emailMissing
+                label: Email missing
+                type: string
+              - name: emailInvalid
+                label: Email not valid
+                type: string
+              - name: subjectMissing
+                label: Topic missing
+                type: string
+              - name: messageMissing
+                label: Message missing
+                type: string
+          - name: routes
+            label: Ways to get in touch
+            type: object
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+              - name: items
+                label: Contact routes
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                fields:
+                  - name: label
+                    label: Title
+                    type: string
+                    required: true
+                  - name: value
+                    label: Email or phone number
+                    type: string
+                    required: true
+                  - name: copy
+                    label: Description
+                    type: text
+          - name: notice
+            label: Warning notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
       - name: sign-in
         label: Sign in page
         type: file
@@ -1389,9 +1478,24 @@ content:
                 type: string
               - name: items
                 label: Menu items
-                type: string
-                list: true
-                description: The first item is shown as the current page.
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                description: >-
+                  The first item is the one highlighted on arrival. A link
+                  starting with # jumps to a section of this page.
+                fields:
+                  - name: label
+                    label: Label
+                    type: string
+                    required: true
+                  - name: href
+                    label: Link
+                    type: string
+                    required: true
+                    pattern: '^(#|/)[A-Za-z0-9/#_-]*$'
           - name: greeting
             label: Greeting
             type: object
@@ -1486,6 +1590,15 @@ content:
               - name: saveLabel
                 label: Save button
                 type: string
+              - name: onLabel
+                label: Word for a switch that is on
+                type: string
+              - name: offLabel
+                label: Word for a switch that is off
+                type: string
+              - name: savedMessage
+                label: Message shown after saving
+                type: text
               - name: items
                 label: Preferences
                 type: object
@@ -1505,6 +1618,31 @@ content:
                   - name: on
                     label: Switched on
                     type: boolean
+          - name: account
+            label: Account details
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: note
+                label: Note
+                type: text
+              - name: nameLabel
+                label: Name label
+                type: string
+              - name: emailLabel
+                label: Email label
+                type: string
+              - name: phoneLabel
+                label: Phone label
+                type: string
+              - name: accessLabel
+                label: Access needs label
+                type: string
+              - name: editLabel
+                label: Update button
+                type: string
           - name: reading
             label: Reading list
             type: object

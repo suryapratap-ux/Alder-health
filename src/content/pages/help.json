@@ -14,26 +14,6 @@
     "supporting": "Need something else? Our example support team is a good place to start.",
     "ctaLabel": "Contact support"
   },
-  "contact": {
-    "eyebrow": "Contact",
-    "heading": "Talk to the example team.",
-    "routes": [
-      {
-        "label": "Email the example team",
-        "value": "hello@alderhealth.example",
-        "copy": "For access needs or help with the booking process."
-      },
-      {
-        "label": "Call the example line",
-        "value": "(555) 010-0199",
-        "copy": "Weekdays, 8am–5pm Eastern Time."
-      }
-    ],
-    "notice": {
-      "title": "Do not send medical details",
-      "copy": "This is a design demonstration. Do not send sensitive medical information to the example addresses above. For an emergency, contact your local emergency services."
-    }
-  },
   "policies": [
     {
       "id": "privacy",

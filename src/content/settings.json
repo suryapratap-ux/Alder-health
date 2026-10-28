@@ -90,7 +90,7 @@
           },
           {
             "label": "Contact",
-            "href": "/help#contact"
+            "href": "/contact"
           }
         ]
       },
@@ -124,7 +124,7 @@
       },
       {
         "label": "Contact",
-        "href": "/help#contact"
+        "href": "/contact"
       }
     ]
   }

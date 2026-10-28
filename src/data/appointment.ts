@@ -16,6 +16,9 @@ export const examplePatient = record.patient;
 /* November 2026 starts on a Sunday; dates with example availability are underlined. */
 export const calendar = {
 	monthLabel: 'November 2026',
+	/* The same month as a date, so the controls can move off it. */
+	year: 2026,
+	monthIndex: 10,
 	weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 	days: 30,
 	startWeekday: 0,

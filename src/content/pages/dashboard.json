@@ -7,12 +7,30 @@
     "eyebrow": "Patient account",
     "note": "Fictional patient data",
     "items": [
-      "Overview",
-      "Appointments",
-      "Notification preferences",
-      "Account details",
-      "Help & support",
-      "Sign out"
+      {
+        "label": "Overview",
+        "href": "#overview"
+      },
+      {
+        "label": "Appointments",
+        "href": "#appointments"
+      },
+      {
+        "label": "Notification preferences",
+        "href": "#preferences"
+      },
+      {
+        "label": "Account details",
+        "href": "#account-details"
+      },
+      {
+        "label": "Help & support",
+        "href": "/contact"
+      },
+      {
+        "label": "Sign out",
+        "href": "/sign-in"
+      }
     ]
   },
   "greeting": {
@@ -71,7 +89,10 @@
         "label": "Resource updates",
         "on": false
       }
-    ]
+    ],
+    "onLabel": "On",
+    "offLabel": "Off",
+    "savedMessage": "Nothing was saved. These are static example preferences, so no reminders will be sent either way."
   },
   "reading": {
     "title": "Before your next visit",
@@ -82,5 +103,14 @@
       "Helping someone book their care",
       "Understanding your visit options"
     ]
+  },
+  "account": {
+    "title": "Account details",
+    "note": "Fictional patient record. Nothing here can be saved.",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "accessLabel": "Access needs",
+    "editLabel": "Update details"
   }
 }

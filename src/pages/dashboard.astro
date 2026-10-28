@@ -11,10 +11,9 @@ import page from '../content/pages/dashboard.json';
 const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
 const firstName = examplePatient.name.split(' ')[0];
 
-const { seo, rail, greeting, upcoming, past, preferences: preferenceCopy, reading } = page;
+const { seo, rail, greeting, upcoming, past, preferences: preferenceCopy, reading, account } =
+	page;
 
-/* The first item is the page you are on. */
-const accountNav = rail.items.map((label, index) => ({ label, current: index === 0 }));
 const pastAppointments = past.items;
 const preferences = preferenceCopy.items;
 const readingList = reading.items;
@@ -29,8 +28,12 @@ const readingList = reading.items;
 
 			<nav class="account-nav">
 				{
-					accountNav.map((item) => (
-						<a href="/dashboard" class:list={['nav-item', item.current && 'nav-item--current']}>
+					rail.items.map((item, index) => (
+						<a
+							href={item.href}
+							class:list={['nav-item', index === 0 && 'nav-item--current']}
+							data-section={item.href.startsWith('#') ? item.href.slice(1) : undefined}
+						>
 							{item.label}
 						</a>
 					))
@@ -38,17 +41,17 @@ const readingList = reading.items;
 			</nav>
 		</aside>
 
-		<ResponsiveAccountNav />
+		<ResponsiveAccountNav items={rail.items} caption={`${rail.eyebrow} · ${rail.note}`} />
 
 		<div class="account-main">
-			<div class="greeting">
+			<div class="greeting" id="overview">
 				<p class="eyebrow">{greeting.eyebrow}</p>
 				<h1>{fill(greeting.title, { firstName })}</h1>
 				<p class="lead">{greeting.lead}</p>
 				<p class="demo-note">{greeting.note}</p>
 			</div>
 
-			<section class="upcoming">
+			<section class="upcoming" id="appointments">
 				<div class="upcoming-head">
 					<p class="upcoming-title">{upcoming.title}</p>
 					<p class="upcoming-status">{upcoming.status}</p>
@@ -108,8 +111,32 @@ const readingList = reading.items;
 				</ul>
 			</section>
 
+			<section class="account-details" id="account-details">
+				<h2 class="section-title">{account.title}</h2>
+				<p class="account-note">{account.note}</p>
+
+				<dl class="account-grid">
+					<div class="account-item">
+						<dt>{account.nameLabel}</dt>
+						<dd>{examplePatient.name}</dd>
+					</div>
+					<div class="account-item">
+						<dt>{account.emailLabel}</dt>
+						<dd>{examplePatient.email}</dd>
+					</div>
+					<div class="account-item">
+						<dt>{account.phoneLabel}</dt>
+						<dd>{examplePatient.phone}</dd>
+					</div>
+					<div class="account-item">
+						<dt>{account.accessLabel}</dt>
+						<dd>{examplePatient.accessNeeds}</dd>
+					</div>
+				</dl>
+			</section>
+
 			<div class="bottom">
-				<section class="preferences">
+				<section class="preferences" id="preferences">
 					<h2 class="card-title">{preferenceCopy.title}</h2>
 					<p class="preferences-note">{preferenceCopy.note}</p>
 
@@ -119,16 +146,29 @@ const readingList = reading.items;
 								<div class="toggle-row">
 									<label for={preference.id}>{preference.label}</label>
 									<span class="toggle">
-										<input type="checkbox" id={preference.id} checked={preference.on} />
-										<span class="track" aria-hidden="true" />
-										<span class="state">{preference.on ? 'On' : 'Off'}</span>
+										<input
+											type="checkbox"
+											id={preference.id}
+											checked={preference.on}
+											data-toggle
+											data-on={preferenceCopy.onLabel}
+											data-off={preferenceCopy.offLabel}
+										/>
+										<label class="track" for={preference.id} aria-hidden="true" />
+										<span class="state" data-state-for={preference.id}>
+											{preference.on ? preferenceCopy.onLabel : preferenceCopy.offLabel}
+										</span>
 									</span>
 								</div>
 							))
 						}
 					</div>
 
-					<Button variant="secondary" type="submit">{preferenceCopy.saveLabel}</Button>
+					<Button variant="secondary" data-save-preferences>{preferenceCopy.saveLabel}</Button>
+
+					<p class="preferences-status" data-preferences-status role="status" hidden>
+						{preferenceCopy.savedMessage}
+					</p>
 				</section>
 
 				<section class="reading">
@@ -154,6 +194,67 @@ const readingList = reading.items;
 		</div>
 	</section>
 </Layout>
+
+<script>
+	/* The On/Off word beside each switch is rendered once at build time. */
+	for (const input of document.querySelectorAll<HTMLInputElement>('[data-toggle]')) {
+		const state = document.querySelector<HTMLElement>(`[data-state-for="${input.id}"]`);
+
+		input.addEventListener('change', () => {
+			if (state) state.textContent = input.checked ? input.dataset.on! : input.dataset.off!;
+		});
+	}
+
+	/*
+	 * The save control sits outside any form and there is nothing to save to,
+	 * so it says that plainly rather than appearing to have stored something.
+	 */
+	const save = document.querySelector<HTMLButtonElement>('[data-save-preferences]');
+	const saveStatus = document.querySelector<HTMLElement>('[data-preferences-status]');
+
+	save?.addEventListener('click', () => {
+		if (saveStatus) saveStatus.hidden = false;
+	});
+
+	/*
+	 * The rail marks whichever section you have scrolled to, so the highlight
+	 * follows the page instead of always sitting on the first item.
+	 */
+	const railLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-section]')];
+	const sections = railLinks
+		.map((link) => document.getElementById(link.dataset.section!))
+		.filter((section): section is HTMLElement => Boolean(section));
+
+	if (railLinks.length && sections.length) {
+		let queued = false;
+
+		const mark = () => {
+			queued = false;
+			/* The last section to have passed under the header wins. */
+			let current = sections[0];
+			for (const section of sections) {
+				if (section.getBoundingClientRect().top <= 140) current = section;
+			}
+
+			for (const link of railLinks) {
+				const on = link.dataset.section === current.id;
+				link.classList.toggle('nav-item--current', on);
+				if (on) link.setAttribute('aria-current', 'true');
+				else link.removeAttribute('aria-current');
+			}
+		};
+
+		const schedule = () => {
+			if (queued) return;
+			queued = true;
+			window.requestAnimationFrame(mark);
+		};
+
+		window.addEventListener('scroll', schedule, { passive: true });
+		window.addEventListener('resize', schedule);
+		mark();
+	}
+</script>
 
 <style>
 	.workspace {
@@ -379,8 +480,12 @@ const readingList = reading.items;
 		flex-direction: column;
 		gap: var(--space-16);
 		align-items: flex-start;
-		width: 520px;
-		flex-shrink: 0;
+		/*
+		 * 520px is the width the design draws, but it has to give way rather
+		 * than push the reading column off the page on a narrow desktop.
+		 */
+		flex: 0 1 520px;
+		min-width: 0;
 		padding: var(--space-24);
 		border-radius: var(--radius-module);
 		background: var(--brand-secondary);
@@ -475,7 +580,12 @@ const readingList = reading.items;
 
 	.reading {
 		display: flex;
-		flex: 1 0 0;
+		/*
+		 * A real basis rather than 0: with nothing to ask for, this column was
+		 * left whatever the preferences card did not take — 41px at 1024 —
+		 * and its contents spilled off the page.
+		 */
+		flex: 1 1 320px;
 		flex-direction: column;
 		gap: var(--space-20);
 		align-items: flex-start;
@@ -490,6 +600,7 @@ const readingList = reading.items;
 	}
 
 	.reading-list li {
+		padding-top: var(--space-16);
 		border-top: 1px solid var(--border-default);
 	}
 
@@ -512,9 +623,60 @@ const readingList = reading.items;
 	}
 
 	.reading-list p {
-		margin-top: 26px;
+		margin-top: var(--space-8);
 		font-size: var(--type-body);
 		color: var(--text-secondary);
+	}
+
+	.account-details {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+		align-items: flex-start;
+	}
+
+	.account-note {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.account-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--space-16);
+		width: 100%;
+		margin-top: var(--space-8);
+	}
+
+	.account-item {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+		padding: var(--space-20);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+	}
+
+	.account-item dt {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-secondary);
+	}
+
+	.account-item dd {
+		font-size: var(--type-body);
+		color: var(--text-primary);
+		/* An address with no spaces in it should wrap rather than push out. */
+		overflow-wrap: anywhere;
+	}
+
+	.preferences-status {
+		padding: var(--space-12) var(--space-16);
+		border-radius: var(--radius-control);
+		background: var(--status-information-surface);
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--status-information);
 	}
 
 	.reading-help {
@@ -551,6 +713,11 @@ const readingList = reading.items;
 	}
 
 	@media (max-width: 767px) {
+		/* Two columns cannot hold an email address at this width. */
+		.account-grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
 		h1 {
 			font-size: 40px;
 		}

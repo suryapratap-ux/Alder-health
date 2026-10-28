@@ -55,14 +55,20 @@ const names = {
 
 			<div class="selector">
 				<div class="month">
-					<h2 class="card-title">{calendar.monthLabel}</h2>
+					<h2 class="card-title" data-month-label>{calendar.monthLabel}</h2>
 					<div class="month-nav">
-						<button type="button" aria-label="Previous month">&#8249;</button>
-						<button type="button" aria-label="Next month">&#8250;</button>
+						<button type="button" aria-label="Previous month" data-month-step="-1">&#8249;</button>
+						<button type="button" aria-label="Next month" data-month-step="1">&#8250;</button>
 					</div>
 				</div>
 
-				<table class="calendar">
+				<table
+					class="calendar"
+					data-calendar
+					data-year={calendar.year}
+					data-month={calendar.monthIndex}
+					data-selected={calendar.selected}
+				>
 					<thead>
 						<tr>
 							{calendar.weekdays.map((day) => <th scope="col">{day}</th>)}
@@ -107,7 +113,7 @@ const names = {
 				<div class="rule"></div>
 
 				<div class="slots">
-					<p class="slot-day">{exampleAppointment.dayLabel}</p>
+					<p class="slot-day" data-slot-day>{exampleAppointment.dayLabel}</p>
 					<p class="slot-note">
 						{exampleAppointment.visitLabel} &middot; {exampleAppointment.timezone}
 					</p>
@@ -125,7 +131,8 @@ const names = {
 			</div>
 
 			<Notice title={confirmation.title} tone="success">
-				{exampleAppointment.dayLong} at {exampleAppointment.time} Eastern Time. Your visit will last
+				<span data-summary-day>{exampleAppointment.dayLong}</span> at{' '}
+				<span data-summary-time>{exampleAppointment.time}</span> Eastern Time. Your visit will last
 				{' '}{exampleAppointment.duration}.
 			</Notice>
 
@@ -143,6 +150,165 @@ const names = {
 		<BookingContext clinician={clinician} />
 	</section>
 </Layout>
+
+<script>
+	const table = document.querySelector<HTMLTableElement>('[data-calendar]');
+
+	if (table) {
+		const body = table.querySelector('tbody')!;
+
+		/*
+		 * Astro scopes component styles with a data attribute stamped on the
+		 * markup it renders. Cells built here have to carry the same one, or
+		 * none of the calendar styling applies to them.
+		 */
+		const scope = [...table.attributes]
+			.map((attribute) => attribute.name)
+			.find((name) => name.startsWith('data-astro-cid-'));
+
+		const scoped = <T extends HTMLElement>(element: T) => {
+			if (scope) element.setAttribute(scope, '');
+			return element;
+		};
+		const monthLabel = document.querySelector<HTMLElement>('[data-month-label]');
+		const steps = [...document.querySelectorAll<HTMLButtonElement>('[data-month-step]')];
+		const slotDay = document.querySelector<HTMLElement>('[data-slot-day]');
+		const summaryDay = document.querySelector<HTMLElement>('[data-summary-day]');
+		const summaryTime = document.querySelector<HTMLElement>('[data-summary-time]');
+
+		/* The month on screen. */
+		let year = Number(table.dataset.year);
+		let month = Number(table.dataset.month);
+
+		/* The day chosen, which keeps its own month so it survives browsing. */
+		let pickedYear = year;
+		let pickedMonth = month;
+		let pickedDay = Number(table.dataset.selected);
+
+		/* The month and day the page opened on, which anchor the example dates. */
+		const openYear = year;
+		const openMonth = month;
+		const openDay = pickedDay;
+
+		/*
+		 * Example availability is the four working days after a reference
+		 * date — the booked visit in its own month, the month start in any
+		 * other. That rule reproduces the dates the design already shows.
+		 */
+		const availableIn = (y: number, m: number) => {
+			const from = y === openYear && m === openMonth ? openDay : 0;
+			const days: number[] = [];
+			const cursor = new Date(y, m, from + 1);
+
+			while (days.length < 4 && cursor.getMonth() === m) {
+				const weekday = cursor.getDay();
+				if (weekday !== 0 && weekday !== 6) days.push(cursor.getDate());
+				cursor.setDate(cursor.getDate() + 1);
+			}
+
+			return days;
+		};
+
+		const monthName = (y: number, m: number) =>
+			new Date(y, m, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+		const dayName = (y: number, m: number, d: number, withYear: boolean) =>
+			new Date(y, m, d).toLocaleDateString('en-US', {
+				weekday: 'long',
+				month: 'long',
+				day: 'numeric',
+				...(withYear ? { year: 'numeric' } : {}),
+			});
+
+		/* Browsing is held to the year ahead of whichever month comes first. */
+		const indexOf = (y: number, m: number) => y * 12 + m;
+		const today = new Date();
+		const minIndex = Math.min(
+			indexOf(openYear, openMonth),
+			indexOf(today.getFullYear(), today.getMonth()),
+		);
+		const maxIndex = minIndex + 12;
+
+		const draw = () => {
+			const first = new Date(year, month, 1).getDay();
+			const total = new Date(year, month + 1, 0).getDate();
+			const available = availableIn(year, month);
+			const weeks = Math.ceil((total + first) / 7);
+
+			body.replaceChildren();
+
+			for (let week = 0; week < weeks; week += 1) {
+				const row = scoped(document.createElement('tr'));
+
+				for (let weekday = 0; weekday < 7; weekday += 1) {
+					const cell = scoped(document.createElement('td'));
+					const number = week * 7 + weekday - first + 1;
+
+					if (number >= 1 && number <= total) {
+						const isSelected =
+							year === pickedYear && month === pickedMonth && number === pickedDay;
+
+						const button = scoped(document.createElement('button'));
+						button.type = 'button';
+						button.className = 'day';
+						if (isSelected) button.classList.add('day--selected');
+						if (available.includes(number)) button.classList.add('day--available');
+						button.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+						button.textContent = String(number);
+						button.addEventListener('click', () => choose(number));
+						cell.append(button);
+					}
+
+					row.append(cell);
+				}
+
+				body.append(row);
+			}
+
+			if (monthLabel) monthLabel.textContent = monthName(year, month);
+
+			for (const step of steps) {
+				const next = indexOf(year, month) + Number(step.dataset.monthStep);
+				step.disabled = next < minIndex || next > maxIndex;
+			}
+		};
+
+		const choose = (day: number) => {
+			pickedYear = year;
+			pickedMonth = month;
+			pickedDay = day;
+
+			if (slotDay) slotDay.textContent = dayName(year, month, day, false);
+			if (summaryDay) summaryDay.textContent = dayName(year, month, day, true);
+
+			draw();
+		};
+
+		for (const step of steps) {
+			step.addEventListener('click', () => {
+				const next = indexOf(year, month) + Number(step.dataset.monthStep);
+				if (next < minIndex || next > maxIndex) return;
+				year = Math.floor(next / 12);
+				month = next % 12;
+				draw();
+			});
+		}
+
+		draw();
+
+		/* The chosen time moves its highlight with it. */
+		const slots = [...document.querySelectorAll<HTMLInputElement>('input[name="booking-time"]')];
+
+		for (const slot of slots) {
+			slot.addEventListener('change', () => {
+				for (const other of slots) {
+					other.closest('.slot')?.classList.toggle('slot--selected', other.checked);
+				}
+				if (summaryTime && slot.checked) summaryTime.textContent = slot.value;
+			});
+		}
+	}
+</script>
 
 <style>
 	.intro {

@@ -1,0 +1,58 @@
+{
+  "seo": {
+    "title": "Contact — Alder Health",
+    "description": "Reach the Alder Health example team by email or phone, or send a message about access needs and booking."
+  },
+  "intro": {
+    "eyebrow": "Contact",
+    "title": "Talk to the example team.",
+    "lead": "Questions about booking, access needs or getting to a clinic. We answer on weekdays, and there is no wrong way to ask."
+  },
+  "form": {
+    "heading": "Send a message",
+    "note": "This is a design demonstration. The form checks what you type and then tells you plainly that nothing was sent.",
+    "nameLabel": "Your name",
+    "namePlaceholder": "Jordan Lee",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "subjectLabel": "What is this about?",
+    "subjectPlaceholder": "Choose a topic",
+    "subjectOptions": [
+      "Booking an appointment",
+      "Access needs",
+      "Finding a clinic",
+      "Something else"
+    ],
+    "messageLabel": "Your message",
+    "messagePlaceholder": "Tell us what you need help with.",
+    "submitLabel": "Send message",
+    "submitBusyLabel": "Sending…",
+    "unavailableMessage": "Nothing was sent. This demonstration has no message service behind it, so please use the email address or phone number listed here instead."
+  },
+  "errors": {
+    "nameMissing": "Please enter your name.",
+    "emailMissing": "Please enter your email address.",
+    "emailInvalid": "Please enter a complete email address.",
+    "subjectMissing": "Please choose a topic.",
+    "messageMissing": "Please write a short message."
+  },
+  "routes": {
+    "heading": "Other ways to reach us",
+    "items": [
+      {
+        "label": "Email the example team",
+        "value": "hello@alderhealth.example",
+        "copy": "For access needs or help with the booking process."
+      },
+      {
+        "label": "Call the example line",
+        "value": "(555) 010-0199",
+        "copy": "Weekdays, 8am–5pm Eastern Time."
+      }
+    ]
+  },
+  "notice": {
+    "title": "Do not send medical details",
+    "copy": "This is a design demonstration. Do not send sensitive medical information to the example addresses above. For an emergency, contact your local emergency services."
+  }
+}

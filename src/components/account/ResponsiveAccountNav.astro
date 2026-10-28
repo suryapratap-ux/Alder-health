@@ -2,27 +2,36 @@
 /*
  * Responsive account navigation — Figma 5:23905 (tablet) / 5:24004 (mobile).
  * Replaces the desktop account rail below 1024px: a caption line above a row
- * of three tabs on a hairline rule.
+ * of tabs on a hairline rule.
+ *
+ * It takes the same items as the rail rather than keeping its own copy, so
+ * the two cannot disagree about where a link goes.
  */
-const tabs = [
-	{ label: 'Overview', current: true },
-	{ label: 'Appointments' },
-	{ label: 'Settings' },
-];
+interface Item {
+	label: string;
+	href: string;
+}
+
+interface Props {
+	items: Item[];
+	caption: string;
+}
+
+const { items, caption } = Astro.props;
 ---
 
 <nav class="account-tabs-nav" aria-label="Patient account">
-	<p class="caption">Patient account &middot; Fictional patient data</p>
+	<p class="caption">{caption}</p>
 
 	<div class="tabs">
 		{
-			tabs.map((tab) => (
+			items.map((item, index) => (
 				<a
-					href="/dashboard"
-					class:list={['tab', 'link-underline', tab.current && 'tab--current']}
-					aria-current={tab.current ? 'page' : undefined}
+					href={item.href}
+					class:list={['tab', 'link-underline', index === 0 && 'tab--current']}
+					data-section={item.href.startsWith('#') ? item.href.slice(1) : undefined}
 				>
-					{tab.label}
+					{item.label}
 				</a>
 			))
 		}
@@ -36,6 +45,11 @@ const tabs = [
 		gap: var(--space-16);
 		align-items: flex-start;
 		width: 100%;
+		/*
+		 * A flex item will not shrink below its content by default, which
+		 * would let the tab row push the page sideways instead of scrolling.
+		 */
+		min-width: 0;
 	}
 
 	.caption {
@@ -45,6 +59,10 @@ const tabs = [
 		color: var(--text-secondary);
 	}
 
+	/*
+	 * Six destinations will not fit across a phone, so the strip scrolls
+	 * sideways rather than wrapping into a block of links.
+	 */
 	.tabs {
 		display: flex;
 		gap: var(--space-16);
@@ -52,6 +70,8 @@ const tabs = [
 		width: 100%;
 		padding-bottom: var(--space-12);
 		border-bottom: 1px solid var(--border-default);
+		overflow-x: auto;
+		scrollbar-width: thin;
 	}
 
 	.tab {
