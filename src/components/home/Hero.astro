@@ -97,8 +97,15 @@ const { hero } = home;
 		color: var(--text-secondary);
 	}
 
-	/* Tablet — the photograph moves below the promise */
-	@media (max-width: 1023px) {
+	/*
+	 * The promise column is a fixed 550px, so every pixel the window loses
+	 * comes out of the photograph: at 1024px it was down to 243px wide and
+	 * showing a quarter of a landscape picture. The two-column hero needs
+	 * roughly 1366px to give the image a sensible shape, so below that the
+	 * photograph moves under the promise, where it crops across its width
+	 * instead of through it.
+	 */
+	@media (max-width: 1365px) {
 		.hero {
 			flex-direction: column;
 			align-items: flex-start;
