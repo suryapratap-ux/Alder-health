@@ -47,4 +47,16 @@ export default defineConfig({
 	output: 'static',
 	adapter: vercel(),
 	integrations: [react(), keystatic()],
+
+	/*
+	 * /cms is the address to hand to an editor. The admin itself cannot be
+	 * moved: Keystatic's router builds its own /keystatic/... links and the
+	 * component takes no base-path option, so relocating the route would break
+	 * navigation inside the app. A redirect gives the short URL without that.
+	 */
+	redirects: {
+		'/cms': '/keystatic',
+		/* The parameter has to be named as Keystatic names its injected route. */
+		'/cms/[...params]': '/keystatic/[...params]',
+	},
 });

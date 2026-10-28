@@ -10,10 +10,16 @@ npm run preview  # preview the build
 
 ## Editing content
 
-Once deployed, editors open `/keystatic` on the live site and sign in through
+Once deployed, editors open **`/cms`** on the live site and sign in through
 Keystatic Cloud. **They do not need a GitHub account** — that is the reason
 this uses Cloud rather than Keystatic's GitHub mode, where every editor needs
 write access to the repository.
+
+`/cms` is a 301 to `/keystatic`, which is where the admin actually lives. It
+cannot be moved there outright: Keystatic's router builds its own
+`/keystatic/...` links and the component takes no base-path option, so serving
+it from another route would break navigation inside the app. Deep links
+redirect too, so a bookmarked `/cms/collection/clinicians` still works.
 
 Saving commits the changed JSON to this repository, which triggers a deploy, so
 the edit is live a minute or so later.
