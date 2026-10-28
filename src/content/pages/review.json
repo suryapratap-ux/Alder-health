@@ -23,5 +23,20 @@
   "plans": {
     "title": "If your plans change",
     "copy": "For a real visit, check the clinic’s cancellation and rescheduling information before booking. Contact the clinic if you need help changing a time. This demo does not define a cancellation policy or any fees."
+  },
+  "privacy": {
+    "title": "Privacy & your choices",
+    "copy": "These details are shown only as fictional examples. In a real service, review the privacy notice to understand how your booking information is used.",
+    "linkLabel": "Privacy notice",
+    "linkHref": "/help#privacy",
+    "acknowledgements": [
+      "I have reviewed the appointment and patient details.",
+      "I understand this is a demo, not a real booking."
+    ],
+    "note": "This acknowledgment is not consent to medical treatment."
+  },
+  "actions": {
+    "backLabel": "Back to details",
+    "confirmLabel": "Confirm appointment"
   }
 }

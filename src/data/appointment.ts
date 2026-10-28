@@ -12,6 +12,8 @@ import record from '../content/appointment.json';
 
 export const exampleAppointment = record.appointment;
 export const examplePatient = record.patient;
+/* Wording shared by the booking, review and confirmation summaries. */
+export const labels = record.labels;
 
 /* November 2026 starts on a Sunday; dates with example availability are underlined. */
 export const calendar = {

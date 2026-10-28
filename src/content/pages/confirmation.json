@@ -35,5 +35,12 @@
     "copy": "Use View appointments to find the reschedule and cancel actions. For a real visit, check the clinic’s cancellation information or contact the team.",
     "email": "hello@alderhealth.example",
     "referenceLabel": "Example contact route"
-  }
+  },
+  "patientPrefix": "Patient:",
+  "actions": {
+    "calendarLabel": "Add to calendar",
+    "appointmentsLabel": "View appointments",
+    "note": "Calendar and account actions are static examples."
+  },
+  "preparationHeading": "A little preparation, a calmer day."
 }

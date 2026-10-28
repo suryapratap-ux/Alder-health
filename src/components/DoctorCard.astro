@@ -1,5 +1,6 @@
 ---
 import Button from './Button.astro';
+import page from '../content/pages/find-a-doctor.json';
 import type { Clinician } from '../data/clinicians';
 
 /* Doctor card — Figma 5:22414 / 5:22509 / 5:22620. */
@@ -33,14 +34,16 @@ const { clinician } = Astro.props;
 
 			<div class="divider"></div>
 
-			<p class="availability">Next example visit &middot; {clinician.nextVisit}</p>
+			<p class="availability">{page.card.nextPrefix} &middot; {clinician.nextVisit}</p>
 
 			<div class="actions">
-				<Button href={`/doctors/${clinician.slug}`} variant="secondary">View profile</Button>
-				<Button href={`/booking?doctor=${clinician.slug}`}>Book a visit</Button>
+				<Button href={`/doctors/${clinician.slug}`} variant="secondary">
+					{page.card.profileLabel}
+				</Button>
+				<Button href={`/booking?doctor=${clinician.slug}`}>{page.card.bookLabel}</Button>
 			</div>
 
-			<p class="disclaimer">Illustrative portrait &middot; profile and credentials are fictional.</p>
+			<p class="disclaimer">{page.card.disclaimer}</p>
 		</div>
 	</div>
 </article>

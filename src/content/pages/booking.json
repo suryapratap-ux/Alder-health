@@ -17,7 +17,9 @@
   },
   "calendarKey": "Selected date has a filled background. Underlined dates have example availability.",
   "confirmation": {
-    "title": "✓ Your time is selected"
+    "title": "✓ Your time is selected",
+    "joinWord": "at",
+    "tail": "Eastern Time. Your visit will last {duration}."
   },
   "actions": {
     "backLabel": "Back",

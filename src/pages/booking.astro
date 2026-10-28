@@ -131,9 +131,9 @@ const names = {
 			</div>
 
 			<Notice title={confirmation.title} tone="success">
-				<span data-summary-day>{exampleAppointment.dayLong}</span> at{' '}
-				<span data-summary-time>{exampleAppointment.time}</span> Eastern Time. Your visit will last
-				{' '}{exampleAppointment.duration}.
+				<span data-summary-day>{exampleAppointment.dayLong}</span> {confirmation.joinWord}{' '}
+				<span data-summary-time>{exampleAppointment.time}</span>{' '}
+				{fill(confirmation.tail, { duration: exampleAppointment.duration })}
 			</Notice>
 
 			<div class="step-navigation">

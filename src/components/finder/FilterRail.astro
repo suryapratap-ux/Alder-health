@@ -6,36 +6,29 @@
  * opened by the tablet bar's "More filters" or the mobile "Filters" button,
  * so there is one set of controls to keep in step rather than three.
  */
-const specialties = ['All specialties', 'Primary care', 'Dermatology', 'Family medicine'];
-const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clinic'];
-const visitTypes = [
-	{ id: 'in-person', label: 'In-person' },
-	{ id: 'video', label: 'Video consultation' },
-];
-const languages = [
-	{ id: 'english', label: 'English' },
-	{ id: 'spanish', label: 'Spanish' },
-	{ id: 'mandarin', label: 'Mandarin' },
-];
+import page from '../../content/pages/find-a-doctor.json';
+
+const { filters } = page;
+const { specialties, clinics, visitTypes, languages } = filters;
 ---
 
 <aside class="rail" aria-label="Refine your search" data-filter-rail data-open="false">
 	<div class="heading">
-		<p class="title">Refine your search</p>
-		<button class="reset" type="button" data-filter-reset>Reset</button>
+		<p class="title">{filters.railTitle}</p>
+		<button class="reset" type="button" data-filter-reset>{filters.resetLabel}</button>
 	</div>
 
 	<div class="rule"></div>
 
 	<div class="field">
-		<label class="field-label" for="rail-specialty">Specialty</label>
+		<label class="field-label" for="rail-specialty">{filters.specialtyLabel}</label>
 		<select class="control" id="rail-specialty" name="specialty" data-filter="specialty">
 			{specialties.map((item) => <option>{item}</option>)}
 		</select>
 	</div>
 
 	<div class="field">
-		<label class="field-label" for="rail-location">Location</label>
+		<label class="field-label" for="rail-location">{filters.locationLabel}</label>
 		<select class="control" id="rail-location" name="location" data-filter="clinic">
 			{clinics.map((item) => <option>{item}</option>)}
 		</select>
@@ -44,7 +37,7 @@ const languages = [
 	<div class="rule"></div>
 
 	<div class="group">
-		<p class="group-label" id="rail-visit-label">Visit type</p>
+		<p class="group-label" id="rail-visit-label">{filters.visitTypeLabel}</p>
 		<div class="options" role="group" aria-labelledby="rail-visit-label">
 			{
 				visitTypes.map((option) => (
@@ -60,7 +53,7 @@ const languages = [
 	<div class="rule"></div>
 
 	<div class="group">
-		<p class="group-label" id="rail-language-label">Languages</p>
+		<p class="group-label" id="rail-language-label">{filters.languagesLabel}</p>
 		<div class="options" role="group" aria-labelledby="rail-language-label">
 			{
 				languages.map((option) => (
@@ -73,7 +66,7 @@ const languages = [
 		</div>
 	</div>
 
-	<p class="note">Times are shown in Eastern Time. Availability is illustrative.</p>
+	<p class="note">{filters.note}</p>
 </aside>
 
 <style>

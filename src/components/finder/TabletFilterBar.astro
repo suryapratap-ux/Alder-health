@@ -1,22 +1,23 @@
 ---
 import Button from '../Button.astro';
+import page from '../../content/pages/find-a-doctor.json';
 
 /* Tablet filter bar — Figma 5:22501. Shown between 768px and 1023px. */
-const specialties = ['All specialties', 'Primary care', 'Dermatology', 'Family medicine'];
-const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clinic'];
+const { filters } = page;
+const { specialties, clinics } = filters;
 ---
 
 <div class="filter-bar">
 	<div class="choices">
 		<div class="field">
-			<label class="field-label" for="bar-specialty">Specialty</label>
+			<label class="field-label" for="bar-specialty">{filters.specialtyLabel}</label>
 			<select class="control" id="bar-specialty" name="specialty" data-filter="specialty">
 				{specialties.map((item) => <option>{item}</option>)}
 			</select>
 		</div>
 
 		<div class="field">
-			<label class="field-label" for="bar-location">Location</label>
+			<label class="field-label" for="bar-location">{filters.locationLabel}</label>
 			<select class="control" id="bar-location" name="location" data-filter="clinic">
 				{clinics.map((item) => <option>{item}</option>)}
 			</select>
@@ -26,13 +27,13 @@ const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clini
 	<div class="visit-types">
 		<label class="check-option">
 			<input type="checkbox" name="visit" value="in-person" data-filter="visit" />
-			In-person
+			{filters.inPersonLabel}
 		</label>
 		<label class="check-option">
 			<input type="checkbox" name="visit" value="video" data-filter="visit" />
-			Video consultation
+			{filters.videoLabel}
 		</label>
-		<Button variant="secondary" class="more-filters" data-filter-toggle>More filters</Button>
+		<Button variant="secondary" class="more-filters" data-filter-toggle>{filters.moreLabel}</Button>
 	</div>
 </div>
 

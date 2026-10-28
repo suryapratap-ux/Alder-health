@@ -1,0 +1,38 @@
+{
+  "seo": {
+    "titleTemplate": "{name} — Alder Health",
+    "descriptionTemplate": "{name} is a {specialty} clinician at {clinic}. Read the profile, see what a visit covers and choose an example time."
+  },
+  "identity": {
+    "credentialsNote": "Illustrative credentials · fictional example",
+    "portraitNote": "Illustrative portrait"
+  },
+  "areas": {
+    "heading": "Areas of care"
+  },
+  "visit": {
+    "heading": "Before your visit",
+    "videoHeading": "Video consultations",
+    "bringHeading": "What to bring"
+  },
+  "booking": {
+    "heading": "A time for your care.",
+    "intro": "Book an example visit with {name}.",
+    "visitTypeLabel": "Visit type",
+    "inPersonLabel": "In-person",
+    "videoLabel": "Video",
+    "nextPrefix": "Next example:",
+    "ctaLabel": "Choose an appointment",
+    "disclaimer": "Fictional profile and availability. No real appointment will be made.",
+    "sidebarNote": "Times are shown in Eastern Time. Availability is illustrative."
+  },
+  "related": {
+    "eyebrow": "More people to meet",
+    "heading": "Explore other clinicians.",
+    "ctaLabel": "View profile"
+  },
+  "sticky": {
+    "nextPrefix": "Next example:",
+    "ctaLabel": "Choose an appointment"
+  }
+}

@@ -72,7 +72,7 @@ const socialImageUrl = Astro.site ? new URL('/og-image.png', Astro.site) : undef
 	</head>
 
 	<body>
-		<a class="skip-link" href="#main">Skip to content</a>
+		<a class="skip-link" href="#main">{site.skipLinkLabel}</a>
 		<Header />
 		<main id="main">
 			<slot />

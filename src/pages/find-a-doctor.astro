@@ -9,9 +9,10 @@ import CompactFilters from '../components/finder/CompactFilters.astro';
 import { clinicians } from '../data/clinicians';
 
 import { findADoctor as page } from '../data/pages';
+import { fill } from '../data/appointment';
 
 /* Find a doctor — Figma 5:22337 (desktop), 5:22470 (tablet), 5:22587 (mobile). */
-const { seo, intro, search } = page;
+const { seo, intro, search, results, support } = page;
 
 /*
  * "Wed, Nov 4 · 10:00 AM ET" sorts alphabetically into nonsense, so the next
@@ -92,14 +93,14 @@ const entries = clinicians.map((clinician) => ({
 
 			<div class="result-count">
 				<p class="count">
-					<span data-result-count>{clinicians.length}</span> example doctors
+					<span data-result-count>{clinicians.length}</span> {results.countSuffix}
 				</p>
 
 				<div class="sort">
-					<label class="sort-label" for="sort-by">Sort</label>
+					<label class="sort-label" for="sort-by">{results.sortLabel}</label>
 					<select class="sort-select" id="sort-by" data-sort>
-						<option value="next">Next available</option>
-						<option value="name">Name (A–Z)</option>
+						<option value="next">{results.sortByNext}</option>
+						<option value="name">{results.sortByName}</option>
 					</select>
 				</div>
 			</div>
@@ -125,24 +126,22 @@ const entries = clinicians.map((clinician) => ({
 			</ul>
 
 			<p class="empty" data-empty hidden>
-				No example doctors match these filters. Try clearing one, or
-				<button class="empty-reset" type="button" data-filter-reset>reset them all</button>.
+				{results.emptyCopy}
+				<button class="empty-reset" type="button" data-filter-reset>
+					{results.emptyResetLabel}
+				</button>.
 			</p>
 
 			<p class="exhausted" data-exhausted>
-				You&rsquo;ve seen all {clinicians.length} example doctors. Broaden or change your filters to
-				explore the directory pattern.
+				{fill(results.exhaustedCopy, { count: String(clinicians.length) })}
 			</p>
 
 			<div class="rule"></div>
 
 			<div class="support">
-				<h2 class="card-title">Not sure who to choose?</h2>
-				<p>
-					Our example support team can help you understand services and practical visit options,
-					without asking for medical details here.
-				</p>
-				<Button href="/contact" variant="secondary">Contact support</Button>
+				<h2 class="card-title">{support.heading}</h2>
+				<p>{support.copy}</p>
+				<Button href={support.ctaHref} variant="secondary">{support.ctaLabel}</Button>
 			</div>
 		</div>
 	</section>

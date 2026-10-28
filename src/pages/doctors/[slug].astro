@@ -4,6 +4,8 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 import Button from '../../components/Button.astro';
 import AppointmentCard from '../../components/AppointmentCard.astro';
 import { clinicians } from '../../data/clinicians';
+import { fill } from '../../data/appointment';
+import page from '../../content/pages/doctor-profile.json';
 
 /* Doctor profile — Figma 5:22683 (desktop), 5:22753 (tablet), 5:22819 (mobile). */
 export function getStaticPaths() {
@@ -16,11 +18,18 @@ export function getStaticPaths() {
 const { clinician } = Astro.props;
 const { profile } = clinician;
 const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
+
+const { seo, identity, areas, visit, related: relatedCopy, sticky } = page;
+const names = {
+	name: clinician.name,
+	specialty: clinician.specialty.toLowerCase(),
+	clinic: clinician.clinic,
+};
 ---
 
 <Layout
-	title={`${clinician.name} — Alder Health`}
-	description={`${clinician.name} is a ${clinician.specialty.toLowerCase()} clinician at ${clinician.clinic}. Read the profile, see what a visit covers and choose an example time.`}
+	title={fill(seo.titleTemplate, names)}
+	description={fill(seo.descriptionTemplate, names)}
 >
 	<section class="profile-navigation">
 		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Find care', href: '/services' }, { label: 'Doctors', href: '/find-a-doctor' }]} current={clinician.name} />
@@ -42,10 +51,10 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 					<p class="specialty">{clinician.specialty}</p>
 					<div class="credentials">
 						<p>{clinician.credentials}</p>
-						<p>Illustrative credentials &middot; fictional example</p>
+						<p>{identity.credentialsNote}</p>
 						<p>{clinician.clinic}</p>
 						<p>{clinician.languagesSentence}</p>
-						<p>Illustrative portrait</p>
+						<p>{identity.portraitNote}</p>
 					</div>
 				</div>
 			</div>
@@ -65,7 +74,7 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 			<div class="rule"></div>
 
 			<div class="editorial">
-				<h2>Areas of care</h2>
+				<h2>{areas.heading}</h2>
 				<p>{profile.areasIntro}</p>
 				<ul class="areas">
 					{profile.areas.map((area) => <li>{area}</li>)}
@@ -74,7 +83,7 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 
 			<div class="rule"></div>
 
-			<h2 class="visit-heading">Before your visit</h2>
+			<h2 class="visit-heading">{visit.heading}</h2>
 
 			<div class="visit-block">
 				<h3>{profile.inPersonHeading}</h3>
@@ -82,20 +91,20 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 			</div>
 
 			<div class="visit-block">
-				<h3>Video consultations</h3>
+				<h3>{visit.videoHeading}</h3>
 				<p>{profile.video}</p>
 			</div>
 
 			<div class="visit-block">
-				<h3>What to bring</h3>
+				<h3>{visit.bringHeading}</h3>
 				<p>{profile.whatToBring}</p>
 			</div>
 		</div>
 	</section>
 
 	<section class="related">
-		<p class="eyebrow">More people to meet</p>
-		<h2 class="section-title">Explore other clinicians.</h2>
+		<p class="eyebrow">{relatedCopy.eyebrow}</p>
+		<h2 class="section-title">{relatedCopy.heading}</h2>
 
 		<ul class="related-collection">
 			{
@@ -115,7 +124,9 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 							<p>{entry.clinic}</p>
 							<p>{entry.note}</p>
 						</div>
-						<Button href={`/doctors/${entry.slug}`} variant="secondary">View profile</Button>
+						<Button href={`/doctors/${entry.slug}`} variant="secondary">
+							{relatedCopy.ctaLabel}
+						</Button>
 					</li>
 				))
 			}
@@ -123,8 +134,8 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 	</section>
 
 	<div class="sticky-booking">
-		<p>{clinician.name} &middot; Next example: {clinician.nextVisit}</p>
-		<Button href={`/booking?doctor=${clinician.slug}`} fullWidth>Choose an appointment</Button>
+		<p>{clinician.name} &middot; {sticky.nextPrefix} {clinician.nextVisit}</p>
+		<Button href={`/booking?doctor=${clinician.slug}`} fullWidth>{sticky.ctaLabel}</Button>
 	</div>
 </Layout>
 

@@ -524,6 +524,150 @@ content:
                 label: Clinic options
                 type: string
                 list: true
+          - name: results
+            label: Results and sorting
+            type: object
+            fields:
+              - name: countSuffix
+                label: Words after the result count
+                type: string
+              - name: sortLabel
+                label: Sort label
+                type: string
+              - name: sortByNext
+                label: Sort by next available
+                type: string
+              - name: sortByName
+                label: Sort by name
+                type: string
+              - name: emptyCopy
+                label: Text when nothing matches
+                type: text
+              - name: emptyResetLabel
+                label: Reset link in that text
+                type: string
+              - name: exhaustedCopy
+                label: Text under the last result
+                type: text
+                description: '{count} is replaced with the number of doctors.'
+          - name: card
+            label: Doctor card
+            type: object
+            fields:
+              - name: nextPrefix
+                label: Availability prefix
+                type: string
+              - name: profileLabel
+                label: Profile button
+                type: string
+              - name: bookLabel
+                label: Booking button
+                type: string
+              - name: disclaimer
+                label: Disclaimer
+                type: text
+          - name: filters
+            label: Filter controls
+            type: object
+            description: >-
+              Shared by the sidebar, the tablet bar and the mobile sheet, so a
+              change here reaches all three.
+            fields:
+              - name: railTitle
+                label: Sidebar heading
+                type: string
+              - name: resetLabel
+                label: Reset button
+                type: string
+              - name: specialtyLabel
+                label: Specialty label
+                type: string
+              - name: locationLabel
+                label: Location label
+                type: string
+              - name: visitTypeLabel
+                label: Visit type label
+                type: string
+              - name: languagesLabel
+                label: Languages label
+                type: string
+              - name: inPersonLabel
+                label: In-person option
+                type: string
+              - name: videoLabel
+                label: Video option
+                type: string
+              - name: moreLabel
+                label: More filters button
+                type: string
+              - name: toggleLabel
+                label: Mobile filters button
+                type: string
+              - name: selectedLabel
+                label: Word after the selected count
+                type: string
+              - name: summaryDefault
+                label: Mobile summary when nothing is chosen
+                type: string
+              - name: note
+                label: Note under the filters
+                type: text
+              - name: specialties
+                label: Specialty options
+                type: string
+                list: true
+              - name: clinics
+                label: Clinic options
+                type: string
+                list: true
+              - name: visitTypes
+                label: Visit type options
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                fields:
+                  - name: id
+                    label: Value
+                    type: string
+                    readonly: true
+                    description: Ties the option to the filtering. Changing it breaks that link.
+                  - name: label
+                    label: Label
+                    type: string
+              - name: languages
+                label: Language options
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                fields:
+                  - name: id
+                    label: Value
+                    type: string
+                    readonly: true
+                    description: Ties the option to the filtering. Changing it breaks that link.
+                  - name: label
+                    label: Label
+                    type: string
+          - name: support
+            label: Support block
+            type: object
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+              - name: copy
+                label: Text
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: ctaHref
+                label: Button link
+                type: string
 
       - name: resources
         label: Resources page
@@ -1238,6 +1382,115 @@ content:
                 component: link
 
   # --------------------------------------------------------- Booking flow --
+  - name: doctor-profile
+    label: Doctor profile
+    type: file
+    path: src/content/pages/doctor-profile.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: seo
+        label: Search engine listing
+        type: object
+        description: >-
+          One profile page is built for each clinician, so these carry
+          placeholders rather than fixed wording.
+        fields:
+          - name: titleTemplate
+            label: Browser tab title
+            type: string
+            description: '{name} is replaced with the clinician name.'
+          - name: descriptionTemplate
+            label: Description
+            type: text
+            description: '{name}, {specialty} and {clinic} are replaced.'
+      - name: identity
+        label: Name block
+        type: object
+        fields:
+          - name: credentialsNote
+            label: Note under the credentials
+            type: string
+          - name: portraitNote
+            label: Note about the portrait
+            type: string
+      - name: areas
+        label: Areas of care
+        type: object
+        fields:
+          - name: heading
+            label: Heading
+            type: string
+      - name: visit
+        label: Before your visit
+        type: object
+        fields:
+          - name: heading
+            label: Section heading
+            type: string
+          - name: videoHeading
+            label: Video sub-heading
+            type: string
+          - name: bringHeading
+            label: What to bring sub-heading
+            type: string
+      - name: booking
+        label: Appointment card
+        type: object
+        fields:
+          - name: heading
+            label: Heading
+            type: string
+          - name: intro
+            label: Line under the heading
+            type: string
+            description: '{name} is replaced with the clinician name.'
+          - name: visitTypeLabel
+            label: Visit type label
+            type: string
+          - name: inPersonLabel
+            label: In-person option
+            type: string
+          - name: videoLabel
+            label: Video option
+            type: string
+          - name: nextPrefix
+            label: Availability prefix
+            type: string
+          - name: ctaLabel
+            label: Button text
+            type: string
+          - name: disclaimer
+            label: Disclaimer
+            type: text
+          - name: sidebarNote
+            label: Note under the card
+            type: text
+      - name: related
+        label: Other clinicians
+        type: object
+        fields:
+          - name: eyebrow
+            label: Eyebrow
+            type: string
+          - name: heading
+            label: Heading
+            type: string
+          - name: ctaLabel
+            label: Button text
+            type: string
+      - name: sticky
+        label: Mobile booking bar
+        type: object
+        fields:
+          - name: nextPrefix
+            label: Availability prefix
+            type: string
+          - name: ctaLabel
+            label: Button text
+            type: string
+
   - name: booking-flow
     label: Booking flow
     type: group
@@ -1300,6 +1553,13 @@ content:
               - name: title
                 label: Title
                 type: string
+              - name: joinWord
+                label: Word between the date and the time
+                type: string
+              - name: tail
+                label: Rest of the sentence
+                type: text
+                description: '{duration} is replaced with the visit length.'
           - name: actions
             label: Step buttons
             type: object
@@ -1382,6 +1642,39 @@ content:
               - name: copy
                 label: Text
                 type: text
+          - name: privacy
+            label: Privacy block
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: copy
+                label: Text
+                type: text
+              - name: linkLabel
+                label: Link text
+                type: string
+              - name: linkHref
+                label: Link address
+                type: string
+              - name: acknowledgements
+                label: Tick-box statements
+                type: string
+                list: true
+              - name: note
+                label: Note under the tick boxes
+                type: text
+          - name: actions
+            label: Buttons
+            type: object
+            fields:
+              - name: backLabel
+                label: Back button
+                type: string
+              - name: confirmLabel
+                label: Confirm button
+                type: string
 
       - name: confirmation
         label: Confirmation
@@ -1455,6 +1748,25 @@ content:
               - name: referenceLabel
                 label: Reference line label
                 type: string
+          - name: patientPrefix
+            label: Patient line label
+            type: string
+          - name: preparationHeading
+            label: Preparation heading
+            type: string
+          - name: actions
+            label: Buttons
+            type: object
+            fields:
+              - name: calendarLabel
+                label: Calendar button
+                type: string
+              - name: appointmentsLabel
+                label: Appointments button
+                type: string
+              - name: note
+                label: Note under the buttons
+                type: text
 
       - name: dashboard
         label: Patient account
@@ -1949,6 +2261,19 @@ content:
           - name: accessNeeds
             label: Access needs
             type: string
+      - name: labels
+        label: Shared booking wording
+        type: object
+        description: >-
+          Shown on the booking, review and confirmation summaries, so a change
+          here reaches all three screens.
+        fields:
+          - name: summaryLabel
+            label: Summary heading
+            type: string
+          - name: disclaimer
+            label: Disclaimer
+            type: text
 
   - name: settings
     label: Header & footer
@@ -1963,6 +2288,12 @@ content:
         type: string
         required: true
         description: Used in page titles and link previews.
+      - name: skipLinkLabel
+        label: Skip to content link
+        type: string
+        description: >-
+          The first link on every page, reached by pressing Tab. It jumps past
+          the navigation to the page content.
       - name: wordmark
         label: Wordmark
         type: string

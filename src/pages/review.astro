@@ -19,7 +19,7 @@ const reviewSteps = [
 	{ label: 'Review', state: 'current' as const },
 ];
 
-const { seo, intro, noticeTitle, editLabel, blocks, plans } = page;
+const { seo, intro, noticeTitle, editLabel, blocks, plans, privacy, actions } = page;
 
 const summaryBlocks = [
 	{
@@ -91,32 +91,31 @@ const summaryBlocks = [
 			</div>
 
 			<div class="block">
-				<h2 class="card-title">Privacy &amp; your choices</h2>
-				<p class="small-prose">
-					These details are shown only as fictional examples. In a real service, review the privacy
-					notice to understand how your booking information is used.
-				</p>
-				<a class="privacy-link link-underline" href="/help#privacy">Privacy notice <span class="link-arrow" aria-hidden="true">&#8599;</span></a>
+				<h2 class="card-title">{privacy.title}</h2>
+				<p class="small-prose">{privacy.copy}</p>
+				<a class="privacy-link link-underline" href={privacy.linkHref}>
+					{privacy.linkLabel} <span class="link-arrow" aria-hidden="true">&#8599;</span>
+				</a>
 
 				<div class="acknowledgements">
-					<label class="check-option">
-						<input type="checkbox" checked />
-						I have reviewed the appointment and patient details.
-					</label>
-					<label class="check-option">
-						<input type="checkbox" checked />
-						I understand this is a demo, not a real booking.
-					</label>
+					{
+						privacy.acknowledgements.map((item) => (
+							<label class="check-option">
+								<input type="checkbox" checked />
+								{item}
+							</label>
+						))
+					}
 				</div>
 
-				<p class="small-prose">This acknowledgment is not consent to medical treatment.</p>
+				<p class="small-prose">{privacy.note}</p>
 			</div>
 
 			<div class="actions">
-				<Button href="/booking" variant="secondary">Back to details</Button>
+				<Button href="/booking" variant="secondary">{actions.backLabel}</Button>
 				<Button href="/confirmation">
 					<span aria-hidden="true">&#10003;</span>
-					Confirm appointment
+					{actions.confirmLabel}
 				</Button>
 			</div>
 		</div>

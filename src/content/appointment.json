@@ -17,5 +17,9 @@
     "email": "jordan@example.com",
     "phone": "Not provided (optional)",
     "accessNeeds": "None shared"
+  },
+  "labels": {
+    "summaryLabel": "Your appointment",
+    "disclaimer": "Fictional clinician and clinic. Example availability only."
   }
 }

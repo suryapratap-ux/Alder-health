@@ -1,6 +1,8 @@
 ---
 import Button from './Button.astro';
 import type { Clinician } from '../data/clinicians';
+import { fill } from '../data/appointment';
+import page from '../content/pages/doctor-profile.json';
 
 /* Choose an appointment — Figma 5:22717. */
 interface Props {
@@ -8,25 +10,26 @@ interface Props {
 }
 
 const { clinician } = Astro.props;
+const copy = page.booking;
 ---
 
 <div class="appointment">
 	<section class="card">
 		<div class="intro">
-			<h2 class="card-title">A time for your care.</h2>
-			<p>Book an example visit with {clinician.name}.</p>
+			<h2 class="card-title">{copy.heading}</h2>
+			<p>{fill(copy.intro, { name: clinician.name })}</p>
 		</div>
 
-		<p class="label">Visit type</p>
+		<p class="label">{copy.visitTypeLabel}</p>
 
 		<div class="segmented" role="radiogroup" aria-label="Visit type">
 			<label class="choice">
 				<input type="radio" name="visit-type" value="in-person" checked />
-				<span>In-person</span>
+				<span>{copy.inPersonLabel}</span>
 			</label>
 			<label class="choice">
 				<input type="radio" name="visit-type" value="video" />
-				<span>Video</span>
+				<span>{copy.videoLabel}</span>
 			</label>
 		</div>
 
@@ -38,18 +41,16 @@ const { clinician } = Astro.props;
 		<div class="rule"></div>
 
 		<div class="availability">
-			<p>Next example: {clinician.nextVisit}</p>
+			<p>{copy.nextPrefix} {clinician.nextVisit}</p>
 			<p>{clinician.visitLength}</p>
 		</div>
 
-		<Button href={`/booking?doctor=${clinician.slug}`} fullWidth>Choose an appointment</Button>
+		<Button href={`/booking?doctor=${clinician.slug}`} fullWidth>{copy.ctaLabel}</Button>
 
-		<p class="disclaimer">Fictional profile and availability. No real appointment will be made.</p>
+		<p class="disclaimer">{copy.disclaimer}</p>
 	</section>
 
-	<p class="sidebar-note">
-		Times are shown in Eastern Time. Availability is illustrative.
-	</p>
+	<p class="sidebar-note">{copy.sidebarNote}</p>
 </div>
 
 <style>

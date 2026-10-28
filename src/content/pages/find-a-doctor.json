@@ -24,5 +24,76 @@
       "Alder Riverside Clinic",
       "Alder Northside Clinic"
     ]
+  },
+  "results": {
+    "countSuffix": "example doctors",
+    "sortLabel": "Sort",
+    "sortByNext": "Next available",
+    "sortByName": "Name (A–Z)",
+    "emptyCopy": "No example doctors match these filters. Try clearing one, or",
+    "emptyResetLabel": "reset them all",
+    "exhaustedCopy": "You’ve seen all {count} example doctors. Broaden or change your filters to explore the directory pattern."
+  },
+  "card": {
+    "nextPrefix": "Next example visit",
+    "profileLabel": "View profile",
+    "bookLabel": "Book a visit",
+    "disclaimer": "Illustrative portrait · profile and credentials are fictional."
+  },
+  "filters": {
+    "railTitle": "Refine your search",
+    "resetLabel": "Reset",
+    "specialtyLabel": "Specialty",
+    "locationLabel": "Location",
+    "visitTypeLabel": "Visit type",
+    "languagesLabel": "Languages",
+    "inPersonLabel": "In-person",
+    "videoLabel": "Video consultation",
+    "moreLabel": "More filters",
+    "toggleLabel": "Filters",
+    "selectedLabel": "selected",
+    "summaryDefault": "All specialties · All clinics · In-person and video",
+    "note": "Times are shown in Eastern Time. Availability is illustrative.",
+    "specialties": [
+      "All specialties",
+      "Primary care",
+      "Dermatology",
+      "Family medicine"
+    ],
+    "clinics": [
+      "All clinics",
+      "Alder Riverside Clinic",
+      "Alder Northside Clinic"
+    ],
+    "visitTypes": [
+      {
+        "id": "in-person",
+        "label": "In-person"
+      },
+      {
+        "id": "video",
+        "label": "Video consultation"
+      }
+    ],
+    "languages": [
+      {
+        "id": "english",
+        "label": "English"
+      },
+      {
+        "id": "spanish",
+        "label": "Spanish"
+      },
+      {
+        "id": "mandarin",
+        "label": "Mandarin"
+      }
+    ]
+  },
+  "support": {
+    "heading": "Not sure who to choose?",
+    "copy": "Our example support team can help you understand services and practical visit options, without asking for medical details here.",
+    "ctaLabel": "Contact support",
+    "ctaHref": "/contact"
   }
 }

@@ -1,15 +1,17 @@
 ---
 import Button from '../Button.astro';
+import page from '../../content/pages/find-a-doctor.json';
 
 /* Compact filters — Figma 5:22615. Mobile only. */
+const { filters } = page;
 ---
 
 <div class="compact-filters">
 	<Button variant="secondary" fullWidth class="filters-button" data-filter-toggle>
 		<img src="/icons/sliders-horizontal.svg" width="18" height="18" alt="" />
-		Filters &middot; <span data-filter-count>0</span> selected
+		{filters.toggleLabel} &middot; <span data-filter-count>0</span> {filters.selectedLabel}
 	</Button>
-	<p class="summary" data-filter-summary>All specialties &middot; All clinics &middot; In-person and video</p>
+	<p class="summary" data-filter-summary>{filters.summaryDefault}</p>
 </div>
 
 <style>

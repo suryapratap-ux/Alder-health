@@ -1,6 +1,6 @@
 ---
 import type { Clinician } from '../../data/clinicians';
-import { exampleAppointment, examplePatient } from '../../data/appointment';
+import { exampleAppointment, examplePatient, labels } from '../../data/appointment';
 
 /* Booking context sidebar — Figma 5:23016. */
 interface Props {
@@ -14,7 +14,7 @@ const { clinician, showPatient = false, help = 'booking' } = Astro.props;
 
 <aside class="booking-context">
 	<section class="summary">
-		<p class="summary-label">Your appointment</p>
+		<p class="summary-label">{labels.summaryLabel}</p>
 
 		<div class="clinician">
 			<img
@@ -41,7 +41,7 @@ const { clinician, showPatient = false, help = 'booking' } = Astro.props;
 			{showPatient && <p>Patient: {examplePatient.name}</p>}
 		</div>
 
-		<p class="disclaimer">Fictional clinician and clinic. Example availability only.</p>
+		<p class="disclaimer">{labels.disclaimer}</p>
 	</section>
 
 	{
