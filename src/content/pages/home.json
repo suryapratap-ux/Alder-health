@@ -13,7 +13,7 @@
     },
     "secondaryCta": {
       "label": "Explore services",
-      "href": "#services"
+      "href": "/services"
     },
     "formats": "Local clinics. In-person visits. Video consultations.",
     "image": {

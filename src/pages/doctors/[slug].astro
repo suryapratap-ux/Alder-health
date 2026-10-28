@@ -24,7 +24,7 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 	description={`${clinician.name} is a ${clinician.specialty.toLowerCase()} clinician at ${clinician.clinic}. Read the profile, see what a visit covers and choose an example time.`}
 >
 	<section class="profile-navigation">
-		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Find care', href: '/#services' }, { label: 'Doctors', href: '/find-a-doctor' }]} current={clinician.name} />
+		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Find care', href: '/services' }, { label: 'Doctors', href: '/find-a-doctor' }]} current={clinician.name} />
 		<Notice title="Fictional clinician profile">
 			Credentials, availability and clinic details are illustrative examples. No real appointment
 			will be made.

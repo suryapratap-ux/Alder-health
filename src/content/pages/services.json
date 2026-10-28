@@ -1,0 +1,56 @@
+{
+  "seo": {
+    "title": "Services — Alder Health",
+    "description": "Primary care, dermatology, family medicine and mental wellbeing appointments across our example clinics, in person or by video consultation."
+  },
+  "intro": {
+    "eyebrow": "Start with what you need",
+    "title": "Different needs. One place to turn.",
+    "lead": "From a first conversation to your next routine visit, explore care without the guesswork."
+  },
+  "hero": {
+    "image": {
+      "src": "/images/hero-consultation.png",
+      "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room."
+    },
+    "caption": "Illustrative photography, not a patient story."
+  },
+  "list": {
+    "eyebrow": "What we offer",
+    "heading": "Appointments across four areas.",
+    "intro": "Every service below is available in person at one of our example clinics, or as a video consultation.",
+    "linkLabel": "See clinicians"
+  },
+  "formats": {
+    "eyebrow": "Two ways to be seen",
+    "heading": "In person or by video.",
+    "items": [
+      {
+        "title": "In person at the clinic",
+        "copy": "Our example clinics have step-free entrances. Contact the team to discuss your access needs before your visit."
+      },
+      {
+        "title": "Video consultations",
+        "copy": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk."
+      }
+    ],
+    "ctaLabel": "About video consultations"
+  },
+  "next": {
+    "eyebrow": "Your next step, at your pace",
+    "heading": "Ready when you are.",
+    "copy": "Choose a clinician, pick a time, and review the details before you confirm.",
+    "primaryCta": {
+      "label": "Find a doctor",
+      "href": "/find-a-doctor"
+    },
+    "secondaryCta": {
+      "label": "Contact the team",
+      "href": "/help#contact"
+    }
+  },
+  "notice": {
+    "title": "Fictional healthcare network",
+    "copy": "Alder Health is a design demonstration. The services, clinicians and availability shown across this site are illustrative examples only, and nothing here is medical advice."
+  }
+}

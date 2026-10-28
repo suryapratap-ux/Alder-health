@@ -1,0 +1,93 @@
+{
+  "seo": {
+    "title": "Video consultations — Alder Health",
+    "description": "How an example video consultation works at Alder Health: choosing video when you book, what you need beforehand, and what to expect on the day."
+  },
+  "intro": {
+    "eyebrow": "Care in more places",
+    "title": "Video consultations.",
+    "lead": "Choose video in the visit selector to explore example video availability, and talk to a clinician without travelling."
+  },
+  "hero": {
+    "image": {
+      "src": "/images/resource-video-visit.png",
+      "alt": "A laptop open on a desk beside a window, set up for a video consultation."
+    },
+    "caption": "Illustrative photography, not a patient story."
+  },
+  "about": {
+    "heading": "A conversation, wherever you are.",
+    "paragraphs": [
+      "Alder brings outpatient appointments and video consultations together, so you can choose the right setting for your day.",
+      "The clinic can help you check whether a video consultation is suitable for your visit. Some appointments are better in person, and the team will say so."
+    ],
+    "ctaLabel": "Find a video visit"
+  },
+  "steps": {
+    "eyebrow": "How it works",
+    "heading": "Four steps, start to finish.",
+    "items": [
+      {
+        "index": "01",
+        "title": "Choose a clinician",
+        "copy": "Browse the example clinicians and filter by visit type to see who offers video."
+      },
+      {
+        "index": "02",
+        "title": "Pick video and a time",
+        "copy": "Select video in the visit selector, then choose from the example availability shown."
+      },
+      {
+        "index": "03",
+        "title": "Review the details",
+        "copy": "Check the clinician, time and visit type before you confirm the appointment."
+      },
+      {
+        "index": "04",
+        "title": "Join at your appointment time",
+        "copy": "In a real service you would receive a link to join. This demonstration ends at the confirmation screen."
+      }
+    ]
+  },
+  "prepare": {
+    "eyebrow": "Before your visit",
+    "heading": "What you will need.",
+    "items": [
+      {
+        "title": "A suitable device",
+        "copy": "A phone, tablet or computer with a working camera and microphone."
+      },
+      {
+        "title": "A private place to talk",
+        "copy": "Somewhere quiet where you are comfortable discussing your health."
+      },
+      {
+        "title": "Your questions ready",
+        "copy": "Have a list of questions and relevant appointment documents ready, as you would for an in-person visit."
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "Common questions",
+    "heading": "Good to know.",
+    "supporting": "Need something else? Our example support team is a good place to start.",
+    "ctaLabel": "Contact support"
+  },
+  "next": {
+    "eyebrow": "Your next step, at your pace",
+    "heading": "Book a video visit.",
+    "copy": "Choose a clinician, pick a time, and review the details before you confirm.",
+    "primaryCta": {
+      "label": "Find a doctor",
+      "href": "/find-a-doctor"
+    },
+    "secondaryCta": {
+      "label": "See our locations",
+      "href": "/locations"
+    }
+  },
+  "notice": {
+    "title": "Not an operational service",
+    "copy": "No video consultation is provided through this site. There is no booking service, patient portal or consultation platform behind these screens — they exist to demonstrate the design."
+  }
+}

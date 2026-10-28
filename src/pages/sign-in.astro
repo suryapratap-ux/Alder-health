@@ -1,0 +1,370 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import page from '../content/pages/sign-in.json';
+
+/*
+ * Sign in — no Figma frame exists for this page. It reuses the form controls
+ * from the booking flow and the page introduction from the inner screens.
+ *
+ * There is no authentication service behind this site, so the form validates
+ * input and then says plainly that nothing was sent. It never reports a
+ * successful sign-in.
+ */
+const { seo, intro, form, errors, notice, alternative } = page;
+---
+
+<Layout title={seo.title} description={seo.description}>
+	<section class="sign-in">
+		<div class="panel">
+			<div class="heading">
+				<p class="eyebrow">{intro.eyebrow}</p>
+				<h1>{intro.title}</h1>
+				<p class="lead">{intro.lead}</p>
+			</div>
+
+			<Notice title={notice.title}>{notice.copy}</Notice>
+
+			<form
+				class="form"
+				data-sign-in
+				data-busy-label={form.submitBusyLabel}
+				data-idle-label={form.submitLabel}
+				novalidate
+			>
+				<div class="field">
+					<label class="field-label" for="email">{form.emailLabel}</label>
+					<input
+						class="control"
+						id="email"
+						name="email"
+						type="email"
+						autocomplete="email"
+						placeholder={form.emailPlaceholder}
+						data-missing={errors.emailMissing}
+						data-invalid={errors.emailInvalid}
+						aria-describedby="email-error"
+					/>
+					<p class="field-error" id="email-error" hidden></p>
+				</div>
+
+				<div class="field">
+					<label class="field-label" for="password">{form.passwordLabel}</label>
+					<div class="password">
+						<input
+							class="control"
+							id="password"
+							name="password"
+							type="password"
+							autocomplete="current-password"
+							placeholder={form.passwordPlaceholder}
+							data-missing={errors.passwordMissing}
+							aria-describedby="password-error"
+						/>
+						<button
+							class="reveal"
+							type="button"
+							data-reveal
+							data-show={form.showPassword}
+							data-hide={form.hidePassword}
+							aria-controls="password"
+						>
+							{form.showPassword}
+						</button>
+					</div>
+					<p class="field-error" id="password-error" hidden></p>
+				</div>
+
+				<div class="options">
+					<label class="check-option">
+						<input type="checkbox" name="remember" />
+						{form.rememberLabel}
+					</label>
+					<a class="forgot link-underline" href="/help#contact">{form.forgotLabel}</a>
+				</div>
+
+				<Button type="submit" fullWidth class="submit">{form.submitLabel}</Button>
+
+				<p class="form-status" data-status role="status" hidden>
+					{form.unavailableMessage}
+				</p>
+			</form>
+		</div>
+
+		<aside class="alternative">
+			<h2 class="section-title">{alternative.heading}</h2>
+			<p>{alternative.copy}</p>
+			<div class="actions">
+				<Button href={alternative.primaryCta.href}>
+					<img src="/icons/arrow-right.svg" width="18" height="18" alt="" />
+					{alternative.primaryCta.label}
+				</Button>
+				<Button href={alternative.secondaryCta.href} variant="secondary">
+					{alternative.secondaryCta.label}
+				</Button>
+			</div>
+		</aside>
+	</section>
+</Layout>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('[data-sign-in]');
+
+	if (form) {
+		const status = form.querySelector<HTMLElement>('[data-status]');
+		const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+		const label = submit?.querySelector<HTMLElement>('.button-label');
+
+		/* Show / hide the password without losing what has been typed. */
+		const reveal = form.querySelector<HTMLButtonElement>('[data-reveal]');
+		const password = form.querySelector<HTMLInputElement>('#password');
+
+		reveal?.addEventListener('click', () => {
+			if (!password) return;
+			const hidden = password.type === 'password';
+			password.type = hidden ? 'text' : 'password';
+			reveal.textContent = hidden ? reveal.dataset.hide! : reveal.dataset.show!;
+			reveal.setAttribute('aria-pressed', String(hidden));
+			password.focus();
+		});
+
+		const showError = (input: HTMLInputElement, message: string) => {
+			const field = document.getElementById(`${input.id}-error`);
+			if (!field) return;
+			field.textContent = message;
+			field.hidden = false;
+			input.setAttribute('aria-invalid', 'true');
+		};
+
+		const clearError = (input: HTMLInputElement) => {
+			const field = document.getElementById(`${input.id}-error`);
+			if (!field) return;
+			field.hidden = true;
+			input.removeAttribute('aria-invalid');
+		};
+
+		const validate = (input: HTMLInputElement) => {
+			const value = input.value.trim();
+
+			if (!value) {
+				showError(input, input.dataset.missing!);
+				return false;
+			}
+
+			/* A single @ with something either side is as far as it is worth going. */
+			if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+				showError(input, input.dataset.invalid!);
+				return false;
+			}
+
+			clearError(input);
+			return true;
+		};
+
+		for (const input of form.querySelectorAll<HTMLInputElement>('input[data-missing]')) {
+			/* Re-check as they correct it, but only once it has been flagged. */
+			input.addEventListener('input', () => {
+				if (input.getAttribute('aria-invalid') === 'true') validate(input);
+			});
+			input.addEventListener('blur', () => {
+				if (input.value.trim()) validate(input);
+			});
+		}
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			if (status) status.hidden = true;
+
+			const inputs = [...form.querySelectorAll<HTMLInputElement>('input[data-missing]')];
+			const firstInvalid = inputs.filter((input) => !validate(input))[0];
+
+			if (firstInvalid) {
+				firstInvalid.focus();
+				return;
+			}
+
+			/*
+			 * Everything the form can check has passed. There is nothing to submit
+			 * to, so it pauses briefly to acknowledge the press and then says so
+			 * rather than pretending anyone has been signed in.
+			 */
+			if (submit && label) {
+				submit.disabled = true;
+				label.textContent = form.dataset.busyLabel!;
+			}
+
+			window.setTimeout(() => {
+				if (submit && label) {
+					submit.disabled = false;
+					label.textContent = form.dataset.idleLabel!;
+				}
+				if (status) status.hidden = false;
+			}, 600);
+		});
+	}
+</script>
+
+<style>
+	.sign-in {
+		display: flex;
+		gap: var(--space-64);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter) var(--space-80);
+	}
+
+	.panel {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-24);
+		min-width: 0;
+		max-width: 520px;
+	}
+
+	.heading {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-12);
+	}
+
+	h1 {
+		font-size: 56px;
+	}
+
+	.form {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-20);
+		padding: var(--space-32);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+		box-shadow: var(--shadow-raised);
+	}
+
+	/* The reveal control sits inside the field, so the input makes room for it */
+	.password {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.password .control {
+		padding-right: 72px;
+	}
+
+	.reveal {
+		position: absolute;
+		right: 10px;
+		padding: 6px 8px;
+		border: 0;
+		border-radius: var(--radius-control);
+		background: none;
+		font-family: var(--font-ui);
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--brand-primary);
+		cursor: pointer;
+	}
+
+	.reveal:hover {
+		background: var(--bg-subtle);
+	}
+
+	.field-error {
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--brand-accent);
+	}
+
+	.control[aria-invalid='true'] {
+		border-color: var(--brand-accent);
+	}
+
+	.options {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-16);
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.forgot {
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.form-status {
+		padding: var(--space-12) var(--space-16);
+		border-radius: var(--radius-control);
+		background: var(--status-information-surface);
+		font-size: var(--type-small);
+		line-height: var(--ui-leading);
+		color: var(--status-information);
+	}
+
+	.alternative {
+		display: flex;
+		flex: 0 0 360px;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+		padding: var(--space-32);
+		border-radius: var(--radius-module);
+		background: var(--bg-subtle);
+	}
+
+	.alternative p {
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-12);
+		margin-top: var(--space-8);
+	}
+
+	/* Tablet — the aside drops below the form and stretches across */
+	@media (max-width: 1023px) {
+		.sign-in {
+			flex-direction: column;
+			gap: var(--space-32);
+		}
+
+		.panel,
+		.alternative {
+			flex: none;
+			width: 100%;
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.sign-in {
+			padding-block: var(--space-40) var(--space-48);
+		}
+
+		h1 {
+			font-size: var(--type-page-title);
+		}
+
+		.lead {
+			font-size: var(--type-body);
+		}
+
+		.form {
+			padding: var(--space-20);
+		}
+
+		.options {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: var(--space-12);
+		}
+	}
+</style>

@@ -718,6 +718,476 @@ content:
                 type: text
                 list: true
 
+
+      - name: sign-in
+        label: Sign in page
+        type: file
+        path: src/content/pages/sign-in.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: form
+            label: Form labels
+            type: object
+            description: >-
+              Wording only. There is no sign-in service behind the form, so
+              changing these cannot make it work.
+            fields:
+              - name: emailLabel
+                label: Email label
+                type: string
+              - name: emailPlaceholder
+                label: Email placeholder
+                type: string
+              - name: passwordLabel
+                label: Password label
+                type: string
+              - name: passwordPlaceholder
+                label: Password placeholder
+                type: string
+              - name: showPassword
+                label: Show password button
+                type: string
+              - name: hidePassword
+                label: Hide password button
+                type: string
+              - name: rememberLabel
+                label: Remember me label
+                type: string
+              - name: forgotLabel
+                label: Forgot password link
+                type: string
+              - name: submitLabel
+                label: Submit button
+                type: string
+              - name: submitBusyLabel
+                label: Submit button while checking
+                type: string
+              - name: unavailableMessage
+                label: Message shown after submitting
+                type: text
+                description: Shown once the form validates. It must not imply anyone was signed in.
+          - name: errors
+            label: Validation messages
+            type: object
+            fields:
+              - name: emailMissing
+                label: Email missing
+                type: string
+              - name: emailInvalid
+                label: Email malformed
+                type: string
+              - name: passwordMissing
+                label: Password missing
+                type: string
+          - name: notice
+            label: Notice above the form
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+          - name: alternative
+            label: No account panel
+            type: object
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+              - name: copy
+                label: Text
+                type: text
+              - name: primaryCta
+                label: Main button
+                component: link
+              - name: secondaryCta
+                label: Second button
+                component: link
+
+      - name: services
+        label: Services page
+        type: file
+        path: src/content/pages/services.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: hero
+            label: Banner image
+            type: object
+            fields:
+              - name: image
+                component: photo
+              - name: caption
+                label: Caption
+                type: string
+          - name: list
+            label: Services section
+            type: object
+            description: >-
+              The services themselves are edited under Pages → Home page →
+              Services, so both pages stay in step.
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: intro
+                label: Introduction
+                type: text
+              - name: linkLabel
+                label: Link text on each service
+                type: string
+          - name: formats
+            label: In person or video section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: items
+                label: Formats
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{title}'
+                fields:
+                  - name: title
+                    label: Title
+                    type: string
+                  - name: copy
+                    label: Text
+                    type: text
+          - name: next
+            label: Next step section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: copy
+                label: Text
+                type: text
+              - name: primaryCta
+                label: Main button
+                component: link
+              - name: secondaryCta
+                label: Second button
+                component: link
+          - name: notice
+            label: Disclosure notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+
+      - name: locations
+        label: Locations page
+        type: file
+        path: src/content/pages/locations.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: hero
+            label: Banner image
+            type: object
+            fields:
+              - name: image
+                component: photo
+              - name: caption
+                label: Caption
+                type: string
+          - name: list
+            label: Clinic cards
+            type: object
+            description: >-
+              The clinics themselves are edited under Pages → About page →
+              Clinics. What is available at each is taken from the clinicians
+              assigned to it.
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: hoursLabel
+                label: Opening hours label
+                type: string
+              - name: hours
+                label: Opening hours
+                type: string
+              - name: servicesLabel
+                label: Available here label
+                type: string
+              - name: linkLabel
+                label: Link text on each clinic
+                type: string
+          - name: contact
+            label: Contact section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: copy
+                label: Text
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: routes
+                label: Ways to get in touch
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                fields:
+                  - name: label
+                    label: Title
+                    type: string
+                  - name: value
+                    label: Email or phone number
+                    type: string
+                  - name: copy
+                    label: Description
+                    type: text
+          - name: notice
+            label: Disclosure notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+
+      - name: video-consultations
+        label: Video consultations page
+        type: file
+        path: src/content/pages/video-consultations.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: hero
+            label: Banner image
+            type: object
+            fields:
+              - name: image
+                component: photo
+              - name: caption
+                label: Caption
+                type: string
+          - name: about
+            label: Introduction section
+            type: object
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: paragraphs
+                label: Paragraphs
+                type: text
+                list: true
+              - name: ctaLabel
+                label: Button text
+                type: string
+          - name: steps
+            label: How it works section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: items
+                label: Steps
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{index}. {title}'
+                fields:
+                  - name: index
+                    label: Number
+                    type: string
+                  - name: title
+                    label: Title
+                    type: string
+                  - name: copy
+                    label: Text
+                    type: text
+          - name: prepare
+            label: What you need section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: items
+                label: Requirements
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{title}'
+                fields:
+                  - name: title
+                    label: Title
+                    type: string
+                  - name: copy
+                    label: Text
+                    type: text
+          - name: faq
+            label: Questions section
+            type: object
+            description: The questions themselves are edited under Content → Questions.
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: supporting
+                label: Supporting line
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+          - name: next
+            label: Next step section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: copy
+                label: Text
+                type: text
+              - name: primaryCta
+                label: Main button
+                component: link
+              - name: secondaryCta
+                label: Second button
+                component: link
+          - name: notice
+            label: Disclosure notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+
   # -------------------------------------------------------------- Content --
   - name: content
     label: Content

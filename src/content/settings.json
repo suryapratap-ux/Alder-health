@@ -10,15 +10,15 @@
       },
       {
         "label": "Services",
-        "href": "/#services"
+        "href": "/services"
       },
       {
         "label": "Locations",
-        "href": "/about#clinics"
+        "href": "/locations"
       },
       {
         "label": "Video consultations",
-        "href": "/about#video"
+        "href": "/video-consultations"
       }
     ]
   },
@@ -38,8 +38,8 @@
   ],
   "headerActions": {
     "account": {
-      "label": "Patient account",
-      "href": "/dashboard"
+      "label": "Sign In",
+      "href": "/sign-in"
     },
     "book": {
       "label": "Book appointment",
@@ -61,15 +61,15 @@
           },
           {
             "label": "Services",
-            "href": "/#services"
+            "href": "/services"
           },
           {
             "label": "Locations",
-            "href": "/about#clinics"
+            "href": "/locations"
           },
           {
             "label": "Video consultations",
-            "href": "/about#video"
+            "href": "/video-consultations"
           }
         ]
       },

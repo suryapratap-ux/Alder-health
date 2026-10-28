@@ -1,0 +1,47 @@
+{
+  "seo": {
+    "title": "Locations — Alder Health",
+    "description": "Our two example clinics, Alder Riverside and Alder Northside, with addresses, opening hours and the services available at each."
+  },
+  "intro": {
+    "eyebrow": "Where we are",
+    "title": "Two example clinics.",
+    "lead": "Both clinics offer in-person appointments and video consultations. Each has a step-free entrance."
+  },
+  "hero": {
+    "image": {
+      "src": "/images/clinic-exterior.png",
+      "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic."
+    },
+    "caption": "Illustrative image of a fictional clinic."
+  },
+  "list": {
+    "heading": "Visit us",
+    "hoursLabel": "Opening hours",
+    "hours": "Weekdays, 8am–5pm Eastern Time",
+    "servicesLabel": "Available here",
+    "linkLabel": "See clinicians at this clinic"
+  },
+  "contact": {
+    "eyebrow": "Before you travel",
+    "heading": "Check with the team first.",
+    "copy": "Opening hours and availability shown here are illustrative. Contact the example team to talk through access needs, or to check whether a video consultation would suit your visit better.",
+    "routes": [
+      {
+        "label": "Email the example team",
+        "value": "hello@alderhealth.example",
+        "copy": "For access needs or help with the booking process."
+      },
+      {
+        "label": "Call the example line",
+        "value": "(555) 010-0199",
+        "copy": "Weekdays, 8am–5pm Eastern Time."
+      }
+    ],
+    "ctaLabel": "Get help"
+  },
+  "notice": {
+    "title": "Fictional addresses",
+    "copy": "These clinics do not exist. The addresses, opening hours and phone number shown are illustrative examples for a design demonstration, so please do not attempt to visit or call them."
+  }
+}

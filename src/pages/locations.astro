@@ -1,0 +1,318 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Button from '../components/Button.astro';
+import Notice from '../components/Notice.astro';
+import page from '../content/pages/locations.json';
+import { about } from '../data/pages';
+import { clinicians } from '../data/clinicians';
+
+/*
+ * Locations — no Figma frame exists for this page. It reuses the page
+ * introduction from the inner screens and the clinic cards from About.
+ *
+ * The clinics come from the About page content, and what is available at each
+ * is derived from the clinicians actually assigned to it, so neither can drift
+ * out of step with the directory.
+ */
+const { seo, intro, hero, list, contact, notice } = page;
+
+const clinics = about.clinics.items.map((clinic) => ({
+	...clinic,
+	team: clinicians.filter((clinician) => clinician.clinic === clinic.name),
+}));
+---
+
+<Layout title={seo.title} description={seo.description}>
+	<PageIntro
+		trail={[{ label: 'Home', href: '/' }, { label: 'Find care', href: '/services' }]}
+		current="Locations"
+		eyebrow={intro.eyebrow}
+		title={intro.title}
+		lead={intro.lead}
+	/>
+
+	<section class="banner">
+		<img src={hero.image.src} width="1376" height="768" alt={hero.image.alt} />
+		<p class="credit">{hero.caption}</p>
+	</section>
+
+	<section class="clinics">
+		<h2 class="section-title">{list.heading}</h2>
+
+		<ul class="clinic-list">
+			{
+				clinics.map((clinic) => (
+					<li class="clinic" id={clinic.id}>
+						<div class="clinic-head">
+							<p class="clinic-name">{clinic.name}</p>
+							<p class="clinic-address">{clinic.address}</p>
+						</div>
+
+						<p class="clinic-copy">{clinic.copy}</p>
+
+						<div class="rule" />
+
+						<div class="detail">
+							<p class="detail-label">{list.hoursLabel}</p>
+							<p class="detail-value">{list.hours}</p>
+						</div>
+
+						<div class="detail">
+							<p class="detail-label">{list.servicesLabel}</p>
+							<ul class="specialties">
+								{clinic.team.map((clinician) => (
+									<li>{clinician.specialty}</li>
+								))}
+							</ul>
+						</div>
+
+						<a
+							class="clinic-link link-underline"
+							href={`/find-a-doctor?clinic=${encodeURIComponent(clinic.name)}`}
+						>
+							{list.linkLabel} <span class="link-arrow" aria-hidden="true">&#8599;</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="contact" id="contact">
+		<div class="contact-intro">
+			<p class="eyebrow">{contact.eyebrow}</p>
+			<h2 class="section-title">{contact.heading}</h2>
+			<p>{contact.copy}</p>
+			<Button href="/help#contact" variant="secondary">{contact.ctaLabel}</Button>
+		</div>
+
+		<ul class="routes">
+			{
+				contact.routes.map((route) => (
+					<li class="route">
+						<p class="route-label">{route.label}</p>
+						<p class="route-value">{route.value}</p>
+						<p class="route-copy">{route.copy}</p>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+
+	<section class="disclosure">
+		<Notice title={notice.title}>{notice.copy}</Notice>
+	</section>
+</Layout>
+
+<style>
+	.banner {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+		padding-inline: var(--layout-gutter);
+	}
+
+	.banner img {
+		width: 100%;
+		height: 360px;
+		object-fit: cover;
+		border-radius: var(--radius-module);
+	}
+
+	.credit {
+		font-size: var(--type-caption);
+		color: var(--text-muted);
+	}
+
+	.clinics {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-24);
+		align-items: flex-start;
+		padding: var(--space-72) var(--layout-gutter);
+	}
+
+	.clinic-list {
+		display: flex;
+		gap: var(--space-24);
+		align-items: stretch;
+		width: 100%;
+		margin-top: var(--space-8);
+	}
+
+	.clinic {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-16);
+		min-width: 0;
+		padding: var(--space-32);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.clinic-head {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.clinic-name {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.18;
+		letter-spacing: var(--editorial-tracking);
+	}
+
+	.clinic-address,
+	.clinic-copy {
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.detail {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+	}
+
+	.detail-label {
+		font-size: var(--type-eyebrow);
+		font-weight: 600;
+		letter-spacing: 1.2px;
+		text-transform: uppercase;
+		color: var(--text-muted);
+	}
+
+	.detail-value {
+		font-size: var(--type-body);
+		color: var(--text-secondary);
+	}
+
+	.specialties {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-8);
+	}
+
+	.specialties li {
+		padding: 6px var(--space-12);
+		border-radius: var(--radius-control);
+		background: var(--bg-soft-sage);
+		font-size: var(--type-small);
+		color: var(--text-primary);
+	}
+
+	.clinic-link {
+		margin-top: auto;
+		padding-top: var(--space-8);
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--brand-primary);
+	}
+
+	.contact {
+		display: flex;
+		gap: var(--space-64);
+		align-items: flex-start;
+		padding: var(--space-64) var(--layout-gutter);
+		background: var(--bg-subtle);
+	}
+
+	.contact-intro {
+		display: flex;
+		flex: 0 0 380px;
+		flex-direction: column;
+		gap: var(--space-16);
+		align-items: flex-start;
+	}
+
+	.contact-intro p:not(.eyebrow) {
+		font-size: var(--type-body);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.routes {
+		display: flex;
+		flex: 1 0 0;
+		gap: var(--space-24);
+		min-width: 0;
+	}
+
+	.route {
+		display: flex;
+		flex: 1 0 0;
+		flex-direction: column;
+		gap: var(--space-8);
+		min-width: 0;
+		padding: var(--space-24);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+	}
+
+	.route-label {
+		font-size: var(--type-small);
+		font-weight: 600;
+		color: var(--text-primary);
+	}
+
+	.route-value {
+		font-family: var(--font-editorial);
+		font-size: var(--type-card-heading);
+		line-height: 1.2;
+		letter-spacing: var(--editorial-tracking);
+		color: var(--brand-primary);
+		overflow-wrap: anywhere;
+	}
+
+	.route-copy {
+		font-size: var(--type-small);
+		line-height: 1.65;
+		color: var(--text-secondary);
+	}
+
+	.disclosure {
+		padding: var(--space-48) var(--layout-gutter) var(--space-72);
+	}
+
+	/* Tablet — the clinic cards and contact band stack */
+	@media (max-width: 1023px) {
+		.clinic-list,
+		.contact,
+		.routes {
+			flex-direction: column;
+		}
+
+		.contact {
+			gap: var(--space-24);
+			align-items: flex-start;
+		}
+
+		.contact-intro {
+			flex: none;
+			width: 100%;
+		}
+
+		.banner img {
+			height: 280px;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.clinics {
+			padding-block: var(--space-48);
+		}
+
+		.clinic {
+			padding: var(--space-20);
+		}
+
+		.banner img {
+			height: 200px;
+		}
+	}
+</style>

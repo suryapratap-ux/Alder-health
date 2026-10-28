@@ -13,14 +13,14 @@ const { services } = home;
 			<h2>{services.heading}</h2>
 			<p>{services.intro}</p>
 		</div>
-		<Button href="#services" variant="secondary">{services.ctaLabel}</Button>
+		<Button href="/services" variant="secondary">{services.ctaLabel}</Button>
 	</div>
 
 	<ul class="directory">
 		{
 			services.items.map((service) => (
 				<li>
-					<a class="listing" href="#services">
+					<a class="listing" href="/services">
 						<span class="index">{service.index}</span>
 						<span class="editorial">
 							<span class="title">{service.title}</span>
