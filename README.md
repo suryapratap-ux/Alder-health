@@ -86,9 +86,17 @@ this repository only, rather than to every repository on the account. It reads
 
 ### 3. Invite the client
 
-Pages CMS acts as the signed-in GitHub user, so an editor needs a GitHub
-account with write access to the repository. Add them as a collaborator.
-There is no way around this: the commits have to be attributable to someone.
+Invite them by email as a **collaborator** in Pages CMS. Collaborators do not
+need a GitHub account — their saves are committed using the GitHub App's
+installation token.
+
+Collaborators can edit content and media but cannot change `.pages.yml` or
+manage other collaborators, which is the right split: the client edits copy,
+the schema stays with you.
+
+By default those commits are attributed to the app rather than the person. To
+record who made each change, set `settings.commit.identity: user` in
+`.pages.yml`.
 
 ### 4. Connect a host
 
