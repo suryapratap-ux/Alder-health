@@ -9,12 +9,12 @@ import { defineConfig } from 'astro/config';
  */
 export default defineConfig({
 	/*
-	 * Set this to the production origin, e.g. 'https://alderhealth.com'.
-	 * The layout builds <link rel="canonical">, og:url and the absolute
-	 * og:image URL from it; while it is unset those tags are left out rather
-	 * than written against a guessed domain.
+	 * The production origin. The layout builds <link rel="canonical">, og:url
+	 * and the absolute og:image URL from it. Change this when a custom domain
+	 * is added, or search engines and link previews will keep pointing at the
+	 * vercel.app address.
 	 */
-	// site: 'https://example.com',
+	site: 'https://alder-health-flame.vercel.app',
 
 	output: 'static',
 });
