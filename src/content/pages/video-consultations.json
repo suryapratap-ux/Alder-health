@@ -85,9 +85,5 @@
       "label": "See our locations",
       "href": "/locations"
     }
-  },
-  "notice": {
-    "title": "Not an operational service",
-    "copy": "No video consultation is provided through this site. There is no booking service, patient portal or consultation platform behind these screens — they exist to demonstrate the design."
   }
 }

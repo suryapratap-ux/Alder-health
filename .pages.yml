@@ -464,16 +464,6 @@ content:
               - name: teamLabel
                 label: Clinician list heading
                 type: string
-          - name: notice
-            label: Disclosure notice
-            type: object
-            fields:
-              - name: title
-                label: Title
-                type: string
-              - name: copy
-                label: Text
-                type: text
 
       - name: find-a-doctor
         label: Find a doctor page
@@ -598,16 +588,6 @@ content:
               - name: secondaryCta
                 label: Second button
                 component: link
-          - name: notice
-            label: Disclosure notice
-            type: object
-            fields:
-              - name: title
-                label: Title
-                type: string
-              - name: copy
-                label: Text
-                type: text
 
       - name: help
         label: Help page
@@ -925,16 +905,6 @@ content:
               - name: secondaryCta
                 label: Second button
                 component: link
-          - name: notice
-            label: Disclosure notice
-            type: object
-            fields:
-              - name: title
-                label: Title
-                type: string
-              - name: copy
-                label: Text
-                type: text
 
       - name: locations
         label: Locations page
@@ -1027,16 +997,6 @@ content:
                   - name: copy
                     label: Description
                     type: text
-          - name: notice
-            label: Disclosure notice
-            type: object
-            fields:
-              - name: title
-                label: Title
-                type: string
-              - name: copy
-                label: Text
-                type: text
 
       - name: video-consultations
         label: Video consultations page
@@ -1177,16 +1137,6 @@ content:
               - name: secondaryCta
                 label: Second button
                 component: link
-          - name: notice
-            label: Disclosure notice
-            type: object
-            fields:
-              - name: title
-                label: Title
-                type: string
-              - name: copy
-                label: Text
-                type: text
 
   # -------------------------------------------------------------- Content --
   - name: content

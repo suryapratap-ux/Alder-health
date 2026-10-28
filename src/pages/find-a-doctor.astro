@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import Button from '../components/Button.astro';
-import Notice from '../components/Notice.astro';
 import DoctorCard from '../components/DoctorCard.astro';
 import FilterRail from '../components/finder/FilterRail.astro';
 import TabletFilterBar from '../components/finder/TabletFilterBar.astro';
@@ -64,10 +63,6 @@ const { seo, intro, search } = page;
 				<p class="sort">Sort: Next available <span aria-hidden="true">&#8964;</span></p>
 			</div>
 
-			<Notice title="Fictional clinician directory">
-				All profiles, credentials, clinic details and availability are fictional examples. Portraits
-				are illustrative.
-			</Notice>
 
 			<ul class="cards">
 				{

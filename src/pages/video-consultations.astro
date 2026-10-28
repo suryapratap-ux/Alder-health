@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Button from '../components/Button.astro';
-import Notice from '../components/Notice.astro';
 import Accordion from '../components/Accordion.astro';
 import page from '../content/pages/video-consultations.json';
 import { questions } from '../data/faq';
@@ -12,7 +11,7 @@ import { questions } from '../data/faq';
  * page introduction from the inner screens, the numbered listing from the
  * home services section and the FAQ accordion.
  */
-const { seo, intro, hero, about, steps, prepare, faq, next, notice } = page;
+const { seo, intro, hero, about, steps, prepare, faq, next } = page;
 ---
 
 <Layout title={seo.title} description={seo.description}>
@@ -106,9 +105,6 @@ const { seo, intro, hero, about, steps, prepare, faq, next, notice } = page;
 		</div>
 	</section>
 
-	<section class="disclosure">
-		<Notice title={notice.title}>{notice.copy}</Notice>
-	</section>
 </Layout>
 
 <style>
@@ -312,9 +308,6 @@ const { seo, intro, hero, about, steps, prepare, faq, next, notice } = page;
 		gap: var(--space-12);
 	}
 
-	.disclosure {
-		padding: var(--space-48) var(--layout-gutter) var(--space-72);
-	}
 
 	/* Tablet — the paired bands stack and the step list wraps to two rows */
 	@media (max-width: 1023px) {

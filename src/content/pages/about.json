@@ -45,9 +45,5 @@
     "copy": "Choose video in the visit selector to explore example video availability. You will need a suitable device and a private place to talk. The clinic can help you check whether a video consultation is suitable for your visit.",
     "ctaLabel": "Find a video visit",
     "teamLabel": "Clinicians offering video"
-  },
-  "notice": {
-    "title": "Fictional healthcare network",
-    "copy": "Alder Health is a design demonstration. The clinics, clinicians, availability and patient records shown across this site are illustrative examples only."
   }
 }

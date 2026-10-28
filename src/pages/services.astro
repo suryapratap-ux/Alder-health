@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Button from '../components/Button.astro';
-import Notice from '../components/Notice.astro';
 import CareBenefits from '../components/home/CareBenefits.astro';
 import page from '../content/pages/services.json';
 import { home } from '../data/pages';
@@ -15,7 +14,7 @@ import { home } from '../data/pages';
  * The services themselves come from the home page content so there is one
  * list to edit rather than two that can drift apart.
  */
-const { seo, intro, hero, list, formats, next, notice } = page;
+const { seo, intro, hero, list, formats, next } = page;
 const services = home.services.items;
 ---
 
@@ -97,9 +96,6 @@ const services = home.services.items;
 		</div>
 	</section>
 
-	<section class="disclosure">
-		<Notice title={notice.title}>{notice.copy}</Notice>
-	</section>
 </Layout>
 
 <style>
@@ -227,9 +223,13 @@ const services = home.services.items;
 		align-items: flex-start;
 	}
 
-	/* A bordered button on the sage band would dissolve into it on hover */
+	/*
+	 * A bordered button on the sage band would hover to the band colour and
+	 * dissolve into it, so it wipes to the subtle surface instead — matching
+	 * the same override on the About page.
+	 */
 	.formats-intro :global(.button--secondary)::before {
-		background: var(--bg-surface);
+		background: var(--bg-subtle);
 	}
 
 	.formats-list {
@@ -289,9 +289,6 @@ const services = home.services.items;
 		gap: var(--space-12);
 	}
 
-	.disclosure {
-		padding: var(--space-48) var(--layout-gutter) var(--space-72);
-	}
 
 	/* Tablet — the side-by-side bands stack */
 	@media (max-width: 1023px) {

@@ -406,6 +406,13 @@ select.control {
 .link-underline {
 	position: relative;
 	text-decoration: none;
+	/*
+	 * The rule is drawn across the whole element, so a link that is a block or
+	 * a flex child — a card's "See clinicians", say — would underline the full
+	 * column rather than the words. Shrinking the box to its text keeps the
+	 * rule on the label. Inline links ignore width, so they are unaffected.
+	 */
+	width: fit-content;
 }
 
 .link-underline::after {

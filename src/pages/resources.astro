@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Button from '../components/Button.astro';
-import Notice from '../components/Notice.astro';
 import { resources } from '../data/resources';
 import { resourcesPage as page } from '../data/pages';
 
@@ -11,7 +10,7 @@ import { resourcesPage as page } from '../data/pages';
  * cards from the home page (5:21887) and the "Before your visit" guidance from
  * the doctor profile (5:22712).
  */
-const { seo, intro, cardLinkLabel, guidance, next, notice } = page;
+const { seo, intro, cardLinkLabel, guidance, next } = page;
 ---
 
 <Layout title={seo.title} description={seo.description}>
@@ -76,9 +75,6 @@ const { seo, intro, cardLinkLabel, guidance, next, notice } = page;
 		</div>
 	</section>
 
-	<section class="disclosure">
-		<Notice title={notice.title}>{notice.copy}</Notice>
-	</section>
 </Layout>
 
 <style>
@@ -207,9 +203,6 @@ const { seo, intro, cardLinkLabel, guidance, next, notice } = page;
 		gap: var(--space-12);
 	}
 
-	.disclosure {
-		padding: 0 var(--layout-gutter) var(--space-64);
-	}
 
 	/* Tablet and mobile — cards and bands stack */
 	@media (max-width: 1023px) {

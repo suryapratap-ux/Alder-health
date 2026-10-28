@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import PageIntro from '../components/PageIntro.astro';
 import Button from '../components/Button.astro';
-import Notice from '../components/Notice.astro';
 import page from '../content/pages/locations.json';
 import { about } from '../data/pages';
 import { clinicians } from '../data/clinicians';
@@ -15,7 +14,7 @@ import { clinicians } from '../data/clinicians';
  * is derived from the clinicians actually assigned to it, so neither can drift
  * out of step with the directory.
  */
-const { seo, intro, hero, list, contact, notice } = page;
+const { seo, intro, hero, list, contact } = page;
 
 const clinics = about.clinics.items.map((clinic) => ({
 	...clinic,
@@ -100,9 +99,6 @@ const clinics = about.clinics.items.map((clinic) => ({
 		</ul>
 	</section>
 
-	<section class="disclosure">
-		<Notice title={notice.title}>{notice.copy}</Notice>
-	</section>
 </Layout>
 
 <style>
@@ -275,9 +271,6 @@ const clinics = about.clinics.items.map((clinic) => ({
 		color: var(--text-secondary);
 	}
 
-	.disclosure {
-		padding: var(--space-48) var(--layout-gutter) var(--space-72);
-	}
 
 	/* Tablet — the clinic cards and contact band stack */
 	@media (max-width: 1023px) {

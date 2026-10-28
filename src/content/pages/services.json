@@ -48,9 +48,5 @@
       "label": "Contact the team",
       "href": "/help#contact"
     }
-  },
-  "notice": {
-    "title": "Fictional healthcare network",
-    "copy": "Alder Health is a design demonstration. The services, clinicians and availability shown across this site are illustrative examples only, and nothing here is medical advice."
   }
 }

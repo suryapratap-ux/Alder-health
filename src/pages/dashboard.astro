@@ -353,6 +353,15 @@ const readingList = [
 		color: var(--brand-primary);
 	}
 
+	/*
+	 * The padding widens the hit area beside the buttons, but the hover rule is
+	 * drawn across the whole box, so it is inset to sit under the words only.
+	 */
+	.cancel::after {
+		left: var(--space-8);
+		width: calc(100% - var(--space-8) * 2);
+	}
+
 	.upcoming :global(.notice) {
 		width: 100%;
 	}

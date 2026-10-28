@@ -39,9 +39,5 @@
       "label": "Get help",
       "href": "/help"
     }
-  },
-  "notice": {
-    "title": "Example reading only",
-    "copy": "These guides are illustrative examples written for a design demonstration. They are not medical advice and no real care is provided through this site."
   }
 }

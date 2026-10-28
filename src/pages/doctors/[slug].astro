@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Button from '../../components/Button.astro';
-import Notice from '../../components/Notice.astro';
 import AppointmentCard from '../../components/AppointmentCard.astro';
 import { clinicians } from '../../data/clinicians';
 
@@ -25,10 +24,6 @@ const related = clinicians.filter((entry) => entry.slug !== clinician.slug);
 >
 	<section class="profile-navigation">
 		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Find care', href: '/services' }, { label: 'Doctors', href: '/find-a-doctor' }]} current={clinician.name} />
-		<Notice title="Fictional clinician profile">
-			Credentials, availability and clinic details are illustrative examples. No real appointment
-			will be made.
-		</Notice>
 	</section>
 
 	<section class="profile">
