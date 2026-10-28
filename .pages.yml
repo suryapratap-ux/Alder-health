@@ -777,18 +777,17 @@ content:
               - name: passwordMissing
                 label: Password missing
                 type: string
-          - name: notice
-            label: Notice above the form
+          - name: feature
+            label: Photograph beside the form
             type: object
             fields:
-              - name: title
-                label: Title
+              - name: image
+                component: photo
+              - name: caption
+                label: Caption
                 type: string
-              - name: copy
-                label: Text
-                type: text
           - name: alternative
-            label: No account panel
+            label: No account note
             type: object
             fields:
               - name: heading

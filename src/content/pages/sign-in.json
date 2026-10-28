@@ -26,13 +26,9 @@
     "emailInvalid": "Enter an email address in the format you@example.com.",
     "passwordMissing": "Enter your password."
   },
-  "notice": {
-    "title": "Sign-in is not connected",
-    "copy": "Alder Health is a design demonstration. There is no account service behind this form, so no password is checked and nothing you type is sent anywhere or stored. The form is here to show the signed-out experience."
-  },
   "alternative": {
     "heading": "No account yet?",
-    "copy": "Registration is not part of this demonstration. You can still browse the example clinicians and walk through a booking without an account.",
+    "copy": "Registration is not part of this demonstration, but you can still browse the example clinicians and walk through a booking.",
     "primaryCta": {
       "label": "Find a doctor",
       "href": "/find-a-doctor"
@@ -41,5 +37,12 @@
       "label": "Get help",
       "href": "/help"
     }
+  },
+  "feature": {
+    "image": {
+      "src": "/images/resource-first-visit.png",
+      "alt": "An open notebook and pencil on a sunlit wooden table, beside a glass of water and a sprig of eucalyptus."
+    },
+    "caption": "Illustrative photography, not a patient story."
   }
 }
