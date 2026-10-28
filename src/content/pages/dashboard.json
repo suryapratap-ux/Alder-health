@@ -1,0 +1,86 @@
+{
+  "seo": {
+    "title": "Patient account — Alder Health",
+    "description": "An example patient overview: your upcoming appointment, past visits, notification preferences and reading to help you prepare for a visit."
+  },
+  "rail": {
+    "eyebrow": "Patient account",
+    "note": "Fictional patient data",
+    "items": [
+      "Overview",
+      "Appointments",
+      "Notification preferences",
+      "Account details",
+      "Help & support",
+      "Sign out"
+    ]
+  },
+  "greeting": {
+    "eyebrow": "Your care, in one place",
+    "title": "Hello, {firstName}.",
+    "lead": "Here’s what’s coming up and the details to help you get ready.",
+    "note": "Fictional patient data · demonstration only"
+  },
+  "upcoming": {
+    "title": "Your upcoming appointment",
+    "status": "✓ Upcoming",
+    "clinicianNote": "Fictional clinician · illustrative portrait",
+    "format": "In-person · 30-minute visit",
+    "referencePrefix": "Reference",
+    "viewLabel": "View details",
+    "rescheduleLabel": "Reschedule",
+    "cancelLabel": "Cancel appointment",
+    "noticeTitle": "Example appointment only",
+    "noticeCopy": "No real appointment has been booked. Use these static actions as a design example."
+  },
+  "past": {
+    "title": "Past appointments",
+    "note": "Illustrative history. No diagnostic information is shown.",
+    "items": [
+      {
+        "date": "September 16, 2026",
+        "status": "✓ Completed",
+        "clinician": "Daniel Ortiz · Family medicine",
+        "place": "Alder Riverside Clinic · In-person"
+      },
+      {
+        "date": "July 8, 2026",
+        "status": "— Canceled",
+        "clinician": "Emma Reed · Primary care",
+        "place": "Alder Riverside Clinic · In-person"
+      }
+    ]
+  },
+  "preferences": {
+    "title": "Keep in touch, your way.",
+    "note": "Static example preferences. No reminders will be sent.",
+    "saveLabel": "Save preferences",
+    "items": [
+      {
+        "id": "email-reminders",
+        "label": "Email appointment reminders",
+        "on": true
+      },
+      {
+        "id": "text-reminders",
+        "label": "Text appointment reminders",
+        "on": false
+      },
+      {
+        "id": "resource-updates",
+        "label": "Resource updates",
+        "on": false
+      }
+    ]
+  },
+  "reading": {
+    "title": "Before your next visit",
+    "note": "Practical preparation, without medical advice.",
+    "help": "Need help? hello@alderhealth.example",
+    "items": [
+      "Your first visit, made simpler",
+      "Helping someone book their care",
+      "Understanding your visit options"
+    ]
+  }
+}

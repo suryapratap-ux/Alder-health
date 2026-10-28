@@ -1,0 +1,27 @@
+{
+  "seo": {
+    "title": "Choose a time — Alder Health",
+    "description": "Step 2 of 4. Pick an in-person or video visit, choose a date and time from the example availability, then carry your selections through to review."
+  },
+  "intro": {
+    "eyebrow": "Step 2 of 4",
+    "title": "Choose a time for yourself.",
+    "lead": "{name} is selected for your {specialty} visit. Choose how and when you’d like to meet."
+  },
+  "visitNote": "In-person at {clinic}, {address}.",
+  "careNote": "Fictional clinician · illustrative appointment availability",
+  "visitType": {
+    "question": "How would you like to visit?",
+    "inPersonLabel": "In-person",
+    "videoLabel": "Video"
+  },
+  "calendarKey": "Selected date has a filled background. Underlined dates have example availability.",
+  "confirmation": {
+    "title": "✓ Your time is selected"
+  },
+  "actions": {
+    "backLabel": "Back",
+    "continueLabel": "Continue to details"
+  },
+  "note": "Your selections carry forward to review. This demonstration does not hold or book a real time."
+}

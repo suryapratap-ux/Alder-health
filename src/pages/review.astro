@@ -7,6 +7,7 @@ import ProgressSteps from '../components/booking/ProgressSteps.astro';
 import BookingContext from '../components/booking/BookingContext.astro';
 import { getClinician, clinicians } from '../data/clinicians';
 import { exampleAppointment, examplePatient } from '../data/appointment';
+import page from '../content/pages/review.json';
 
 /* Review appointment — Figma 5:23329 (desktop), 5:23425 (tablet), 5:23519 (mobile). */
 const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
@@ -18,18 +19,16 @@ const reviewSteps = [
 	{ label: 'Review', state: 'current' as const },
 ];
 
+const { seo, intro, noticeTitle, editLabel, blocks, plans } = page;
+
 const summaryBlocks = [
 	{
-		title: 'Your care',
+		title: blocks.careTitle,
 		editHref: `/doctors/${clinician.slug}`,
-		lines: [
-			`${clinician.name} · ${clinician.specialty}`,
-			'In-person visit · 30 minutes',
-			'Fictional clinician and illustrative credentials.',
-		],
+		lines: [`${clinician.name} · ${clinician.specialty}`, blocks.careFormat, blocks.careNote],
 	},
 	{
-		title: 'Time and place',
+		title: blocks.timeTitle,
 		editHref: '/booking',
 		lines: [
 			exampleAppointment.dayLong,
@@ -39,32 +38,27 @@ const summaryBlocks = [
 		],
 	},
 	{
-		title: 'Patient details',
+		title: blocks.patientTitle,
 		editHref: '/booking',
 		lines: [
 			examplePatient.name,
 			examplePatient.email,
-			`Phone: ${examplePatient.phone}`,
-			`Access needs: ${examplePatient.accessNeeds}`,
-			'Fictional patient data. No medical history is collected.',
+			`${blocks.phonePrefix} ${examplePatient.phone}`,
+			`${blocks.accessPrefix} ${examplePatient.accessNeeds}`,
+			blocks.patientNote,
 		],
 	},
 ];
 ---
 
-<Layout
-	title="Review your appointment — Alder Health"
-	description="Step 4 of 4. Check the clinician, time, place and patient details of your example appointment before confirming. No real booking is made."
->
+<Layout title={seo.title} description={seo.description}>
 	<section class="intro">
 		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Book appointment', href: '/booking' }]} current="Review" />
-		<p class="eyebrow">Step 4 of 4</p>
-		<h1>A moment to check the details.</h1>
-		<p class="lead">
-			Make sure everything looks right before you confirm this example appointment.
-		</p>
+		<p class="eyebrow">{intro.eyebrow}</p>
+		<h1>{intro.title}</h1>
+		<p class="lead">{intro.lead}</p>
 		<ProgressSteps steps={reviewSteps} />
-		<Notice title="Demo only — no real appointment will be made" />
+		<Notice title={noticeTitle} />
 	</section>
 
 	<section class="workspace">
@@ -75,7 +69,7 @@ const summaryBlocks = [
 						<div class="block-head">
 							<h2 class="card-title">{block.title}</h2>
 							<Button href={block.editHref} variant="secondary" class="edit">
-								Edit
+								{editLabel}
 							</Button>
 						</div>
 						<div class="block-lines">
@@ -90,11 +84,9 @@ const summaryBlocks = [
 			<div class="rule"></div>
 
 			<div class="block block--padded">
-				<h2 class="card-title">If your plans change</h2>
+				<h2 class="card-title">{plans.title}</h2>
 				<p class="prose">
-					For a real visit, check the clinic&rsquo;s cancellation and rescheduling information
-					before booking. Contact the clinic if you need help changing a time. This demo does not
-					define a cancellation policy or any fees.
+					{plans.copy}
 				</p>
 			</div>
 

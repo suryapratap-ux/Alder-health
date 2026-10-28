@@ -4,58 +4,28 @@ import Button from '../components/Button.astro';
 import Notice from '../components/Notice.astro';
 import ResponsiveAccountNav from '../components/account/ResponsiveAccountNav.astro';
 import { getClinician, clinicians } from '../data/clinicians';
-import { exampleAppointment, examplePatient } from '../data/appointment';
+import { exampleAppointment, examplePatient, fill } from '../data/appointment';
+import page from '../content/pages/dashboard.json';
 
 /* Patient dashboard — Figma 5:23777 (desktop), 5:23892 (tablet), 5:23994 (mobile). */
 const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
 const firstName = examplePatient.name.split(' ')[0];
 
-const accountNav = [
-	{ label: 'Overview', current: true },
-	{ label: 'Appointments' },
-	{ label: 'Notification preferences' },
-	{ label: 'Account details' },
-	{ label: 'Help & support' },
-	{ label: 'Sign out' },
-];
+const { seo, rail, greeting, upcoming, past, preferences: preferenceCopy, reading } = page;
 
-const pastAppointments = [
-	{
-		date: 'September 16, 2026',
-		status: '✓ Completed',
-		clinician: 'Daniel Ortiz · Family medicine',
-		place: 'Alder Riverside Clinic · In-person',
-	},
-	{
-		date: 'July 8, 2026',
-		status: '— Canceled',
-		clinician: 'Emma Reed · Primary care',
-		place: 'Alder Riverside Clinic · In-person',
-	},
-];
-
-const preferences = [
-	{ id: 'email-reminders', label: 'Email appointment reminders', on: true },
-	{ id: 'text-reminders', label: 'Text appointment reminders', on: false },
-	{ id: 'resource-updates', label: 'Resource updates', on: false },
-];
-
-const readingList = [
-	{ title: 'Your first visit, made simpler' },
-	{ title: 'Helping someone book their care' },
-	{ title: 'Understanding your visit options' },
-];
+/* The first item is the page you are on. */
+const accountNav = rail.items.map((label, index) => ({ label, current: index === 0 }));
+const pastAppointments = past.items;
+const preferences = preferenceCopy.items;
+const readingList = reading.items;
 ---
 
-<Layout
-	title="Patient account — Alder Health"
-	description="An example patient overview: your upcoming appointment, past visits, notification preferences and reading to help you prepare for a visit."
->
+<Layout title={seo.title} description={seo.description}>
 	<section class="workspace">
 		<aside class="account-rail" aria-label="Patient account">
-			<p class="eyebrow">Patient account</p>
+			<p class="eyebrow">{rail.eyebrow}</p>
 			<p class="patient-name">{examplePatient.name}</p>
-			<p class="patient-note">Fictional patient data</p>
+			<p class="patient-note">{rail.note}</p>
 
 			<nav class="account-nav">
 				{
@@ -72,16 +42,16 @@ const readingList = [
 
 		<div class="account-main">
 			<div class="greeting">
-				<p class="eyebrow">Your care, in one place</p>
-				<h1>Hello, {firstName}.</h1>
-				<p class="lead">Here&rsquo;s what&rsquo;s coming up and the details to help you get ready.</p>
-				<p class="demo-note">Fictional patient data &middot; demonstration only</p>
+				<p class="eyebrow">{greeting.eyebrow}</p>
+				<h1>{fill(greeting.title, { firstName })}</h1>
+				<p class="lead">{greeting.lead}</p>
+				<p class="demo-note">{greeting.note}</p>
 			</div>
 
 			<section class="upcoming">
 				<div class="upcoming-head">
-					<p class="upcoming-title">Your upcoming appointment</p>
-					<p class="upcoming-status">&#10003; Upcoming</p>
+					<p class="upcoming-title">{upcoming.title}</p>
+					<p class="upcoming-status">{upcoming.status}</p>
 				</div>
 
 				<div class="clinician">
@@ -95,7 +65,7 @@ const readingList = [
 					<div>
 						<p class="clinician-name">{clinician.name}</p>
 						<p class="clinician-specialty">{clinician.specialty}</p>
-						<p class="clinician-note">Fictional clinician &middot; illustrative portrait</p>
+						<p class="clinician-note">{upcoming.clinicianNote}</p>
 					</div>
 				</div>
 
@@ -105,25 +75,23 @@ const readingList = [
 
 				<div class="appointment-facts">
 					<p>{exampleAppointment.timeRange}</p>
-					<p>In-person &middot; 30-minute visit</p>
+					<p>{upcoming.format}</p>
 					<p>{clinician.clinic} &middot; {clinician.clinicAddress}</p>
-					<p>{examplePatient.name} &middot; Reference {exampleAppointment.reference}</p>
+					<p>{examplePatient.name} &middot; {upcoming.referencePrefix} {exampleAppointment.reference}</p>
 				</div>
 
 				<div class="appointment-actions">
-					<Button href="/confirmation">View details</Button>
-					<Button href="/booking" variant="secondary">Reschedule</Button>
-					<a class="cancel link-underline" href="/dashboard">Cancel appointment</a>
+					<Button href="/confirmation">{upcoming.viewLabel}</Button>
+					<Button href="/booking" variant="secondary">{upcoming.rescheduleLabel}</Button>
+					<a class="cancel link-underline" href="/dashboard">{upcoming.cancelLabel}</a>
 				</div>
 
-				<Notice title="Example appointment only">
-					No real appointment has been booked. Use these static actions as a design example.
-				</Notice>
+				<Notice title={upcoming.noticeTitle}>{upcoming.noticeCopy}</Notice>
 			</section>
 
 			<section class="past">
-				<h2 class="section-title">Past appointments</h2>
-				<p class="past-note">Illustrative history. No diagnostic information is shown.</p>
+				<h2 class="section-title">{past.title}</h2>
+				<p class="past-note">{past.note}</p>
 
 				<ul class="past-list">
 					{
@@ -142,8 +110,8 @@ const readingList = [
 
 			<div class="bottom">
 				<section class="preferences">
-					<h2 class="card-title">Keep in touch, your way.</h2>
-					<p class="preferences-note">Static example preferences. No reminders will be sent.</p>
+					<h2 class="card-title">{preferenceCopy.title}</h2>
+					<p class="preferences-note">{preferenceCopy.note}</p>
 
 					<div class="toggles">
 						{
@@ -160,27 +128,27 @@ const readingList = [
 						}
 					</div>
 
-					<Button variant="secondary" type="submit">Save preferences</Button>
+					<Button variant="secondary" type="submit">{preferenceCopy.saveLabel}</Button>
 				</section>
 
 				<section class="reading">
-					<h2 class="section-title">Before your next visit</h2>
+					<h2 class="section-title">{reading.title}</h2>
 
 					<ul class="reading-list">
 						{
-							readingList.map((item) => (
+							readingList.map((title) => (
 								<li>
 									<a href="/resources">
-										<span class="reading-title">{item.title}</span>
+										<span class="reading-title">{title}</span>
 										<img src="/icons/arrow-up-right.svg" width="20" height="20" alt="" />
 									</a>
-									<p>Practical preparation, without medical advice.</p>
+									<p>{reading.note}</p>
 								</li>
 							))
 						}
 					</ul>
 
-					<p class="reading-help">Need help? hello@alderhealth.example</p>
+					<p class="reading-help">{reading.help}</p>
 				</section>
 			</div>
 		</div>

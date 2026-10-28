@@ -1,0 +1,27 @@
+{
+  "seo": {
+    "title": "Review your appointment — Alder Health",
+    "description": "Step 4 of 4. Check the clinician, time, place and patient details of your example appointment before confirming. No real booking is made."
+  },
+  "intro": {
+    "eyebrow": "Step 4 of 4",
+    "title": "A moment to check the details.",
+    "lead": "Make sure everything looks right before you confirm this example appointment."
+  },
+  "noticeTitle": "Demo only — no real appointment will be made",
+  "editLabel": "Edit",
+  "blocks": {
+    "careTitle": "Your care",
+    "careNote": "Fictional clinician and illustrative credentials.",
+    "careFormat": "In-person visit · 30 minutes",
+    "timeTitle": "Time and place",
+    "patientTitle": "Patient details",
+    "patientNote": "Fictional patient data. No medical history is collected.",
+    "phonePrefix": "Phone:",
+    "accessPrefix": "Access needs:"
+  },
+  "plans": {
+    "title": "If your plans change",
+    "copy": "For a real visit, check the clinic’s cancellation and rescheduling information before booking. Contact the clinic if you need help changing a time. This demo does not define a cancellation policy or any fees."
+  }
+}

@@ -3,56 +3,45 @@ import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import Notice from '../components/Notice.astro';
 import { getClinician, clinicians } from '../data/clinicians';
-import { exampleAppointment, examplePatient } from '../data/appointment';
+import { exampleAppointment, examplePatient, fill } from '../data/appointment';
+import page from '../content/pages/confirmation.json';
 
 /* Appointment confirmation — Figma 5:23610 (desktop), 5:23668 (tablet), 5:23724 (mobile). */
 const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
 const firstName = examplePatient.name.split(' ')[0];
 
-const preparationSteps = [
-	{
-		index: '01',
-		title: 'Plan your arrival',
-		copy: `Your example in-person visit is at ${clinician.clinic}, ${clinician.clinicAddress}. Allow time to find the entrance and check in.`,
-	},
-	{
-		index: '02',
-		title: 'Bring your questions',
-		copy: 'Have your appointment details and any relevant documents ready. Write down the questions you would like to discuss.',
-	},
-	{
-		index: '03',
-		title: 'Tell us what would help',
-		copy: 'For step-free access or other practical needs, contact the clinic before your visit. Do not send sensitive medical details by general email.',
-	},
-];
+const { seo, intro, notice, summaryLabel, plans } = page;
+const names = {
+	firstName,
+	specialty: clinician.specialty.toLowerCase(),
+	clinic: clinician.clinic,
+	address: clinician.clinicAddress,
+};
+
+const preparationSteps = page.preparation.map((step) => ({
+	...step,
+	copy: fill(step.copy, names),
+}));
 ---
 
-<Layout
-	title="Appointment confirmed — Alder Health"
-	description="An example confirmation with your visit details, how to plan your arrival and what to bring. Nothing is booked — this is a design demonstration."
->
+<Layout title={seo.title} description={seo.description}>
 	<section class="success">
 		<span class="success-mark" aria-hidden="true">
 			<img src="/icons/circle-check.svg" width="20" height="20" alt="" />
 		</span>
 
-		<p class="eyebrow">Example appointment confirmed</p>
-		<h1>Your next step is all set.</h1>
-		<p class="lead">
-			{firstName}, here are the details for your example {clinician.specialty.toLowerCase()} visit.
-		</p>
+		<p class="eyebrow">{intro.eyebrow}</p>
+		<h1>{intro.title}</h1>
+		<p class="lead">{fill(intro.lead, names)}</p>
 
-		<Notice title="Example confirmation — no appointment has been booked" tone="success">
-			This is a fictional booking demonstration. No confirmation email has been sent.
-		</Notice>
+		<Notice title={notice.title} tone="success">{notice.copy}</Notice>
 	</section>
 
 	<section class="details">
 		<div class="summary-column">
 			<div class="summary">
 				<p class="summary-label">
-					Your appointment &middot; {exampleAppointment.reference}
+					{summaryLabel} &middot; {exampleAppointment.reference}
 				</p>
 
 				<div class="clinician">
@@ -109,14 +98,11 @@ const preparationSteps = [
 			<div class="rule"></div>
 
 			<div class="plans">
-				<h2 class="section-title">Plans change. We&rsquo;re here to help.</h2>
-				<p>
-					Use View appointments to find the reschedule and cancel actions. For a real visit, check
-					the clinic&rsquo;s cancellation information or contact the team.
-				</p>
-				<p class="email">hello@alderhealth.example</p>
+				<h2 class="section-title">{plans.title}</h2>
+				<p>{plans.copy}</p>
+				<p class="email">{plans.email}</p>
 				<p class="reference">
-					Example contact route &middot; Reference {exampleAppointment.reference}
+					{plans.referenceLabel} &middot; Reference {exampleAppointment.reference}
 				</p>
 			</div>
 		</div>

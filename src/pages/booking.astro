@@ -6,24 +6,26 @@ import Notice from '../components/Notice.astro';
 import ProgressSteps from '../components/booking/ProgressSteps.astro';
 import BookingContext from '../components/booking/BookingContext.astro';
 import { getClinician, clinicians } from '../data/clinicians';
-import { exampleAppointment, calendar, timeSlots, bookingSteps } from '../data/appointment';
+import { exampleAppointment, calendar, timeSlots, bookingSteps, fill } from '../data/appointment';
+import page from '../content/pages/booking.json';
 
 /* Appointment booking — Figma 5:22886 (desktop), 5:23036 (tablet), 5:23184 (mobile). */
 const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0];
+const { seo, intro, visitType, visitNote, careNote, calendarKey, confirmation, actions, note } = page;
+const names = {
+	name: clinician.name,
+	specialty: clinician.specialty.toLowerCase(),
+	clinic: clinician.clinic,
+	address: clinician.clinicAddress,
+};
 ---
 
-<Layout
-	title="Choose a time — Alder Health"
-	description="Step 2 of 4. Pick an in-person or video visit, choose a date and time from the example availability, then carry your selections through to review."
->
+<Layout title={seo.title} description={seo.description}>
 	<section class="intro">
 		<Breadcrumb trail={[{ label: 'Home', href: '/' }, { label: 'Book appointment', href: '/booking' }]} current="Choose a time" />
-		<p class="eyebrow">Step 2 of 4</p>
-		<h1>Choose a time for yourself.</h1>
-		<p class="lead">
-			{clinician.name} is selected for your {clinician.specialty.toLowerCase()} visit. Choose how and
-			when you&rsquo;d like to meet.
-		</p>
+		<p class="eyebrow">{intro.eyebrow}</p>
+		<h1>{intro.title}</h1>
+		<p class="lead">{fill(intro.lead, names)}</p>
 		<ProgressSteps steps={bookingSteps} />
 	</section>
 
@@ -31,22 +33,22 @@ const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0
 		<div class="time-selection">
 			<div class="selected-care">
 				<p class="care-label">{clinician.name} &middot; {clinician.specialty}</p>
-				<p class="care-note">Fictional clinician &middot; illustrative appointment availability</p>
+				<p class="care-note">{careNote}</p>
 			</div>
 
 			<div class="visit-type">
-				<p class="question">How would you like to visit?</p>
-				<div class="segmented" role="radiogroup" aria-label="How would you like to visit?">
+				<p class="question">{visitType.question}</p>
+				<div class="segmented" role="radiogroup" aria-label={visitType.question}>
 					<label class="choice">
 						<input type="radio" name="booking-visit" value="in-person" checked />
-						<span>In-person</span>
+						<span>{visitType.inPersonLabel}</span>
 					</label>
 					<label class="choice">
 						<input type="radio" name="booking-visit" value="video" />
-						<span>Video</span>
+						<span>{visitType.videoLabel}</span>
 					</label>
 				</div>
-				<p class="visit-note">In-person at {clinician.clinic}, {clinician.clinicAddress}.</p>
+				<p class="visit-note">{fill(visitNote, names)}</p>
 			</div>
 
 			<div class="rule"></div>
@@ -100,9 +102,7 @@ const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0
 					</tbody>
 				</table>
 
-				<p class="calendar-key">
-					Selected date has a filled background. Underlined dates have example availability.
-				</p>
+				<p class="calendar-key">{calendarKey}</p>
 
 				<div class="rule"></div>
 
@@ -124,23 +124,20 @@ const clinician = getClinician(exampleAppointment.clinicianSlug) ?? clinicians[0
 				</div>
 			</div>
 
-			<Notice title={`✓ Your time is selected`} tone="success">
+			<Notice title={confirmation.title} tone="success">
 				{exampleAppointment.dayLong} at {exampleAppointment.time} Eastern Time. Your visit will last
 				{' '}{exampleAppointment.duration}.
 			</Notice>
 
 			<div class="step-navigation">
-				<Button href={`/doctors/${clinician.slug}`} variant="secondary">Back</Button>
+				<Button href={`/doctors/${clinician.slug}`} variant="secondary">{actions.backLabel}</Button>
 				<Button href="/review">
 					<img src="/icons/arrow-right.svg" width="18" height="18" alt="" />
-					Continue to details
+					{actions.continueLabel}
 				</Button>
 			</div>
 
-			<p class="workspace-note">
-				Your selections carry forward to review. This demonstration does not hold or book a real
-				time.
-			</p>
+			<p class="workspace-note">{note}</p>
 		</div>
 
 		<BookingContext clinician={clinician} />

@@ -1,0 +1,39 @@
+{
+  "seo": {
+    "title": "Appointment confirmed — Alder Health",
+    "description": "An example confirmation with your visit details, how to plan your arrival and what to bring. Nothing is booked — this is a design demonstration."
+  },
+  "intro": {
+    "eyebrow": "Example appointment confirmed",
+    "title": "Your next step is all set.",
+    "lead": "{firstName}, here are the details for your example {specialty} visit."
+  },
+  "notice": {
+    "title": "Example confirmation — no appointment has been booked",
+    "copy": "This is a fictional booking demonstration. No confirmation email has been sent."
+  },
+  "summaryLabel": "Your appointment",
+  "preparation": [
+    {
+      "index": "01",
+      "title": "Plan your arrival",
+      "copy": "Your example in-person visit is at {clinic}, {address}. Allow time to find the entrance and check in."
+    },
+    {
+      "index": "02",
+      "title": "Bring your questions",
+      "copy": "Have your appointment details and any relevant documents ready. Write down the questions you would like to discuss."
+    },
+    {
+      "index": "03",
+      "title": "Tell us what would help",
+      "copy": "For step-free access or other practical needs, contact the clinic before your visit. Do not send sensitive medical details by general email."
+    }
+  ],
+  "plans": {
+    "title": "Plans change. We’re here to help.",
+    "copy": "Use View appointments to find the reschedule and cancel actions. For a real visit, check the clinic’s cancellation information or contact the team.",
+    "email": "hello@alderhealth.example",
+    "referenceLabel": "Example contact route"
+  }
+}

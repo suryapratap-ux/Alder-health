@@ -1137,6 +1137,381 @@ content:
                 label: Second button
                 component: link
 
+  # --------------------------------------------------------- Booking flow --
+  - name: booking-flow
+    label: Booking flow
+    type: group
+    items:
+      - name: booking
+        label: Choose a time
+        type: file
+        path: src/content/pages/booking.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+                description: >-
+                  {name} and {specialty} are filled in with the selected
+                  clinician. Keep them if you want their name to appear.
+          - name: visitNote
+            label: Visit location line
+            type: string
+            description: '{clinic} and {address} are filled in with the clinic details.'
+          - name: careNote
+            label: Clinician note
+            type: string
+          - name: visitType
+            label: Visit type chooser
+            type: object
+            fields:
+              - name: question
+                label: Question
+                type: string
+              - name: inPersonLabel
+                label: In-person option
+                type: string
+              - name: videoLabel
+                label: Video option
+                type: string
+          - name: calendarKey
+            label: Calendar key
+            type: text
+            description: Explains what the highlighted dates mean.
+          - name: confirmation
+            label: Selected-time notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+          - name: actions
+            label: Step buttons
+            type: object
+            fields:
+              - name: backLabel
+                label: Back button
+                type: string
+              - name: continueLabel
+                label: Continue button
+                type: string
+          - name: note
+            label: Closing note
+            type: text
+
+      - name: review
+        label: Review
+        type: file
+        path: src/content/pages/review.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: noticeTitle
+            label: Demo notice
+            type: string
+          - name: editLabel
+            label: Edit button
+            type: string
+          - name: blocks
+            label: Summary blocks
+            type: object
+            fields:
+              - name: careTitle
+                label: Care block heading
+                type: string
+              - name: careNote
+                label: Care block note
+                type: string
+              - name: careFormat
+                label: Care block format line
+                type: string
+              - name: timeTitle
+                label: Time block heading
+                type: string
+              - name: patientTitle
+                label: Patient block heading
+                type: string
+              - name: patientNote
+                label: Patient block note
+                type: string
+              - name: phonePrefix
+                label: Phone label
+                type: string
+              - name: accessPrefix
+                label: Access needs label
+                type: string
+          - name: plans
+            label: If plans change
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: copy
+                label: Text
+                type: text
+
+      - name: confirmation
+        label: Confirmation
+        type: file
+        path: src/content/pages/confirmation.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+                description: '{firstName} and {specialty} are filled in automatically.'
+          - name: notice
+            label: Demo notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+          - name: summaryLabel
+            label: Summary heading
+            type: string
+          - name: preparation
+            label: How to prepare
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{index}. {title}'
+            fields:
+              - name: index
+                label: Number
+                type: string
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+                description: '{clinic} and {address} are filled in with the clinic details.'
+          - name: plans
+            label: If plans change
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: copy
+                label: Text
+                type: text
+              - name: email
+                label: Contact email
+                type: string
+              - name: referenceLabel
+                label: Reference line label
+                type: string
+
+      - name: dashboard
+        label: Patient account
+        type: file
+        path: src/content/pages/dashboard.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: rail
+            label: Account menu
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: note
+                label: Note under the name
+                type: string
+              - name: items
+                label: Menu items
+                type: string
+                list: true
+                description: The first item is shown as the current page.
+          - name: greeting
+            label: Greeting
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                description: '{firstName} is filled in from the example patient.'
+              - name: lead
+                label: Introduction
+                type: text
+              - name: note
+                label: Demo note
+                type: string
+          - name: upcoming
+            label: Upcoming appointment
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: status
+                label: Status chip
+                type: string
+              - name: clinicianNote
+                label: Clinician note
+                type: string
+              - name: format
+                label: Format line
+                type: string
+              - name: referencePrefix
+                label: Reference label
+                type: string
+              - name: viewLabel
+                label: View button
+                type: string
+              - name: rescheduleLabel
+                label: Reschedule button
+                type: string
+              - name: cancelLabel
+                label: Cancel link
+                type: string
+              - name: noticeTitle
+                label: Notice title
+                type: string
+              - name: noticeCopy
+                label: Notice text
+                type: text
+          - name: past
+            label: Past appointments
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: note
+                label: Note
+                type: string
+              - name: items
+                label: Appointments
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{date}'
+                fields:
+                  - name: date
+                    label: Date
+                    type: string
+                  - name: status
+                    label: Status
+                    type: string
+                  - name: clinician
+                    label: Clinician
+                    type: string
+                  - name: place
+                    label: Place
+                    type: string
+          - name: preferences
+            label: Notification preferences
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: note
+                label: Note
+                type: string
+              - name: saveLabel
+                label: Save button
+                type: string
+              - name: items
+                label: Preferences
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                fields:
+                  - name: id
+                    label: Field id
+                    type: string
+                    readonly: true
+                    description: Ties the label to its switch. Changing it breaks that link.
+                  - name: label
+                    label: Label
+                    type: string
+                  - name: on
+                    label: Switched on
+                    type: boolean
+          - name: reading
+            label: Reading list
+            type: object
+            fields:
+              - name: title
+                label: Heading
+                type: string
+              - name: note
+                label: Note under each item
+                type: string
+              - name: help
+                label: Help line
+                type: string
+              - name: items
+                label: Titles
+                type: string
+                list: true
+
   # -------------------------------------------------------------- Content --
   - name: content
     label: Content
@@ -1348,6 +1723,74 @@ content:
             required: true
 
   # ------------------------------------------------------------- Site-wide --
+  - name: appointment
+    label: Example appointment
+    type: file
+    path: src/content/appointment.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: appointment
+        label: The visit
+        type: object
+        description: >-
+          Shown on the booking, review, confirmation and account screens. The
+          calendar grid itself is set in the code, because a month label that
+          disagreed with its dates would draw a calendar that cannot exist.
+        fields:
+          - name: clinicianSlug
+            label: Clinician
+            type: string
+            description: The file name of a clinician, such as emma-reed.
+          - name: reference
+            label: Booking reference
+            type: string
+          - name: dateShort
+            label: Date, short
+            type: string
+          - name: dayLabel
+            label: Day, without the year
+            type: string
+          - name: dayLong
+            label: Day, with the year
+            type: string
+          - name: time
+            label: Start time
+            type: string
+          - name: timeRange
+            label: Time range
+            type: string
+          - name: format
+            label: Format line
+            type: string
+          - name: duration
+            label: Duration
+            type: string
+          - name: visitLabel
+            label: Visit length label
+            type: string
+          - name: timezone
+            label: Time zone
+            type: string
+      - name: patient
+        label: The patient
+        type: object
+        description: Fictional details. No medical history is collected anywhere.
+        fields:
+          - name: name
+            label: Full name
+            type: string
+          - name: email
+            label: Email
+            type: string
+          - name: phone
+            label: Phone
+            type: string
+          - name: accessNeeds
+            label: Access needs
+            type: string
+
   - name: settings
     label: Header & footer
     type: file

@@ -1,0 +1,21 @@
+{
+  "appointment": {
+    "clinicianSlug": "emma-reed",
+    "reference": "AH-20481",
+    "dateShort": "Wed, Nov 4, 2026",
+    "dayLabel": "Wednesday, November 4",
+    "dayLong": "Wednesday, November 4, 2026",
+    "time": "10:00 AM",
+    "timeRange": "10:00–10:30 AM Eastern Time",
+    "format": "In-person · 30 minutes",
+    "duration": "30 minutes",
+    "visitLabel": "30-minute visits",
+    "timezone": "Eastern Time (ET)"
+  },
+  "patient": {
+    "name": "Jordan Lee",
+    "email": "jordan@example.com",
+    "phone": "Not provided (optional)",
+    "accessNeeds": "None shared"
+  }
+}
