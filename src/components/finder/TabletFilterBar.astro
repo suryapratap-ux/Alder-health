@@ -10,14 +10,14 @@ const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clini
 	<div class="choices">
 		<div class="field">
 			<label class="field-label" for="bar-specialty">Specialty</label>
-			<select class="control" id="bar-specialty" name="specialty">
+			<select class="control" id="bar-specialty" name="specialty" data-filter="specialty">
 				{specialties.map((item) => <option>{item}</option>)}
 			</select>
 		</div>
 
 		<div class="field">
 			<label class="field-label" for="bar-location">Location</label>
-			<select class="control" id="bar-location" name="location">
+			<select class="control" id="bar-location" name="location" data-filter="clinic">
 				{clinics.map((item) => <option>{item}</option>)}
 			</select>
 		</div>
@@ -25,14 +25,14 @@ const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clini
 
 	<div class="visit-types">
 		<label class="check-option">
-			<input type="checkbox" name="visit" value="in-person" checked />
+			<input type="checkbox" name="visit" value="in-person" data-filter="visit" />
 			In-person
 		</label>
 		<label class="check-option">
-			<input type="checkbox" name="visit" value="video" checked />
+			<input type="checkbox" name="visit" value="video" data-filter="visit" />
 			Video consultation
 		</label>
-		<Button href="/find-a-doctor" variant="secondary">More filters</Button>
+		<Button variant="secondary" class="more-filters" data-filter-toggle>More filters</Button>
 	</div>
 </div>
 

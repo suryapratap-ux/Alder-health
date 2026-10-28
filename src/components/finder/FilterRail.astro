@@ -1,10 +1,16 @@
 ---
-/* Filtering rail — Figma 5:22370. Desktop only; tablet and mobile use their own controls. */
+/*
+ * Filtering rail — Figma 5:22370.
+ *
+ * On desktop it is a permanent sidebar. Below 1024px it collapses and is
+ * opened by the tablet bar's "More filters" or the mobile "Filters" button,
+ * so there is one set of controls to keep in step rather than three.
+ */
 const specialties = ['All specialties', 'Primary care', 'Dermatology', 'Family medicine'];
 const clinics = ['All clinics', 'Alder Riverside Clinic', 'Alder Northside Clinic'];
 const visitTypes = [
-	{ id: 'in-person', label: 'In-person', checked: true },
-	{ id: 'video', label: 'Video consultation', checked: true },
+	{ id: 'in-person', label: 'In-person' },
+	{ id: 'video', label: 'Video consultation' },
 ];
 const languages = [
 	{ id: 'english', label: 'English' },
@@ -13,51 +19,59 @@ const languages = [
 ];
 ---
 
-<aside class="rail" aria-label="Refine your search">
+<aside class="rail" aria-label="Refine your search" data-filter-rail data-open="false">
 	<div class="heading">
 		<p class="title">Refine your search</p>
-		<a class="reset" href="/find-a-doctor">Reset</a>
+		<button class="reset" type="button" data-filter-reset>Reset</button>
 	</div>
 
 	<div class="rule"></div>
 
 	<div class="field">
 		<label class="field-label" for="rail-specialty">Specialty</label>
-		<select class="control" id="rail-specialty" name="specialty">
+		<select class="control" id="rail-specialty" name="specialty" data-filter="specialty">
 			{specialties.map((item) => <option>{item}</option>)}
 		</select>
 	</div>
 
 	<div class="field">
 		<label class="field-label" for="rail-location">Location</label>
-		<select class="control" id="rail-location" name="location">
+		<select class="control" id="rail-location" name="location" data-filter="clinic">
 			{clinics.map((item) => <option>{item}</option>)}
 		</select>
 	</div>
 
 	<div class="rule"></div>
 
-	<p class="group-label">Visit type</p>
-	{
-		visitTypes.map((option) => (
-			<label class="check-option">
-				<input type="checkbox" name="visit" value={option.id} checked={option.checked} />
-				{option.label}
-			</label>
-		))
-	}
+	<div class="group">
+		<p class="group-label" id="rail-visit-label">Visit type</p>
+		<div class="options" role="group" aria-labelledby="rail-visit-label">
+			{
+				visitTypes.map((option) => (
+					<label class="check-option">
+						<input type="checkbox" name="visit" value={option.id} data-filter="visit" />
+						{option.label}
+					</label>
+				))
+			}
+		</div>
+	</div>
 
 	<div class="rule"></div>
 
-	<p class="group-label">Languages</p>
-	{
-		languages.map((option) => (
-			<label class="check-option">
-				<input type="checkbox" name="language" value={option.id} />
-				{option.label}
-			</label>
-		))
-	}
+	<div class="group">
+		<p class="group-label" id="rail-language-label">Languages</p>
+		<div class="options" role="group" aria-labelledby="rail-language-label">
+			{
+				languages.map((option) => (
+					<label class="check-option">
+						<input type="checkbox" name="language" value={option.id} data-filter="language" />
+						{option.label}
+					</label>
+				))
+			}
+		</div>
+	</div>
 
 	<p class="note">Times are shown in Eastern Time. Availability is illustrative.</p>
 </aside>
@@ -90,9 +104,35 @@ const languages = [
 	}
 
 	.reset {
+		padding: 0;
+		border: 0;
+		background: none;
+		font-family: var(--font-ui);
 		font-size: var(--type-caption);
 		color: var(--text-secondary);
 		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.reset:hover {
+		color: var(--brand-primary);
+	}
+
+	/*
+	 * The rail spaces its sections 24px apart, which pushed every checkbox the
+	 * same distance from its neighbour. The rows belong together, so each group
+	 * holds its own list and only the groups keep the rail's rhythm.
+	 */
+	.group {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-8);
+		width: 100%;
+	}
+
+	.options {
+		display: flex;
+		flex-direction: column;
 	}
 
 	.group-label {
@@ -111,9 +151,20 @@ const languages = [
 		flex: none;
 	}
 
+	/* Tablet and mobile — a panel the filter buttons disclose */
 	@media (max-width: 1023px) {
 		.rail {
 			display: none;
+			width: 100%;
+			padding: var(--space-20);
+			padding-right: var(--space-20);
+			border: 1px solid var(--border-default);
+			border-radius: var(--radius-module);
+			background: var(--bg-surface);
+		}
+
+		.rail[data-open='true'] {
+			display: flex;
 		}
 	}
 </style>

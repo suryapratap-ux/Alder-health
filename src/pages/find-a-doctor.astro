@@ -12,6 +12,37 @@ import { findADoctor as page } from '../data/pages';
 
 /* Find a doctor — Figma 5:22337 (desktop), 5:22470 (tablet), 5:22587 (mobile). */
 const { seo, intro, search } = page;
+
+/*
+ * "Wed, Nov 4 · 10:00 AM ET" sorts alphabetically into nonsense, so the next
+ * example visit is reduced to a comparable number at build time. Anything the
+ * pattern does not recognise sorts last and falls back to the manual order.
+ */
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const whenNext = (value: string) => {
+	const parts = value.match(/([A-Z][a-z]{2})s+(d{1,2})D+?(d{1,2}):(d{2})s*(AM|PM)/);
+	if (!parts) return Number.MAX_SAFE_INTEGER;
+
+	const month = MONTHS.indexOf(parts[1]);
+	if (month < 0) return Number.MAX_SAFE_INTEGER;
+
+	const hour = (Number(parts[3]) % 12) + (parts[5] === 'PM' ? 12 : 0);
+	return ((month + 1) * 100 + Number(parts[2])) * 10000 + hour * 100 + Number(parts[4]);
+};
+
+const entries = clinicians.map((clinician) => ({
+	clinician,
+	/* The formats line is prose, so read the two offerings out of it. */
+	visit: [/in[s-]person/i.test(clinician.formats) && 'in-person', /video/i.test(clinician.formats) && 'video']
+		.filter(Boolean)
+		.join(' '),
+	languages: clinician.languages
+		.split(',')
+		.map((language) => language.trim().toLowerCase())
+		.join(' '),
+	next: whenNext(clinician.nextVisit),
+}));
 ---
 
 <Layout title={seo.title} description={seo.description}>
@@ -31,6 +62,7 @@ const { seo, intro, search } = page;
 						id="doctor-query"
 						name="q"
 						type="search"
+						data-filter-query
 						placeholder={search.queryPlaceholder}
 						list="specialty-options"
 					/>
@@ -42,7 +74,7 @@ const { seo, intro, search } = page;
 
 			<div class="field">
 				<label class="field-label" for="doctor-clinic">{search.clinicLabel}</label>
-				<select class="control" id="doctor-clinic" name="clinic">
+				<select class="control" id="doctor-clinic" name="clinic" data-filter="clinic">
 					{search.clinics.map((item) => <option>{item}</option>)}
 				</select>
 			</div>
@@ -59,22 +91,45 @@ const { seo, intro, search } = page;
 			<CompactFilters />
 
 			<div class="result-count">
-				<p class="count">{clinicians.length} example doctors</p>
-				<p class="sort">Sort: Next available <span aria-hidden="true">&#8964;</span></p>
+				<p class="count">
+					<span data-result-count>{clinicians.length}</span> example doctors
+				</p>
+
+				<div class="sort">
+					<label class="sort-label" for="sort-by">Sort</label>
+					<select class="sort-select" id="sort-by" data-sort>
+						<option value="next">Next available</option>
+						<option value="name">Name (A–Z)</option>
+					</select>
+				</div>
 			</div>
 
 
-			<ul class="cards">
+			<ul class="cards" data-results>
 				{
-					clinicians.map((clinician) => (
-						<li>
-							<DoctorCard clinician={clinician} />
+					entries.map((entry) => (
+						<li
+							data-card
+							data-name={entry.clinician.name}
+							data-specialty={entry.clinician.specialty}
+							data-clinic={entry.clinician.clinic}
+							data-visit={entry.visit}
+							data-languages={entry.languages}
+							data-next={entry.next}
+							data-order={entry.clinician.order}
+						>
+							<DoctorCard clinician={entry.clinician} />
 						</li>
 					))
 				}
 			</ul>
 
-			<p class="exhausted">
+			<p class="empty" data-empty hidden>
+				No example doctors match these filters. Try clearing one, or
+				<button class="empty-reset" type="button" data-filter-reset>reset them all</button>.
+			</p>
+
+			<p class="exhausted" data-exhausted>
 				You&rsquo;ve seen all {clinicians.length} example doctors. Broaden or change your filters to
 				explore the directory pattern.
 			</p>
@@ -92,6 +147,211 @@ const { seo, intro, search } = page;
 		</div>
 	</section>
 </Layout>
+
+<script>
+	/*
+	 * Filtering and sorting run in the browser against the cards already on the
+	 * page — there are three example clinicians, so there is nothing to fetch.
+	 *
+	 * The same filters appear in the rail, the tablet bar and the search form,
+	 * so a change to one is mirrored to the others before anything is applied.
+	 * Without JavaScript every card simply stays visible.
+	 */
+	const results = document.querySelector<HTMLElement>('[data-results]');
+
+	if (results) {
+		const cards = [...results.querySelectorAll<HTMLElement>('li[data-card]')];
+		const controls = [
+			...document.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-filter]'),
+		];
+		const queryInput = document.querySelector<HTMLInputElement>('[data-filter-query]');
+		const sortSelect = document.querySelector<HTMLSelectElement>('[data-sort]');
+		const countOutput = document.querySelector<HTMLElement>('[data-result-count]');
+		const emptyMessage = document.querySelector<HTMLElement>('[data-empty]');
+		const exhausted = document.querySelector<HTMLElement>('[data-exhausted]');
+		const rail = document.querySelector<HTMLElement>('[data-filter-rail]');
+		const summary = document.querySelector<HTMLElement>('[data-filter-summary]');
+		const chosenCount = document.querySelector<HTMLElement>('[data-filter-count]');
+
+		/* "All specialties", "All clinics", "All Alder clinics" all mean no filter. */
+		const isAll = (value: string) => /^all\b/i.test(value.trim());
+
+		const selected = (kind: string) => {
+			const select = controls.find(
+				(control) => control.dataset.filter === kind && control instanceof HTMLSelectElement
+			) as HTMLSelectElement | undefined;
+			const value = select?.value ?? '';
+			return isAll(value) ? '' : value;
+		};
+
+		const ticked = (kind: string) =>
+			controls
+				.filter(
+					(control) =>
+						control.dataset.filter === kind && (control as HTMLInputElement).checked === true
+				)
+				.map((control) => control.value)
+				.filter((value, index, all) => all.indexOf(value) === index);
+
+		/* Keep the duplicate controls across breakpoints in step. */
+		const mirror = (source: HTMLInputElement | HTMLSelectElement) => {
+			for (const target of controls) {
+				if (target === source || target.dataset.filter !== source.dataset.filter) continue;
+
+				if (source instanceof HTMLInputElement && target instanceof HTMLInputElement) {
+					if (target.value === source.value) target.checked = source.checked;
+					continue;
+				}
+
+				if (source instanceof HTMLSelectElement && target instanceof HTMLSelectElement) {
+					/* The lists differ slightly, so only take a value this one offers. */
+					const match = [...target.options].find((option) => option.value === source.value);
+					target.value = match ? match.value : (target.options[0]?.value ?? '');
+				}
+			}
+		};
+
+		const apply = () => {
+			const specialty = selected('specialty');
+			const clinic = selected('clinic');
+			const visits = ticked('visit');
+			const languages = ticked('language');
+			const query = (queryInput?.value ?? '').trim().toLowerCase();
+
+			let visible = 0;
+
+			for (const card of cards) {
+				const listed = (attribute: string, value: string) =>
+					(card.dataset[attribute] ?? '').split(' ').includes(value);
+
+				const haystack = [card.dataset.name, card.dataset.specialty, card.dataset.clinic]
+					.join(' ')
+					.toLowerCase();
+
+				const matches =
+					(!specialty || card.dataset.specialty === specialty) &&
+					(!clinic || card.dataset.clinic === clinic) &&
+					(!visits.length || visits.some((value) => listed('visit', value))) &&
+					(!languages.length || languages.some((value) => listed('languages', value))) &&
+					(!query || haystack.includes(query));
+
+				card.hidden = !matches;
+				if (matches) visible += 1;
+			}
+
+			const byName = (a: HTMLElement, b: HTMLElement) =>
+				(a.dataset.name ?? '').localeCompare(b.dataset.name ?? '');
+
+			const byNext = (a: HTMLElement, b: HTMLElement) =>
+				Number(a.dataset.next) - Number(b.dataset.next) ||
+				Number(a.dataset.order) - Number(b.dataset.order);
+
+			for (const card of [...cards].sort(sortSelect?.value === 'name' ? byName : byNext)) {
+				results.appendChild(card);
+			}
+
+			if (countOutput) countOutput.textContent = String(visible);
+			if (emptyMessage) emptyMessage.hidden = visible > 0;
+			if (exhausted) exhausted.hidden = visible !== cards.length;
+
+			const active =
+				(specialty ? 1 : 0) + (clinic ? 1 : 0) + visits.length + languages.length + (query ? 1 : 0);
+			if (chosenCount) chosenCount.textContent = String(active);
+
+			if (summary) {
+				const format =
+					visits.length === 1
+						? visits[0] === 'video'
+							? 'Video'
+							: 'In-person'
+						: 'In-person and video';
+				summary.textContent = [specialty || 'All specialties', clinic || 'All clinics', format].join(
+					' \u00b7 '
+				);
+			}
+		};
+
+		for (const control of controls) {
+			control.addEventListener('change', () => {
+				mirror(control);
+				apply();
+			});
+		}
+
+		sortSelect?.addEventListener('change', apply);
+		queryInput?.addEventListener('input', apply);
+
+		/* The form has nothing to post to, so it filters in place instead. */
+		queryInput?.form?.addEventListener('submit', (event) => {
+			event.preventDefault();
+			apply();
+			results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		});
+
+		for (const button of document.querySelectorAll<HTMLButtonElement>('[data-filter-reset]')) {
+			button.addEventListener('click', () => {
+				for (const control of controls) {
+					if (control instanceof HTMLInputElement) control.checked = false;
+					else control.value = control.options[0]?.value ?? '';
+				}
+				if (queryInput) queryInput.value = '';
+				apply();
+			});
+		}
+
+		/* "Filters" and "More filters" disclose the rail below 1024px. */
+		for (const toggle of document.querySelectorAll<HTMLElement>('[data-filter-toggle]')) {
+			toggle.setAttribute('aria-expanded', 'false');
+			toggle.addEventListener('click', () => {
+				if (!rail) return;
+				const open = rail.dataset.open !== 'true';
+				rail.dataset.open = String(open);
+				for (const other of document.querySelectorAll('[data-filter-toggle]')) {
+					other.setAttribute('aria-expanded', String(open));
+				}
+				if (open) rail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+			});
+		}
+
+		/*
+		 * Links elsewhere on the site arrive with a clinic or visit type already
+		 * chosen — /find-a-doctor?clinic=Riverside from the home page, say — so
+		 * those are matched loosely against what the controls actually offer.
+		 */
+		const params = new URLSearchParams(window.location.search);
+
+		const preset = (kind: string, wanted: string) => {
+			for (const control of controls) {
+				if (control.dataset.filter !== kind) continue;
+
+				if (control instanceof HTMLSelectElement) {
+					const option = [...control.options].find(
+						(candidate) =>
+							!isAll(candidate.value) &&
+							candidate.value.toLowerCase().includes(wanted.toLowerCase())
+					);
+					if (option) control.value = option.value;
+				} else if (control.value.toLowerCase() === wanted.toLowerCase()) {
+					control.checked = true;
+				}
+			}
+		};
+
+		const presetClinic = params.get('clinic');
+		if (presetClinic) preset('clinic', presetClinic);
+
+		const presetSpecialty = params.get('specialty');
+		if (presetSpecialty) preset('specialty', presetSpecialty);
+
+		const presetVisit = params.get('visit');
+		if (presetVisit) preset('visit', /video/i.test(presetVisit) ? 'video' : 'in-person');
+
+		const presetQuery = params.get('q');
+		if (presetQuery && queryInput) queryInput.value = presetQuery;
+
+		apply();
+	}
+</script>
 
 <style>
 	.intro {
@@ -141,6 +401,9 @@ const { seo, intro, search } = page;
 	}
 
 	.sort {
+		display: flex;
+		gap: var(--space-8);
+		align-items: center;
 		font-size: var(--type-caption);
 		color: var(--text-secondary);
 		white-space: nowrap;
@@ -170,6 +433,66 @@ const { seo, intro, search } = page;
 	}
 
 	/* Tablet and mobile — filters sit above the results */
+
+	.sort-label {
+		font-size: var(--type-caption);
+		color: var(--text-secondary);
+	}
+
+	/*
+	 * A native select, stripped back to the size of the line it replaces. The
+	 * arrow is the same chevron the header's Find care menu draws, rather than
+	 * the ⌄ character that was standing in for it.
+	 */
+	.sort-select {
+		appearance: none;
+		padding: 4px 26px 4px 8px;
+		border: 1px solid transparent;
+		border-radius: var(--radius-control);
+		background-color: transparent;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M4.5 6.75L9 11.25L13.5 6.75' stroke='%23465b53' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 4px center;
+		background-size: 16px 16px;
+		font-family: var(--font-ui);
+		font-size: var(--type-caption);
+		font-weight: 600;
+		color: var(--text-primary);
+		cursor: pointer;
+	}
+
+	.sort-select:hover {
+		border-color: var(--border-default);
+		background-color: var(--bg-surface);
+	}
+
+	.empty {
+		padding: var(--space-24);
+		border: 1px solid var(--border-default);
+		border-radius: var(--radius-module);
+		background: var(--bg-surface);
+		font-size: var(--type-body);
+		line-height: var(--ui-leading);
+		color: var(--text-secondary);
+	}
+
+	.empty-reset {
+		padding: 0;
+		border: 0;
+		background: none;
+		font-family: var(--font-ui);
+		font-size: var(--type-body);
+		font-weight: 600;
+		color: var(--brand-primary);
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	/* A hidden card must not keep its space in the list. */
+	.cards li[hidden] {
+		display: none;
+	}
+
 	@media (max-width: 1023px) {
 		.search {
 			flex-direction: column;
@@ -181,7 +504,8 @@ const { seo, intro, search } = page;
 		}
 
 		.finder {
-			gap: 0;
+			flex-direction: column;
+			gap: var(--space-24);
 		}
 
 		.results {

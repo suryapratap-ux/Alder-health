@@ -10,9 +10,18 @@ interface Props {
 	type?: 'button' | 'submit';
 	class?: string;
 	fullWidth?: boolean;
+	/* Anything else — aria-*, data-* — is passed through to the element. */
+	[attribute: string]: unknown;
 }
 
-const { href, variant = 'primary', type = 'button', class: className, fullWidth = false } = Astro.props;
+const {
+	href,
+	variant = 'primary',
+	type = 'button',
+	class: className,
+	fullWidth = false,
+	...rest
+} = Astro.props;
 const classes = ['button', `button--${variant}`, fullWidth && 'button--full', className]
 	.filter(Boolean)
 	.join(' ');
@@ -20,13 +29,13 @@ const classes = ['button', `button--${variant}`, fullWidth && 'button--full', cl
 
 {
 	href ? (
-		<a class={classes} href={href}>
+		<a class={classes} href={href} {...rest}>
 			<span class="button-label">
 				<slot />
 			</span>
 		</a>
 	) : (
-		<button class={classes} type={type}>
+		<button class={classes} type={type} {...rest}>
 			<span class="button-label">
 				<slot />
 			</span>
