@@ -3,6 +3,6 @@
   "kicker": "Caregiver guide · 5 min read",
   "copy": "A starting point for family members and caregivers.",
   "order": 3,
-  "photo": "public/images/resource-caregiver.png",
+  "photo": "/images/resource-caregiver.png",
   "alt": "Two people looking at a phone together at a kitchen table."
 }

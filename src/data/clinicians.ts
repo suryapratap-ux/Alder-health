@@ -44,8 +44,6 @@ export interface Clinician {
 	};
 }
 
-import { assetUrl } from './asset';
-
 const entries = import.meta.glob<{ default: Omit<Clinician, 'slug'> }>(
 	'../content/clinicians/*.json',
 	{ eager: true }
@@ -55,7 +53,6 @@ export const clinicians: Clinician[] = Object.entries(entries)
 	.map(([file, module]) => ({
 		slug: (file.split('/').at(-1) as string).replace(/\.json$/, ''),
 		...module.default,
-		photo: assetUrl(module.default.photo),
 	}))
 	.sort((a, b) => a.order - b.order);
 

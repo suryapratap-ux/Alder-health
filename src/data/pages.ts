@@ -1,17 +1,14 @@
 /*
- * Per-page copy, edited in the CMS and stored under src/content/pages/.
- * Image paths are converted to served URLs on the way out — see ./asset.
+ * Per-page copy, edited in Pages CMS and stored under src/content/pages/.
+ *
+ * Image fields already hold served URLs ("/images/x.png"), because the CMS
+ * writes them that way — see the `output` paths in .pages.yml — so the
+ * templates can use them as they are.
  */
-import { withAssetUrls } from './asset';
+import home from '../content/pages/home.json';
+import about from '../content/pages/about.json';
+import findADoctor from '../content/pages/find-a-doctor.json';
+import resourcesPage from '../content/pages/resources.json';
+import help from '../content/pages/help.json';
 
-import homeContent from '../content/pages/home.json';
-import aboutContent from '../content/pages/about.json';
-import findADoctorContent from '../content/pages/find-a-doctor.json';
-import resourcesContent from '../content/pages/resources.json';
-import helpContent from '../content/pages/help.json';
-
-export const home = withAssetUrls(homeContent);
-export const about = withAssetUrls(aboutContent);
-export const findADoctor = withAssetUrls(findADoctorContent);
-export const resourcesPage = withAssetUrls(resourcesContent);
-export const help = withAssetUrls(helpContent);
+export { home, about, findADoctor, resourcesPage, help };

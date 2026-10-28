@@ -11,12 +11,10 @@ export interface Resource {
 	alt: string;
 }
 
-import { assetUrl } from './asset';
-
 const entries = import.meta.glob<{ default: Resource }>('../content/guides/*.json', {
 	eager: true,
 });
 
 export const resources: Resource[] = Object.values(entries)
-	.map((module) => ({ ...module.default, photo: assetUrl(module.default.photo) }))
+	.map((module) => module.default)
 	.sort((a, b) => a.order - b.order);

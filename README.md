@@ -1,33 +1,25 @@
 # Alder Health
 
-Astro site with a Keystatic CMS, deployed on Vercel.
+A static Astro site. Content is edited through [Pages CMS](https://pagescms.org),
+a hosted service that reads and writes this repository on GitHub.
 
 ```sh
-npm run dev      # dev server at localhost:4321, CMS at localhost:4321/keystatic
-npm run build    # build (static pages + the CMS as a function)
+npm run dev      # dev server at localhost:4321
+npm run build    # static build to ./dist
 npm run preview  # preview the build
 ```
 
+One dependency, `astro`. No admin routes, no adapter, no client-side framework
+— the CMS runs on Pages CMS's servers, not here.
+
 ## Editing content
 
-Once deployed, editors open **`/cms`** on the live site and sign in through
-Keystatic Cloud. **They do not need a GitHub account** — that is the reason
-this uses Cloud rather than Keystatic's GitHub mode, where every editor needs
-write access to the repository.
+Editors go to <https://app.pagescms.org>, sign in with GitHub and pick this
+repository. Saving commits the changed JSON to the repository; if the host is
+set to deploy on push, the site rebuilds by itself.
 
-`/cms` is a 301 to `/keystatic`, which is where the admin actually lives. It
-cannot be moved there outright: Keystatic's router builds its own
-`/keystatic/...` links and the component takes no base-path option, so serving
-it from another route would break navigation inside the app. Deep links
-redirect too, so a bookmarked `/cms/collection/clinicians` still works.
-
-Saving commits the changed JSON to this repository, which triggers a deploy, so
-the edit is live a minute or so later.
-
-Locally, `npm run dev` and <http://localhost:4321/keystatic> does the same
-thing. If `PUBLIC_KEYSTATIC_CLOUD_PROJECT` is set it reads and writes through
-Cloud; if it is not, it falls back to editing the files in your working copy,
-so a fresh clone is usable before the Cloud project exists.
+The editing interface is defined by [`.pages.yml`](.pages.yml) at the
+repository root.
 
 | In the CMS | On disk |
 | --- | --- |
@@ -35,95 +27,92 @@ so a fresh clone is usable before the Cloud project exists.
 | Content → Clinicians | `src/content/clinicians/<slug>.json` |
 | Content → Questions | `src/content/faqs/<slug>.json` |
 | Content → Guides | `src/content/guides/<slug>.json` |
-| Site-wide → Header & footer | `src/content/settings.json` |
+| Header & footer | `src/content/settings.json` |
+| Photographs | `public/images` |
+| Icons | `public/icons` |
 
-A clinician's file name is its URL, so `emma-reed.json` is `/doctors/emma-reed`.
-Collections have an **Order** field that sets the sequence on the page; the FAQ
-accordion shows one answer at a time, so tick **Open by default** on one
+A clinician's file name is the web address, so `emma-reed.json` is
+`/doctors/emma-reed`. Renaming the clinician renames the file and changes that
+address, so any link pointing at the old one breaks.
+
+Collections have an **Order** field setting the sequence on the page. The FAQ
+accordion shows one answer at a time, so **Open by default** belongs on one
 question only.
 
-Image fields **pick** from the files already in `public/images` and
-`public/icons` rather than uploading. That is deliberate: an upload field in
-Keystatic takes ownership of the file and renames it after the field it sits in,
-which moves assets out from under the other pages that share them —
-`clinic-exterior.png` appears on both the home and about pages. To add a new
-image, commit the file to `public/images` and it becomes selectable. (Keystatic
-Cloud also offers **Cloud Images**, a paid upload-and-optimise service that
-would let editors add images without touching the repository.)
+A few fields are marked read-only because other parts of the site point at
+them — the anchor ids on the About clinics and the Help policy sections, which
+the navigation and footer link to.
 
-Each clinician portrait also carries a **focal point** — an `object-position`
-value such as `52% 20%` — because the portraits are cropped to several
-different shapes across the site and this keeps the face in frame in all of them.
+Each clinician portrait carries a **focal point**, two percentages such as
+`52% 20%`. The portraits are cropped to several different shapes across the
+site and this keeps the face in frame in all of them. It is validated, so a
+malformed value is rejected in the editor rather than silently breaking a crop.
 
-The schema lives in [`keystatic.config.ts`](keystatic.config.ts). Adding a field
-there makes it editable; the page template then has to render it.
+### Changing what is editable
+
+Adding a field to `.pages.yml` makes it appear in the CMS, but the Astro
+template still has to render it. Renaming or deleting one breaks the page that
+reads it.
+
+Field names must match the JSON keys exactly. Pages CMS writes back only the
+fields it knows about, so a key present in the JSON but missing from
+`.pages.yml` would be **dropped the first time an editor saves that file**.
+There is a checker for this:
+
+```sh
+node scripts/check-pages-yml.mjs
+```
 
 ### What is not in the CMS
 
-The booking, review, confirmation and patient account screens are a demo
-built on the fictional appointment data in `src/data/appointment.ts`. Their text
-is interface labelling rather than editorial copy, so it stays in the templates.
+The booking, review, confirmation and patient account screens are a demo built
+on the fictional appointment data in `src/data/appointment.ts`. Their text is
+interface labelling rather than editorial copy, so it stays in the templates.
 
-## First-time setup
+## Setup — needs your action
+
+These steps need accounts and cannot be done from the codebase.
 
 ### 1. Push to GitHub
 
-Create an empty **private** repository, then set the remote and push `main`.
-Keystatic Cloud stores nothing itself — it handles sign-in and commits to this
-repository on the editor's behalf — so the repo has to exist first.
+Pages CMS is a front end for a GitHub repository, so one has to exist. Create
+an empty **private** repository, add it as `origin`, and push `main`.
 
-### 2. Create the Keystatic Cloud project
+### 2. Authorise Pages CMS
 
-Sign up at <https://keystatic.cloud>, create a team, then a project inside it
-pointed at the GitHub repository from step 1. The project's settings page shows
-its `team/project` name.
+Go to <https://app.pagescms.org> and sign in with GitHub. Grant it access to
+this repository only, rather than to every repository on the account. It reads
+`.pages.yml` from the default branch and builds the editing interface from it.
 
-Copy `.env.example` to `.env` and fill it in:
+### 3. Invite the client
 
-```
-PUBLIC_KEYSTATIC_CLOUD_PROJECT=team/project
-```
+Pages CMS acts as the signed-in GitHub user, so an editor needs a GitHub
+account with write access to the repository. Add them as a collaborator.
+There is no way around this: the commits have to be attributable to someone.
 
-The free plan covers **3 users per team**, which is enough for you plus two at
-the client. Beyond that, Pro starts at $10/month plus $5/month per extra user.
+### 4. Connect a host
 
-### 3. Deploy to Vercel
+Import the repository on Vercel, Netlify or similar. Astro is detected
+automatically and this is a plain static build, so no adapter or environment
+variable is needed. Enable deploy-on-push so a CMS save publishes itself.
 
-Import the repository at <https://vercel.com/new>; Astro is detected
-automatically. Add the same variable under **Settings → Environment
-Variables**, then deploy. The build fails without it by design, so that a CMS
-which writes nowhere never reaches production.
-
-### 4. Invite the client
-
-Add them to the Cloud team. They sign in at `yourdomain.com/keystatic` — no
-GitHub account, no repository access.
+**Deployment is not automatic until this is configured.** Until then, saves
+land in the repository and the live site does not change.
 
 ### 5. Set the site URL
 
-`site` in [`astro.config.mjs`](astro.config.mjs) is commented out. Set it to the
-production origin to switch on canonical URLs, `og:url` and the absolute
+`site` in [`astro.config.mjs`](astro.config.mjs) is commented out. Set it to
+the production origin to switch on canonical URLs, `og:url` and the absolute
 `og:image` URL.
 
-## Optional: review edits before they go live
+## Images
 
-By default an editor's save commits straight to `main` and deploys. Adding
-`branchPrefix` to the `storage` block in `keystatic.config.ts` makes the admin
-work on branches instead, so changes arrive as pull requests for you to approve.
-Worth switching on before handing the CMS to someone else.
+Image fields upload into `public/images` (photographs) or `public/icons`
+(icons) and store a served path such as `/images/hero-consultation.png`.
+Uploads are slugified, so a file named `Clinic Photo.PNG` arrives as
+`clinic-photo.png`.
 
-## What gets deployed
-
-`output: 'static'` with an adapter means all 12 pages are prerendered to plain
-HTML and served as files — they reference no JavaScript bundles at all, the
-same as before the CMS existed. Only `/keystatic` and `/api/keystatic` run as a
-function, and only that route loads the React admin bundle.
-
-## Known advisories
-
-`npm audit` reports 7 high-severity advisories (`path-to-regexp`, `zod`) coming
-in through `@astrojs/vercel` → `@vercel/functions` → `@vercel/oidc`. They are
-Vercel's own build and deploy tooling, not code served to visitors. The fix npm
-suggests is `@astrojs/vercel@8`, which supports only Astro 5 and would break the
-build, so it has been left alone pending an upstream release. Do not run
-`npm audit fix --force` here.
+Replacing a clinician portrait also means updating its **width** and **height**
+fields, which are the pixel size of the file. They only hint the aspect ratio
+to the browser — CSS fixes both dimensions — so a stale value will not break
+the layout, but it is worth keeping accurate.

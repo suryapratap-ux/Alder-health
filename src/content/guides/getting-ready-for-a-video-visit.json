@@ -3,6 +3,6 @@
   "kicker": "Video care · 3 min read",
   "copy": "A quiet space, a charged device, and a few simple checks.",
   "order": 2,
-  "photo": "public/images/resource-video-visit.png",
+  "photo": "/images/resource-video-visit.png",
   "alt": "A laptop open on a desk beside a window, set up for a video consultation."
 }

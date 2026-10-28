@@ -9,19 +9,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:cms": "node scripts/check-pages-yml.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^7.1.1",
-    "@astrojs/vercel": "^11.0.16",
-    "@keystatic/astro": "^6.0.0",
-    "@keystatic/core": "^0.6.9",
-    "astro": "^7.4.2",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
-  },
-  "devDependencies": {
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0"
+    "astro": "^7.4.2"
   }
 }

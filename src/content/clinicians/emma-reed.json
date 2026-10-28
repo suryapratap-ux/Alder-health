@@ -11,7 +11,7 @@
   "formats": "In-person · Video consultations",
   "nextVisit": "Wed, Nov 4 · 10:00 AM ET",
   "visitLength": "30-minute in-person visit",
-  "photo": "public/images/clinician-emma-reed.png",
+  "photo": "/images/clinician-emma-reed.png",
   "photoWidth": 896,
   "photoHeight": 1200,
   "photoFocus": "52% 20%",

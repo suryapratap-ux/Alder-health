@@ -1,0 +1,1054 @@
+# Pages CMS configuration — https://pagescms.org
+#
+# Describes the content files in src/content/ so they can be edited at
+# app.pagescms.org without touching the code. Field names here must match the
+# JSON keys exactly; the Astro templates read those same keys.
+#
+# Adding a field here makes it editable, but the template still has to render
+# it. Renaming or removing one will break the page that reads it.
+
+media:
+  - name: images
+    label: Photographs
+    input: public/images
+    output: /images
+    categories: [image]
+    rename: safe
+
+  - name: icons
+    label: Icons
+    input: public/icons
+    output: /icons
+    extensions: [svg]
+    rename: safe
+
+# Reusable field groups, so the same shape is defined once.
+components:
+  seo:
+    type: object
+    label: Search & social
+    fields:
+      - name: title
+        label: Browser title
+        type: string
+        required: true
+        description: >-
+          Shown in the browser tab and as the blue headline in Google results.
+          Keep it under about 60 characters or it gets cut off.
+      - name: description
+        label: Meta description
+        type: text
+        required: true
+        description: >-
+          The grey summary under the headline in search results, and the
+          preview when the page is shared. Aim for 120–160 characters.
+        options:
+          minlength: 50
+          maxlength: 200
+
+  link:
+    type: object
+    label: Link
+    fields:
+      - name: label
+        label: Text
+        type: string
+        required: true
+      - name: href
+        label: Goes to
+        type: string
+        required: true
+        description: 'A path on this site, such as /find-a-doctor, or an anchor such as #services.'
+
+  photo:
+    type: object
+    label: Photograph
+    fields:
+      - name: src
+        label: Image
+        type: image
+        required: true
+        options:
+          media: images
+      - name: alt
+        label: Alt text
+        type: text
+        required: true
+        description: >-
+          Describes the picture for people using a screen reader, and shows if
+          the image fails to load. Describe what is in it, not "photo of".
+
+content:
+  # ---------------------------------------------------------------- Pages --
+  - name: pages
+    label: Pages
+    type: group
+    items:
+      - name: home
+        label: Home page
+        type: file
+        path: src/content/pages/home.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+
+          - name: hero
+            label: Hero — the top of the page
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+                description: The small line in capitals above the heading.
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+                required: true
+              - name: primaryCta
+                label: Main button
+                component: link
+              - name: secondaryCta
+                label: Second button
+                component: link
+              - name: formats
+                label: Formats line
+                type: string
+                description: The line beside the map pin icon.
+              - name: image
+                component: photo
+              - name: caption
+                label: Caption
+                type: string
+                description: The small italic line under the photograph.
+
+          - name: services
+            label: Services section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: intro
+                label: Introduction
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: items
+                label: Services
+                type: object
+                list:
+                  min: 1
+                  collapsible:
+                    collapsed: true
+                    summary: '{index}. {title}'
+                fields:
+                  - name: index
+                    label: Number
+                    type: string
+                    description: 'Shown beside the service, e.g. 01.'
+                  - name: title
+                    label: Title
+                    type: string
+                    required: true
+                  - name: copy
+                    label: Description
+                    type: text
+                    required: true
+
+          - name: benefits
+            label: Benefits strip
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: items
+                label: Benefits
+                type: object
+                list:
+                  min: 1
+                  max: 3
+                  collapsible:
+                    collapsed: true
+                    summary: '{title}'
+                description: Three benefits sit side by side on desktop.
+                fields:
+                  - name: icon
+                    label: Icon
+                    type: image
+                    required: true
+                    options:
+                      media: icons
+                  - name: title
+                    label: Title
+                    type: string
+                    required: true
+                  - name: copy
+                    label: Description
+                    type: text
+                    required: true
+
+          - name: search
+            label: Search panel
+            type: object
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: queryLabel
+                label: Search box label
+                type: string
+              - name: queryPlaceholder
+                label: Search box placeholder
+                type: string
+              - name: clinicLabel
+                label: Clinic dropdown label
+                type: string
+              - name: visitLabel
+                label: Visit type dropdown label
+                type: string
+              - name: submitLabel
+                label: Button text
+                type: string
+              - name: note
+                label: Note under the form
+                type: text
+              - name: clinics
+                label: Clinic options
+                type: string
+                list: true
+                description: The choices in the clinic dropdown.
+              - name: visitTypes
+                label: Visit type options
+                type: string
+                list: true
+
+          - name: featured
+            label: Featured clinicians section
+            type: object
+            description: The clinicians themselves are edited under Content → Clinicians.
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: intro
+                label: Introduction
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: cardLinkLabel
+                label: Link text on each card
+                type: string
+
+          - name: network
+            label: Local network section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: paragraphs
+                label: Paragraphs
+                type: text
+                list: true
+              - name: clinicLinks
+                label: Clinic links
+                type: object
+                list:
+                  collapsible:
+                    summary: '{label}'
+                fields:
+                  - name: label
+                    label: Text
+                    type: string
+                  - name: href
+                    label: Goes to
+                    type: string
+              - name: credit
+                label: Image credit
+                type: string
+              - name: image
+                component: photo
+
+          - name: perspective
+            label: Patient quote
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: quote
+                label: Quote
+                type: text
+                required: true
+                description: Include the quotation marks you want to appear.
+              - name: attribution
+                label: Attribution
+                type: text
+
+          - name: resources
+            label: Guides section
+            type: object
+            description: The guides themselves are edited under Content → Guides.
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: cardLinkLabel
+                label: Link text on each card
+                type: string
+
+          - name: faq
+            label: Questions section
+            type: object
+            description: The questions themselves are edited under Content → Questions.
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: supporting
+                label: Supporting line
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+
+          - name: invitation
+            label: Booking invitation
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: supporting
+                label: Supporting line
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+
+      - name: about
+        label: About page
+        type: file
+        path: src/content/pages/about.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: network
+            label: Network section
+            type: object
+            fields:
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: paragraphs
+                label: Paragraphs
+                type: text
+                list: true
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: image
+                component: photo
+          - name: clinics
+            label: Clinics section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: linkLabel
+                label: Link text on each clinic
+                type: string
+              - name: items
+                label: Clinics
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{name}'
+                fields:
+                  - name: id
+                    label: Anchor id
+                    type: string
+                    readonly: true
+                    description: >-
+                      Used by links elsewhere on the site, such as the Locations
+                      menu item. Changing it would break those links.
+                  - name: name
+                    label: Clinic name
+                    type: string
+                    required: true
+                  - name: address
+                    label: Address
+                    type: string
+                  - name: copy
+                    label: Description
+                    type: text
+          - name: video
+            label: Video consultations section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: copy
+                label: Description
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+              - name: teamLabel
+                label: Clinician list heading
+                type: string
+          - name: notice
+            label: Disclosure notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+
+      - name: find-a-doctor
+        label: Find a doctor page
+        type: file
+        path: src/content/pages/find-a-doctor.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: search
+            label: Search form
+            type: object
+            fields:
+              - name: queryLabel
+                label: Search box label
+                type: string
+              - name: queryPlaceholder
+                label: Search box placeholder
+                type: string
+              - name: clinicLabel
+                label: Clinic dropdown label
+                type: string
+              - name: submitLabel
+                label: Button text
+                type: string
+              - name: specialties
+                label: Specialty suggestions
+                type: string
+                list: true
+              - name: clinics
+                label: Clinic options
+                type: string
+                list: true
+
+      - name: resources
+        label: Resources page
+        type: file
+        path: src/content/pages/resources.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: cardLinkLabel
+            label: Link text on each guide card
+            type: string
+          - name: guidance
+            label: Before your visit section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: items
+                label: Guidance
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{title}'
+                fields:
+                  - name: title
+                    label: Title
+                    type: string
+                    required: true
+                  - name: copy
+                    label: Text
+                    type: text
+                    required: true
+          - name: next
+            label: Next step section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: copy
+                label: Text
+                type: text
+              - name: primaryCta
+                label: Main button
+                component: link
+              - name: secondaryCta
+                label: Second button
+                component: link
+          - name: notice
+            label: Disclosure notice
+            type: object
+            fields:
+              - name: title
+                label: Title
+                type: string
+              - name: copy
+                label: Text
+                type: text
+
+      - name: help
+        label: Help page
+        type: file
+        path: src/content/pages/help.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - name: seo
+            component: seo
+          - name: intro
+            label: Page introduction
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: title
+                label: Heading
+                type: string
+                required: true
+              - name: lead
+                label: Introduction
+                type: text
+          - name: faq
+            label: Questions section
+            type: object
+            description: The questions themselves are edited under Content → Questions.
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: supporting
+                label: Supporting line
+                type: text
+              - name: ctaLabel
+                label: Button text
+                type: string
+          - name: contact
+            label: Contact section
+            type: object
+            fields:
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: routes
+                label: Ways to get in touch
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{label}'
+                fields:
+                  - name: label
+                    label: Title
+                    type: string
+                    required: true
+                  - name: value
+                    label: Email or phone number
+                    type: string
+                    required: true
+                  - name: copy
+                    label: Description
+                    type: text
+              - name: notice
+                label: Warning notice
+                type: object
+                fields:
+                  - name: title
+                    label: Title
+                    type: string
+                  - name: copy
+                    label: Text
+                    type: text
+          - name: policies
+            label: Policy sections
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{heading}'
+            description: Privacy and accessibility. They alternate background colour in order.
+            fields:
+              - name: id
+                label: Anchor id
+                type: string
+                readonly: true
+                description: >-
+                  Used by the footer links. Changing it would break them.
+              - name: eyebrow
+                label: Eyebrow
+                type: string
+              - name: heading
+                label: Heading
+                type: string
+                required: true
+              - name: paragraphs
+                label: Paragraphs
+                type: text
+                list: true
+
+  # -------------------------------------------------------------- Content --
+  - name: content
+    label: Content
+    type: group
+    items:
+      - name: clinicians
+        label: Clinicians
+        type: collection
+        path: src/content/clinicians
+        format: json
+        filename: '{primary}.json'
+        view:
+          primary: name
+          fields: [name, specialty, clinic]
+          sort: [order, name]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: name
+            label: Full name
+            type: string
+            required: true
+            description: >-
+              The file name becomes the web address, so Emma Reed is at
+              /doctors/emma-reed. Renaming changes that address.
+          - name: order
+            label: Order
+            type: number
+            required: true
+            description: Lower numbers appear first in the directory and on the home page.
+          - name: specialty
+            label: Specialty
+            type: string
+            required: true
+          - name: clinic
+            label: Clinic
+            type: string
+            required: true
+          - name: clinicAddress
+            label: Clinic address
+            type: string
+          - name: note
+            label: Card note
+            type: string
+            description: The small grey line under the clinic name on cards.
+          - name: languages
+            label: Languages (short)
+            type: string
+            description: 'Shown on cards, e.g. English, Spanish.'
+          - name: languagesSentence
+            label: Languages (sentence)
+            type: string
+            description: 'Shown on the profile page, e.g. Languages: English and Spanish.'
+          - name: credentials
+            label: Credentials
+            type: string
+          - name: formats
+            label: Visit formats
+            type: string
+          - name: nextVisit
+            label: Next example visit
+            type: string
+          - name: visitLength
+            label: Visit length
+            type: string
+
+          - name: photo
+            label: Portrait
+            type: image
+            required: true
+            options:
+              media: images
+          - name: alt
+            label: Portrait alt text
+            type: text
+            required: true
+          - name: photoFocus
+            label: Portrait focal point
+            type: string
+            required: true
+            pattern:
+              regex: '^\d{1,3}% \d{1,3}%$'
+              message: 'Use two percentages, across then down, such as 52% 20%.'
+            description: >-
+              Where the face sits in the picture, across then down. The portrait
+              is cropped to different shapes around the site and this keeps the
+              face in frame. 50% 20% means centred across, near the top.
+          - name: photoWidth
+            label: Portrait width in pixels
+            type: number
+            required: true
+            description: Update this if you replace the portrait with a different size.
+          - name: photoHeight
+            label: Portrait height in pixels
+            type: number
+            required: true
+
+          - name: profile
+            label: Profile page
+            type: object
+            fields:
+              - name: headline
+                label: Headline
+                type: string
+                required: true
+              - name: quote
+                label: Quote
+                type: text
+                description: Include the quotation marks you want to appear.
+              - name: paragraphs
+                label: Paragraphs
+                type: text
+                list: true
+              - name: areasIntro
+                label: Areas introduction
+                type: text
+              - name: areas
+                label: Areas of focus
+                type: string
+                list: true
+              - name: inPersonHeading
+                label: In-person heading
+                type: string
+              - name: inPerson
+                label: In-person details
+                type: text
+              - name: video
+                label: Video visit details
+                type: text
+              - name: whatToBring
+                label: What to bring
+                type: text
+
+      - name: faqs
+        label: Questions
+        type: collection
+        path: src/content/faqs
+        format: json
+        filename: '{primary}.json'
+        view:
+          primary: question
+          fields: [question, order]
+          sort: [order, question]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: question
+            label: Question
+            type: string
+            required: true
+          - name: answer
+            label: Answer
+            type: text
+            required: true
+          - name: order
+            label: Order
+            type: number
+            required: true
+            description: Lower numbers appear first.
+          - name: open
+            label: Open by default
+            type: boolean
+            description: >-
+              The accordion shows one answer at a time, so tick this on one
+              question only.
+
+      - name: guides
+        label: Guides
+        type: collection
+        path: src/content/guides
+        format: json
+        filename: '{primary}.json'
+        view:
+          primary: title
+          fields: [title, kicker, order]
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: kicker
+            label: Kicker
+            type: string
+            description: 'The small line above the title, e.g. Visit guide · 4 min read.'
+          - name: copy
+            label: Description
+            type: text
+            required: true
+          - name: order
+            label: Order
+            type: number
+            required: true
+            description: Lower numbers appear first.
+          - name: photo
+            label: Cover image
+            type: image
+            required: true
+            options:
+              media: images
+          - name: alt
+            label: Cover alt text
+            type: text
+            required: true
+
+  # ------------------------------------------------------------- Site-wide --
+  - name: settings
+    label: Header & footer
+    type: file
+    path: src/content/settings.json
+    format: json
+    operations:
+      delete: false
+    fields:
+      - name: brandName
+        label: Brand name
+        type: string
+        required: true
+        description: Used in page titles and link previews.
+      - name: wordmark
+        label: Wordmark
+        type: string
+        required: true
+        description: The logotype in the header and footer.
+
+      - name: findCare
+        label: Find care menu
+        type: object
+        fields:
+          - name: label
+            label: Menu label
+            type: string
+          - name: items
+            label: Menu items
+            type: object
+            list:
+              collapsible:
+                summary: '{label}'
+            fields:
+              - name: label
+                label: Text
+                type: string
+              - name: href
+                label: Goes to
+                type: string
+
+      - name: primaryNav
+        label: Main navigation
+        type: object
+        list:
+          collapsible:
+            summary: '{label}'
+        fields:
+          - name: label
+            label: Text
+            type: string
+          - name: href
+            label: Goes to
+            type: string
+
+      - name: headerActions
+        label: Header buttons
+        type: object
+        fields:
+          - name: account
+            label: Account link
+            component: link
+          - name: book
+            label: Booking button
+            component: link
+          - name: menu
+            label: Mobile menu label
+            type: string
+
+      - name: footer
+        label: Footer
+        type: object
+        fields:
+          - name: tagline
+            label: Tagline
+            type: text
+          - name: support
+            label: Support line
+            type: text
+          - name: email
+            label: Contact email
+            type: string
+          - name: columns
+            label: Link columns
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{title}'
+            fields:
+              - name: title
+                label: Column heading
+                type: string
+                required: true
+              - name: links
+                label: Links
+                type: object
+                list:
+                  collapsible:
+                    summary: '{label}'
+                fields:
+                  - name: label
+                    label: Text
+                    type: string
+                  - name: href
+                    label: Goes to
+                    type: string
+          - name: legal
+            label: Legal line
+            type: text
+            description: The © symbol and the current year are added automatically.
+          - name: policyLinks
+            label: Policy links
+            type: object
+            list:
+              collapsible:
+                summary: '{label}'
+            fields:
+              - name: label
+                label: Text
+                type: string
+              - name: href
+                label: Goes to
+                type: string

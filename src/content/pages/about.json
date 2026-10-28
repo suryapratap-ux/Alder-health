@@ -16,7 +16,7 @@
     ],
     "ctaLabel": "Meet the clinicians",
     "image": {
-      "src": "public/images/clinic-exterior.png",
+      "src": "/images/clinic-exterior.png",
       "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic."
     }
   },

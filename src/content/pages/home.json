@@ -17,7 +17,7 @@
     },
     "formats": "Local clinics. In-person visits. Video consultations.",
     "image": {
-      "src": "public/images/hero-consultation.png",
+      "src": "/images/hero-consultation.png",
       "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room."
     },
     "caption": "A moment of connection. Illustrative photography, not a patient story."
@@ -54,17 +54,17 @@
     "eyebrow": "Less friction, more clarity",
     "items": [
       {
-        "icon": "public/icons/calendar-days.svg",
+        "icon": "/icons/calendar-days.svg",
         "title": "A time that works",
         "copy": "Browse example availability before starting your booking."
       },
       {
-        "icon": "public/icons/video.svg",
+        "icon": "/icons/video.svg",
         "title": "Care in more places",
         "copy": "Choose an in-person appointment or a video consultation."
       },
       {
-        "icon": "public/icons/messages-square.svg",
+        "icon": "/icons/messages-square.svg",
         "title": "A person to ask",
         "copy": "Find a contact route when you need a little help with the details."
       }
@@ -117,7 +117,7 @@
     ],
     "credit": "Illustrative image of a fictional clinic.",
     "image": {
-      "src": "public/images/clinic-exterior.png",
+      "src": "/images/clinic-exterior.png",
       "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic."
     }
   },
