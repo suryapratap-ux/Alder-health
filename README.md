@@ -113,6 +113,21 @@ land in the repository and the live site does not change.
 the production origin to switch on canonical URLs, `og:url` and the absolute
 `og:image` URL.
 
+## Committing from a local clone
+
+Vercel blocks a deployment when the commit's author email does not match a
+GitHub account, so set the identity before committing:
+
+```sh
+git config user.name "suryapratap-ux"
+git config user.email "315748640+suryapratap-ux@users.noreply.github.com"
+```
+
+A push from an unrecognised email still reaches GitHub but the deployment is
+marked **Blocked** rather than failing loudly, so the site silently stays on
+the previous version. Saves made in Pages CMS are unaffected — they are already
+authored with this identity.
+
 ## Images
 
 Image fields upload into `public/images` (photographs) or `public/icons`
