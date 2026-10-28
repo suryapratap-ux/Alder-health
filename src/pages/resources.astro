@@ -27,7 +27,14 @@ const { seo, intro, cardLinkLabel, guidance, next } = page;
 			{
 				resources.map((resource) => (
 					<li class="resource">
-						<img class="cover" src={resource.photo} width="1376" height="768" alt={resource.alt} />
+						<img
+							class="cover"
+							src={resource.photo}
+							width="1376"
+							height="768"
+							style={`object-position: ${resource.photoFocus}`}
+							alt={resource.alt}
+						/>
 						<p class="kicker">{resource.kicker}</p>
 						<div class="editorial">
 							<p class="title">{resource.title}</p>

@@ -18,7 +18,8 @@
     "formats": "Local clinics. In-person visits. Video consultations.",
     "image": {
       "src": "/images/hero-consultation.png",
-      "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room."
+      "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room.",
+      "focus": "50% 20%"
     },
     "caption": "A moment of connection. Illustrative photography, not a patient story."
   },
@@ -118,7 +119,8 @@
     "credit": "Illustrative image of a fictional clinic.",
     "image": {
       "src": "/images/clinic-exterior.png",
-      "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic."
+      "alt": "A person walking towards the timber and stone entrance of an Alder Health clinic.",
+      "focus": "50% 45%"
     }
   },
   "perspective": {

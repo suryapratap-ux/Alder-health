@@ -25,7 +25,13 @@ const { seo, intro, hero, about, steps, prepare, faq, next } = page;
 
 	<section class="overview">
 		<div class="photograph">
-			<img src={hero.image.src} width="1376" height="768" alt={hero.image.alt} />
+			<img
+				src={hero.image.src}
+				width="1376"
+				height="768"
+				style={`object-position: ${hero.image.focus}`}
+				alt={hero.image.alt}
+			/>
 		</div>
 
 		<div class="introduction">

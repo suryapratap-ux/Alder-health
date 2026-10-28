@@ -8,6 +8,8 @@ export interface Resource {
 	copy: string;
 	order: number;
 	photo: string;
+	/* An object-position value, so the subject survives the card's crop. */
+	photoFocus: string;
 	alt: string;
 }
 

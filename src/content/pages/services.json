@@ -11,7 +11,8 @@
   "hero": {
     "image": {
       "src": "/images/hero-consultation.png",
-      "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room."
+      "alt": "A patient and a clinician in conversation across a desk in a sunlit consulting room.",
+      "focus": "50% 20%"
     },
     "caption": "Illustrative photography, not a patient story."
   },

@@ -103,7 +103,13 @@ const { seo, intro, form, errors, alternative, feature } = page;
 		</div>
 
 		<figure class="feature">
-			<img src={feature.image.src} width="1376" height="768" alt={feature.image.alt} />
+			<img
+				src={feature.image.src}
+				width="1376"
+				height="768"
+				style={`object-position: ${feature.image.focus}`}
+				alt={feature.image.alt}
+			/>
 			<figcaption>{feature.caption}</figcaption>
 		</figure>
 	</section>

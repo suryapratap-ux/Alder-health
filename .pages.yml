@@ -77,6 +77,17 @@ components:
         description: >-
           Describes the picture for people using a screen reader, and shows if
           the image fails to load. Describe what is in it, not "photo of".
+      - name: focus
+        label: Focal point
+        type: string
+        pattern:
+          regex: '^\d{1,3}% \d{1,3}%$'
+          message: 'Use two percentages, across then down, such as 50% 20%.'
+        description: >-
+          Where the subject sits in the picture, across then down. The same
+          photograph is cropped to different shapes around the site, and this
+          keeps the subject in frame. 50% 20% means centred across, near the
+          top.
 
 content:
   # ---------------------------------------------------------------- Pages --
@@ -1717,6 +1728,16 @@ content:
             required: true
             options:
               media: images
+          - name: photoFocus
+            label: Cover focal point
+            type: string
+            required: true
+            pattern:
+              regex: '^\d{1,3}% \d{1,3}%$'
+              message: 'Use two percentages, across then down, such as 50% 70%.'
+            description: >-
+              Where the subject sits in the picture, across then down. The card
+              crops to a wide strip, so this keeps the subject in it.
           - name: alt
             label: Cover alt text
             type: text

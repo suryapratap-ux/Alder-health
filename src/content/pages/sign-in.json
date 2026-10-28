@@ -41,7 +41,8 @@
   "feature": {
     "image": {
       "src": "/images/resource-first-visit.png",
-      "alt": "An open notebook and pencil on a sunlit wooden table, beside a glass of water and a sprig of eucalyptus."
+      "alt": "An open notebook and pencil on a sunlit wooden table, beside a glass of water and a sprig of eucalyptus.",
+      "focus": "46% 58%"
     },
     "caption": "Illustrative photography, not a patient story."
   }
