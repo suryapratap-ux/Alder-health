@@ -7,6 +7,21 @@
 # Adding a field here makes it editable, but the template still has to render
 # it. Renaming or removing one will break the page that reads it.
 
+# Commit as the person doing the editing rather than as the Pages CMS app.
+#
+# This repository is private, and Netlify's Deploy Request Policy holds back
+# deploys whose commits come from an author it does not recognise — a category
+# its documentation explicitly says includes a CMS. A commit authored by a
+# member of the Netlify team is recognised and builds straight away, so a save
+# in the CMS reaches the live site without anyone approving it.
+#
+# Whoever edits must therefore be on the Netlify team (or a Git Contributor on
+# it). If a deploy ever shows "Pending approval", that is this policy, and the
+# editor needs adding to the team.
+settings:
+  commit:
+    identity: user
+
 media:
   - name: images
     label: Photographs
