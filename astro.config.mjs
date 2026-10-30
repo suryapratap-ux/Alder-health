@@ -10,11 +10,11 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
 	/*
 	 * The production origin. The layout builds <link rel="canonical">, og:url
-	 * and the absolute og:image URL from it. Change this when a custom domain
-	 * is added, or search engines and link previews will keep pointing at the
-	 * vercel.app address.
+	 * and the absolute og:image URL from it, so it has to name the site people
+	 * actually visit. Change this when a custom domain is added, or search
+	 * engines and link previews will keep pointing at the netlify.app address.
 	 */
-	site: 'https://alder-health-flame.vercel.app',
+	site: 'https://alder-health.netlify.app',
 
 	output: 'static',
 });

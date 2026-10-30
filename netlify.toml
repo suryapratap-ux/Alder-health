@@ -1,0 +1,20 @@
+# Netlify build configuration.
+#
+# Pages CMS commits content changes straight to this repository. Netlify
+# watches the repository and rebuilds the site from each commit, so a save in
+# the CMS reaches the live site without anyone deploying by hand.
+#
+# These settings live here rather than only in the Netlify UI so they travel
+# with the code and cannot drift out of step with it.
+
+[build]
+  # Plain static Astro build — no adapter, because the site uses none of
+  # Astro's server-side features.
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # package.json requires Node >=22.23.4. This pins the build to the same
+  # major version used in development and overrides whatever default the
+  # Netlify build image happens to carry.
+  NODE_VERSION = "24"
