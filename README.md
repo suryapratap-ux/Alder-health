@@ -98,35 +98,51 @@ By default those commits are attributed to the app rather than the person. To
 record who made each change, set `settings.commit.identity: user` in
 `.pages.yml`.
 
-### 4. Connect a host
+### 4. The host
 
-Import the repository on Vercel, Netlify or similar. Astro is detected
-automatically and this is a plain static build, so no adapter or environment
-variable is needed. Enable deploy-on-push so a CMS save publishes itself.
+The site is built and served by Netlify from this repository. A save in Pages
+CMS commits to `main`, GitHub notifies Netlify, and Netlify runs the build and
+publishes it — there is no manual step and nothing to press.
 
-**Deployment is not automatic until this is configured.** Until then, saves
-land in the repository and the live site does not change.
+Build settings live in [`netlify.toml`](netlify.toml) rather than only in the
+Netlify UI: `npm run build`, publish `dist`, and Node 24, which matters because
+`package.json` requires >=22.23.4 and the build image default is older.
 
-### 5. Set the site URL
+Two things are configured in the Netlify account rather than here, and the
+chain is broken without either:
 
-`site` in [`astro.config.mjs`](astro.config.mjs) is commented out. Set it to
-the production origin to switch on canonical URLs, `og:url` and the absolute
-`og:image` URL.
+- **The repository is linked** under Project configuration → Developer settings
+  → Continuous deployment. Netlify needs a GitHub account connected to the
+  Netlify user for this; a user who signed up with Google has none until they
+  add one under User settings → Profile → Connected accounts.
+- **Auto-publishing is unlocked** on the Deploys page. A locked site builds
+  every commit and publishes none, which looks exactly like nothing happening.
+
+### 5. The site URL
+
+`site` in [`astro.config.mjs`](astro.config.mjs) is the production origin, and
+the layout builds `<link rel="canonical">`, `og:url` and the absolute
+`og:image` from it. Change it when a custom domain is added.
 
 ## Committing from a local clone
 
-Vercel blocks a deployment when the commit's author email does not match a
-GitHub account, so set the identity before committing:
+This repository is private, and Netlify's Deploy Request Policy only builds
+commits whose author it recognises as a member of the Netlify team. Set the
+identity before committing:
 
 ```sh
 git config user.name "suryapratap-ux"
 git config user.email "315748640+suryapratap-ux@users.noreply.github.com"
 ```
 
-A push from an unrecognised email still reaches GitHub but the deployment is
-marked **Blocked** rather than failing loudly, so the site silently stays on
-the previous version. Saves made in Pages CMS are unaffected — they are already
-authored with this identity.
+A push from an unrecognised author still reaches GitHub, but the deploy waits
+as **Pending approval** rather than failing loudly, so the site quietly stays
+on the previous version.
+
+Saves made in Pages CMS are covered by `settings.commit.identity: user` in
+[`.pages.yml`](.pages.yml), which attributes each commit to the person editing
+instead of to the CMS app — an app would be an unrecognised author. Whoever
+edits therefore has to be on the Netlify team.
 
 ## Images
 
