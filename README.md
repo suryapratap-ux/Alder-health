@@ -126,29 +126,27 @@ the layout builds `<link rel="canonical">`, `og:url` and the absolute
 
 ## Committing from a local clone
 
-Saves made in Pages CMS need nothing here. `settings.commit.identity: user` in
-[`.pages.yml`](.pages.yml) attributes each commit to the signed-in editor, and
-because the CMS writes through the GitHub API it can use that person's real
-email — the address Netlify matches against its team members. Those commits
-build straight away.
-
-Pushing from a local clone is caught between two rules that disagree:
+Set the identity before committing:
 
 ```sh
 git config user.name "suryapratap-ux"
 git config user.email "315748640+suryapratap-ux@users.noreply.github.com"
 ```
 
-- GitHub's **email privacy** setting rejects a command-line push that exposes
-  the account's real address, so the noreply form is the only one it accepts.
-- Netlify matches a commit author's **email** against its team members, and the
-  noreply address matches nobody, so the build stops with
-  `Build blocked: Unrecognized Git contributor`.
+GitHub's **email privacy** setting rejects a command-line push that would
+expose the account's real address, so the noreply form is the one that works.
 
-Connecting a GitHub account to the Netlify user, under User settings → Profile
-→ Connected accounts, resolves this: Netlify can then recognise the noreply
-address as that member. Until then a local push reaches GitHub but does not
-deploy, and the site quietly stays on the previous version.
+**This repository is public, and that matters more than it looks.** Netlify's
+Deploy Request Policy only builds commits from authors it recognises as team
+members, and it applies to private repositories only. While the repository is
+public every commit builds, whoever wrote it.
+
+Make it private again and that policy returns, blocking local pushes *and*
+Pages CMS saves with `Build blocked: Unrecognized Git contributor` — a build
+that stops rather than fails, so the site quietly stays on its previous
+version. The way out of that is to connect a GitHub account to the Netlify
+user, under User settings → Profile → Connected accounts, so Netlify can match
+the commit author to a member of the team.
 
 ## Images
 
