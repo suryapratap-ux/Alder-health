@@ -126,23 +126,29 @@ the layout builds `<link rel="canonical">`, `og:url` and the absolute
 
 ## Committing from a local clone
 
-This repository is private, and Netlify's Deploy Request Policy only builds
-commits whose author it recognises as a member of the Netlify team. Set the
-identity before committing:
+Saves made in Pages CMS need nothing here. `settings.commit.identity: user` in
+[`.pages.yml`](.pages.yml) attributes each commit to the signed-in editor, and
+because the CMS writes through the GitHub API it can use that person's real
+email — the address Netlify matches against its team members. Those commits
+build straight away.
+
+Pushing from a local clone is caught between two rules that disagree:
 
 ```sh
 git config user.name "suryapratap-ux"
 git config user.email "315748640+suryapratap-ux@users.noreply.github.com"
 ```
 
-A push from an unrecognised author still reaches GitHub, but the deploy waits
-as **Pending approval** rather than failing loudly, so the site quietly stays
-on the previous version.
+- GitHub's **email privacy** setting rejects a command-line push that exposes
+  the account's real address, so the noreply form is the only one it accepts.
+- Netlify matches a commit author's **email** against its team members, and the
+  noreply address matches nobody, so the build stops with
+  `Build blocked: Unrecognized Git contributor`.
 
-Saves made in Pages CMS are covered by `settings.commit.identity: user` in
-[`.pages.yml`](.pages.yml), which attributes each commit to the person editing
-instead of to the CMS app — an app would be an unrecognised author. Whoever
-edits therefore has to be on the Netlify team.
+Connecting a GitHub account to the Netlify user, under User settings → Profile
+→ Connected accounts, resolves this: Netlify can then recognise the noreply
+address as that member. Until then a local push reaches GitHub but does not
+deploy, and the site quietly stays on the previous version.
 
 ## Images
 
